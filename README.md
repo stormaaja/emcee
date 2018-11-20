@@ -6,7 +6,7 @@ Compiler for hybrid C/JS/Java language.
 
 ## Run
 
-    jison emcee.jison && node parse.js examples/simple.emc
+    npm test -- examples/simple.emc
 
 ## License
 
