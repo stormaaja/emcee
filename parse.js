@@ -3,14 +3,14 @@ if (!process.argv[2]) {
   return 1;
 }
 
-const parse = require('./emcee.js').parse;
+const parser = require('./emcee.js');
 const fs = require('fs');
 const path = require('path');
 const file = path.normalize(process.argv[2]);
 const source = fs.readFileSync(file, "utf8");
 
 try {
-  const result = parse(source);
+  const result = parser.parse(source);
   console.log("OK");
 } catch(err) {
   console.log(err.message);
