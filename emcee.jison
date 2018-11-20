@@ -13,6 +13,7 @@
 "{"                   return "BRACEOPEN";
 "}"                   return "BRACECLOSE";
 ";"                   return "SEMICOLON";
+"//".*\n              /* skip comment */
 /lex
 
 %%
