@@ -13,7 +13,9 @@
 "{"                   return "BRACEOPEN";
 "}"                   return "BRACECLOSE";
 ";"                   return "SEMICOLON";
+","                   return "COMMA";
 "//".*\n              /* skip comment */
+\"[^"]+\"             return "STR_VALUE";
 /lex
 
 %%
@@ -23,7 +25,7 @@ pgm
     ;
 
 function
-    : fndecl BRACEOPEN return BRACECLOSE
+    : fndecl BRACEOPEN block return BRACECLOSE
     ;
 
 fndecl
@@ -47,6 +49,25 @@ arg
 
 id
     : ID
+    ;
+
+block
+    : fn_call
+    | null
+    ;
+
+fn_call
+    : id PAROPEN paramlist PARCLOSE SEMICOLON
+    ;
+
+paramlist
+    : param
+    | param COMMA paramlist
+    ;
+
+param
+    : STR_VALUE
+    | id
     ;
 
 return
