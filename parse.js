@@ -1,3 +1,8 @@
+if (!process.argv[2]) {
+  console.log("No source file given")
+  return 1;
+}
+
 const parse = require('./emcee.js').parse;
 const fs = require('fs');
 const path = require('path');
