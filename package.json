@@ -1,0 +1,25 @@
+{
+  "name": "emcee",
+  "version": "0.0.1",
+  "description": "Simple compiler",
+  "main": "parse.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "node_modules/jison/lib/cli.js emcee.jison && node parse.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stormaaja/emcee.git"
+  },
+  "author": "Matti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stormaaja/emcee/issues"
+  },
+  "homepage": "https://github.com/stormaaja/emcee#readme",
+  "dependencies": {
+    "jison": "^0.4.18"
+  }
+}
