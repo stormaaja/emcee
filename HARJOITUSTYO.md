@@ -1,0 +1,116 @@
+# Harjoitustyön tiedot
+
+## Ryhmä
+Matti Ahinko
+matti.ahinko (ät) gmail.com
+
+## Kieli
+
+Kieli on C-JavaScript-Java-hybridikieli. Syntaksi on lähelle C:tä, mutta mukana
+on esimerkiksi merkkijonot.
+
+## Kohdekieli
+
+Kohdekieli on joko ES5-JS tai WebAssembly. Tämä tarkentuu myöhemmin.
+
+## Työkalut
+
+Isäntäkielenä on JavaScript (ES6).
+
+Parserigeneraattorina toimii Jison.
+
+Muut työkalut tarkentuvat myöhemmin.
+
+## Testaus
+
+Kääntäjää testataan läpi sen kehityksen. Aluksi selaajaa varten luodaan kokoelma
+ohjelmakoodin pätkiä. Näitä tiedostoja käytään myös muiden vaiheiden
+testaamisessa.
+
+Ohjelmakoodin testauksessa käytetään unit.js-kirjastoa. Tämän lisäksi
+testauksessa hyödynnetään node-projektin run-skriptejä. Ohjelmaa varten luodaan
+skriptejä, jotka kääntävät esimerkkikoodit ja tarkastelevat mahdollisia
+kääntäjän palauttamia virheilmoituksia.
+
+## Opintopistemäärätavoite
+
+Kokonaisopintopistemäärätavoite on 5-8, riippuen lopullisen toteutuksen
+laajuudesta ja kohdekielen lopullisesta valinnasta.
+
+### Perusominaisuudet
+
+[] lukukelpoinen (ei binäärimössöä)
+[] kommentit
+[] kokonaislukuaritmetiikka (infix-syntaksilla, ellei erikseen muuta sovita)
+[] valintojen tekeminen (if tms)
+[] toisto (silmukat, rekursio tms)
+[] muuttujat
+[] jonkinlainen syötteen välitys vähintään ohjelman alussa, esim. muuttujille
+   alkuarvot
+[] jonkinlainen tulostus vähintään ohjelman lopussa, esim. muuttujien
+   loppuarvot
+Yhteensä 3 op
+
+### Lisäominaisuudet
+
+[] aliohjelmat, joille voi viedä parametreja ja joissa voi käyttää paikallisia
+   muuttujia, rekursiolla (1 op)
+[] yksiulotteiset taulukot (0,25 op)
+[] merkkijonosyöte ja -tulostus (0,5 op)
+[] staattinen tyypintarkastus, yksinkertaiset tyypit (1 op)
+
+Yhteensä 2,75 op
+
+### Toteutustekniikat
+
+[] Webassembly 2 op
+
+Yhteensä 2 op
+
+# Aikataulusuunnitelma
+
+Toteutus tapahtuu inkrementtipohjaisesti.
+
+Aikataulu on aika joustava ja väljä erinäisistä syistä, jotka on ilmoitettu
+erikseen. Aikataulu tarkentuu myös toteutettavien ominaisuuksien vahvistuksen
+jälkeen.
+
+## 1. inkrementti
+
+13.11.2018 - 15.12.2018
+
+- Työkalujen valinta
+- Tiedostonlukija
+- Selaaja
+- Parserin generointi
+
+## 2. inkrementti
+
+16.12.2018 - 31.1.2018
+
+- Syntaktinen analyysi
+- Syntaksipuu
+- Kontekstinen analyysi
+- AST
+- Kohdekielen selvitykset
+- Yksinkertaiset virheviestit
+
+## 3. inkrementti
+
+31.1.2018 - 15.2.2019
+
+- Yksinkertainen virheidenhallinta
+- Koodin generointi
+
+## 4. inkrementti
+
+16.2.2019 - 28.2.2019
+
+- Virheidenhallinta
+
+## 5. inkrementti
+
+1.3.2019 - 12.3.2019
+
+- Kääntäjän viimeistelyt
+- Harjoitustyön palautus
