@@ -80,16 +80,16 @@ jälkeen.
 13.11.2018 - 15.12.2018
 
 - Työkalujen valinta
-- Tiedostonlukija
-- Selaaja
-- Parserin generointi
+- Parseri
+  - Tiedostonlukija
+  - Selaaja
+  - Jäsentäjä
 
 ## 2. inkrementti
 
 16.12.2018 - 31.1.2018
 
 - Syntaktinen analyysi
-- Syntaksipuu
 - Kontekstinen analyysi
 - AST
 - Kohdekielen selvitykset
@@ -99,14 +99,15 @@ jälkeen.
 
 31.1.2018 - 15.2.2019
 
-- Yksinkertainen virheidenhallinta
 - Koodin generointi
+- Yksinkertainen virheidenhallinta
 
 ## 4. inkrementti
 
 16.2.2019 - 28.2.2019
 
 - Virheidenhallinta
+- Optimoinnit
 
 ## 5. inkrementti
 
