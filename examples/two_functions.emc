@@ -1,0 +1,10 @@
+// Two functions with function call
+
+void print_hello() {
+  print("Hello!");
+}
+
+int main(void) {
+  print_hello();
+  return 1;
+}
