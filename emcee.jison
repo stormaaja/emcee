@@ -7,7 +7,7 @@
 "void"                return "VOID";
 "double"              return "DOUBLE"
 "return"              return "RETURN";
-[a-zA-Z][a-zA-Z0-9]*  return "ID";
+[a-zA-Z][a-zA-Z0-9_]*  return "ID";
 [0-9]+                return "NATLITERAL";
 "("                   return "PAROPEN";
 ")"                   return "PARCLOSE";
@@ -30,8 +30,14 @@
 %%
 
 pgm
+    : pgm_block
+    ;
+
+pgm_block
     : assgnmt_stmt
+    | pgm_block assgnmt_stmt
     | function
+    | pgm_block function
     ;
 
 function
@@ -50,6 +56,7 @@ type
 arglist
     : arg
     | arg COMMA arglist
+    | %empty
     ;
 
 arg
@@ -84,6 +91,7 @@ fn_call
 paramlist
     : param
     | param COMMA paramlist
+    | %empty
     ;
 
 param
