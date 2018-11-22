@@ -5,7 +5,8 @@
 \s+                   /* skip whitespace */
 "int"                 return "INT";
 "void"                return "VOID";
-"double"              return "DOUBLE"
+"double"              return "DOUBLE";
+"string"              return "STRING";
 "return"              return "RETURN";
 [a-zA-Z][a-zA-Z0-9_]*  return "ID";
 [0-9]+                return "NATLITERAL";
@@ -56,6 +57,7 @@ type
     : INT
     | VOID
     | DOUBLE
+    | STRING
     ;
 
 arglist
