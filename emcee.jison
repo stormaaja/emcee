@@ -5,6 +5,7 @@
 \s+                   /* skip whitespace */
 "int"                 return "INT";
 "void"                return "VOID";
+"double"              return "DOUBLE"
 "return"              return "RETURN";
 [a-zA-Z][a-zA-Z0-9]*  return "ID";
 [0-9]+                return "NATLITERAL";
@@ -14,27 +15,36 @@
 "}"                   return "BRACECLOSE";
 ";"                   return "SEMICOLON";
 ","                   return "COMMA";
+"="                   return "EQUALSSIGN";
+"+"                   return "PLUS";
+"-"                   return "MINUS";
+"*"                   return "MULTIPLY";
 "//".*\n              /* skip comment */
+"/"                   return "DIVIDE";
 \"[^"]+\"             return "STR_VALUE";
 /lex
+
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
 
 %%
 
 pgm
-    : function
+    : assgnmt_stmt
+    | function
     ;
 
 function
-    : fndecl BRACEOPEN block return BRACECLOSE
-    ;
-
-fndecl
-    : type id PAROPEN arglist PARCLOSE
+    : type id PAROPEN arglist PARCLOSE BRACEOPEN
+        block
+        return
+      BRACECLOSE
     ;
 
 type
     : INT
     | VOID
+    | DOUBLE
     ;
 
 arglist
@@ -52,12 +62,23 @@ id
     ;
 
 block
+    : stmt SEMICOLON
+    | stmt SEMICOLON block
+    ;
+
+return
+    : RETURN expr SEMICOLON
+    | RETURN SEMICOLON
+    | %empty
+    ;
+
+stmt
     : fn_call
-    | null
+    | assgnmt_stmt
     ;
 
 fn_call
-    : id PAROPEN paramlist PARCLOSE SEMICOLON
+    : id PAROPEN paramlist PARCLOSE
     ;
 
 paramlist
@@ -70,14 +91,22 @@ param
     | id
     ;
 
-return
-    : RETURN return_value SEMICOLON
-    ;
-
-return_value
-    : expr
-    ;
-
 expr
+    : id
+    | value
+    | PAROPEN expr PARCLOSE
+    | expr MULTIPLY expr
+    | expr DIVIDE expr
+    | expr PLUS expr
+    | expr MINUS expr
+    ;
+
+assgnmt_stmt
+    : id EQUALSSIGN expr
+    | type id EQUALSSIGN expr
+    ;
+
+value
     : NATLITERAL
+    | STR_VALUE
     ;
