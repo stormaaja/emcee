@@ -14,6 +14,8 @@ try {
   const parser = new jison.Parser(bnf);
   const result = parser.parse(source);
   console.log("OK");
+  return 0;
 } catch(err) {
   console.log(err.message);
+  return 1;
 }
