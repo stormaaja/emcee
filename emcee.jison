@@ -46,14 +46,8 @@ pgm_block
 
 function
     : type id PAROPEN arglist PARCLOSE BRACEOPEN
-        fn_block
-        return
+        block
       BRACECLOSE
-    ;
-
-fn_block
-    : block
-    | %empty
     ;
 
 type
@@ -82,12 +76,12 @@ id
 block
     : stmt SEMICOLON
     | stmt SEMICOLON block
+    | return
     ;
 
 return
     : RETURN expr SEMICOLON
     | RETURN SEMICOLON
-    | %empty
     ;
 
 stmt
