@@ -96,14 +96,9 @@ fn_call
     ;
 
 paramlist
-    : param
-    | param COMMA paramlist
+    : expr
+    | expr COMMA paramlist
     | %empty
-    ;
-
-param
-    : value
-    | id
     ;
 
 expr
