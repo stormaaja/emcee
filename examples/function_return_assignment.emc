@@ -1,0 +1,11 @@
+// Function return value assignment
+
+int sum(int x, int y) {
+  return x + y;
+}
+
+int main() {
+  int v = sum(1, 2);
+  print(v);
+  return 0;
+}
