@@ -42,9 +42,14 @@ pgm_block
 
 function
     : type id PAROPEN arglist PARCLOSE BRACEOPEN
-        block
+        fn_block
         return
       BRACECLOSE
+    ;
+
+fn_block
+    : block
+    | %empty
     ;
 
 type
@@ -95,7 +100,7 @@ paramlist
     ;
 
 param
-    : STR_VALUE
+    : value
     | id
     ;
 
@@ -107,6 +112,7 @@ expr
     | expr DIVIDE expr
     | expr PLUS expr
     | expr MINUS expr
+    | fn_call
     ;
 
 assgnmt_stmt
