@@ -7,7 +7,10 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "node_modules/jison/lib/cli.js emcee.jison && node parse.js"
+    "test":
+      "node_modules/jison/lib/cli.js emcee.jison && node parse.js",
+    "build-examples":
+      "find examples -name '*.emc' -exec npm test -- {} +"
   },
   "repository": {
     "type": "git",
