@@ -39,31 +39,31 @@ laajuudesta ja kohdekielen lopullisesta valinnasta.
 
 ### Perusominaisuudet
 
-[ ] lukukelpoinen (ei binäärimössöä)
-[ ] kommentit
-[ ] kokonaislukuaritmetiikka (infix-syntaksilla, ellei erikseen muuta sovita)
-[ ] valintojen tekeminen (if tms)
-[ ] toisto (silmukat, rekursio tms)
-[ ] muuttujat
-[ ] jonkinlainen syötteen välitys vähintään ohjelman alussa, esim. muuttujille
+- [ ] lukukelpoinen (ei binäärimössöä)
+- [ ] kommentit
+- [ ] kokonaislukuaritmetiikka (infix-syntaksilla, ellei erikseen muuta sovita)
+- [ ] valintojen tekeminen (if tms)
+- [ ] toisto (silmukat, rekursio tms)
+- [ ] muuttujat
+- [ ] jonkinlainen syötteen välitys vähintään ohjelman alussa, esim. muuttujille
    alkuarvot
-[ ] jonkinlainen tulostus vähintään ohjelman lopussa, esim. muuttujien
+- [ ] jonkinlainen tulostus vähintään ohjelman lopussa, esim. muuttujien
    loppuarvot
 Yhteensä 3 op
 
 ### Lisäominaisuudet
 
-[ ] aliohjelmat, joille voi viedä parametreja ja joissa voi käyttää paikallisia
+- [ ] aliohjelmat, joille voi viedä parametreja ja joissa voi käyttää paikallisia
    muuttujia, rekursiolla (1 op)
-[ ] yksiulotteiset taulukot (0,25 op)
-[ ] merkkijonosyöte ja -tulostus (0,5 op)
-[ ] staattinen tyypintarkastus, yksinkertaiset tyypit (1 op)
+- [ ] yksiulotteiset taulukot (0,25 op)
+- [ ] merkkijonosyöte ja -tulostus (0,5 op)
+- [ ] staattinen tyypintarkastus, yksinkertaiset tyypit (1 op)
 
 Yhteensä 2,75 op
 
 ### Toteutustekniikat
 
-[ ] Webassembly 2 op
+- [ ] Webassembly 2 op
 
 Yhteensä 2 op
 
