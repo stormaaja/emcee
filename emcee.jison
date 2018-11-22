@@ -7,6 +7,7 @@
 "void"                return "VOID";
 "double"              return "DOUBLE";
 "string"              return "STRING";
+"bool"                return "BOOL";
 "return"              return "RETURN";
 [a-zA-Z][a-zA-Z0-9_]*  return "ID";
 [0-9]+                return "NATLITERAL";
@@ -58,6 +59,7 @@ type
     | VOID
     | DOUBLE
     | STRING
+    | BOOL
     ;
 
 arglist
