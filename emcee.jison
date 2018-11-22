@@ -21,12 +21,14 @@
 "+"                   return "PLUS";
 "-"                   return "MINUS";
 "*"                   return "MULTIPLY";
+">"                   return "GT";
+"<"                   return "LT";
 "//".*\n              /* skip comment */
 "/"                   return "DIVIDE";
 \"[^"]+\"             return "STR_VALUE";
 /lex
 
-%left PLUS MINUS
+%left GT LT PLUS MINUS
 %left MULTIPLY DIVIDE
 
 %%
@@ -107,6 +109,8 @@ expr
     : id
     | value
     | PAROPEN expr PARCLOSE
+    | expr GT expr
+    | expr LT expr
     | expr MULTIPLY expr
     | expr DIVIDE expr
     | expr PLUS expr
