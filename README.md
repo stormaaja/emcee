@@ -6,7 +6,7 @@ Compiler for hybrid C/JS/Java language.
 
 ## Run
 
-    npm test -- examples/simple.emc
+    npm run build-examples
 
 ## License
 
