@@ -6,9 +6,9 @@ int main() {
   // Basic
   if (x) {
      print("X is true");
-   } else {
+  } else {
      print("Not happening");
-   }
+  }
 
    // Without else
    if (x) {
