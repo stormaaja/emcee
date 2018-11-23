@@ -10,8 +10,8 @@
 "bool"                return "BOOL";
 "return"              return "RETURN";
 "if"                  return "IF";
-"else"                return "ELSE";
-[a-zA-Z][a-zA-Z0-9_]*  return "ID";
+"while"               return "WHILE";
+[a-zA-Z][a-zA-Z0-9_]* return "ID";
 [0-9]+                return "NATLITERAL";
 "("                   return "PAROPEN";
 ")"                   return "PARCLOSE";
@@ -90,6 +90,11 @@ stmt
     : fn_call SEMICOLON
     | assgnmt_stmt SEMICOLON
     | if
+    | while
+    ;
+
+while
+    : WHILE PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
     ;
 
 fn_call
