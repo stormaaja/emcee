@@ -130,6 +130,7 @@ expr
     | expr PLUS expr
     | expr MINUS expr
     | fn_call
+    | id SBOPEN expr SBCLOSE
     ;
 
 assgnmt_stmt
