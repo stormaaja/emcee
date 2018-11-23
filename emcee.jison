@@ -74,8 +74,8 @@ id
     ;
 
 block
-    : stmt SEMICOLON
-    | stmt SEMICOLON block
+    : stmt
+    | stmt block
     | return
     ;
 
@@ -85,8 +85,9 @@ return
     ;
 
 stmt
-    : fn_call
-    | assgnmt_stmt
+    : fn_call SEMICOLON
+    | assgnmt_stmt SEMICOLON
+    | if
     ;
 
 fn_call
