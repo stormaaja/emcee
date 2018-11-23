@@ -10,10 +10,5 @@ int main() {
      print("Not happening");
   }
 
-   // Without else
-   if (x) {
-      print("Does things without else");
-   }
-
    return 0;
 }
