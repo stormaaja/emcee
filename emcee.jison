@@ -17,6 +17,8 @@
 ")"                   return "PARCLOSE";
 "{"                   return "BRACEOPEN";
 "}"                   return "BRACECLOSE";
+"["                   return "SBOPEN";
+"]"                   return "SBCLOSE";
 ";"                   return "SEMICOLON";
 ","                   return "COMMA";
 "="                   return "EQUALSSIGN";
@@ -58,6 +60,11 @@ type
     | DOUBLE
     | STRING
     | BOOL
+    | array
+    ;
+
+array
+    : type SBOPEN SBCLOSE
     ;
 
 arglist
@@ -133,4 +140,15 @@ assgnmt_stmt
 value
     : NATLITERAL
     | STR_VALUE
+    | array_value
+    ;
+
+array_value
+    : SBOPEN value_list SBCLOSE
+    ;
+
+value_list
+    : %empty
+    | value
+    | value COMMA value_list
     ;
