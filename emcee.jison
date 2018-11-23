@@ -10,6 +10,7 @@
 "bool"                return "BOOL";
 "return"              return "RETURN";
 "if"                  return "IF";
+"else"                return "ELSE";
 "while"               return "WHILE";
 [a-zA-Z][a-zA-Z0-9_]* return "ID";
 [0-9]+                return "NATLITERAL";
