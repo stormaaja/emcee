@@ -1,0 +1,14 @@
+// Recursion
+
+int sum_desc(int x) {
+  if (x > 0) {
+    return sum_desc(x - 1) + x;
+  } else {
+    return x;
+  }
+}
+
+int main() {
+  print(sum_desc(10)); // -> 55
+  return 0;
+}
