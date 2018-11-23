@@ -9,6 +9,8 @@
 "string"              return "STRING";
 "bool"                return "BOOL";
 "return"              return "RETURN";
+"if"                  return "IF";
+"else"                return "ELSE";
 [a-zA-Z][a-zA-Z0-9_]*  return "ID";
 [0-9]+                return "NATLITERAL";
 "("                   return "PAROPEN";
@@ -92,6 +94,11 @@ stmt
 
 fn_call
     : id PAROPEN paramlist PARCLOSE
+    ;
+
+if
+    : IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
+    | if ELSE BRACEOPEN block BRACECLOSE
     ;
 
 paramlist
