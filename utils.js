@@ -3,7 +3,7 @@ function createNode(nodeType, children, id, meta, expr) {
 }
 
 function appendNode(children, x) {
-  return children.concat(x);
+  return [x].concat(children);
 }
 
 function createReturn(expr) {
