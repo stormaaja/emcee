@@ -1,3 +1,11 @@
+%{
+    const path = require("path");
+    const {
+      createNode, appendNode, createReturn, createFunction, createComparision,
+      createFnCall
+    } = require(path.normalize("../../../utils.js"));
+%}
+
 %lex
 
 %%
@@ -40,19 +48,21 @@
 
 pgm
     : pgm_block
+      {return createNode("root", $1);}
     ;
 
 pgm_block
     : assgnmt_stmt
     | pgm_block assgnmt_stmt
+      {$$ = appendNode($1, $2);}
     | function
     | pgm_block function
+      {$$ = appendNode($1, $2);}
     ;
 
 function
-    : type id PAROPEN arglist PARCLOSE BRACEOPEN
-        block
-      BRACECLOSE
+    : type id PAROPEN arglist PARCLOSE BRACEOPEN block BRACECLOSE
+      {$$ = createFunction($7, $2, $1, $3);}
     ;
 
 type
@@ -85,13 +95,18 @@ id
 
 block
     : stmt
+      {$$ = [$1];}
     | stmt block
+      {$$ = [$1].concat($2);}
     | return
+      {$$ = [$1];}
     ;
 
 return
     : RETURN expr SEMICOLON
+      {$$ = createNode("return", [], undefined, {}, $2);}
     | RETURN SEMICOLON
+      {$$ = createNode("return", [], undefined, {});}
     ;
 
 stmt
@@ -103,10 +118,12 @@ stmt
 
 while
     : WHILE PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
+      {$$ = createNode("while", $6, undefined, {expr: $3});}
     ;
 
 fn_call
     : id PAROPEN paramlist PARCLOSE
+      {$$ = createFnCall($1, $3);}
     ;
 
 if
@@ -126,6 +143,7 @@ expr
     | PAROPEN expr PARCLOSE
     | expr GT expr
     | expr LT expr
+      {$$ = createComparision("lt", $1, $3);}
     | expr MULTIPLY expr
     | expr DIVIDE expr
     | expr PLUS expr
@@ -136,7 +154,9 @@ expr
 
 assgnmt_stmt
     : id EQUALSSIGN expr
+      {$$ = createNode("assignment", [], $1, {value: $3});}
     | type id EQUALSSIGN expr
+      {$$ = createNode("assignment", [], $2, {value: $4, type: $1});}
     ;
 
 value
@@ -151,6 +171,9 @@ array_value
 
 value_list
     : %empty
+      {$$ = [];}
     | value
+      {$$ = [$1];}
     | value COMMA value_list
+      {$$ = appendNode($3, $1);}
     ;
