@@ -97,7 +97,7 @@ block
     : stmt
       {$$ = [$1];}
     | stmt block
-      {$$ = [$1].concat($2);}
+      {$$ = appendNode($2, $1);}
     | return
       {$$ = [$1];}
     ;
