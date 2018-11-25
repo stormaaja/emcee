@@ -142,9 +142,11 @@ if
 
 paramlist
     : expr
+      {$$ = [$1];}
     | expr COMMA paramlist
       {$$ = appendChild($2, $1);}
     | %empty
+      {$$ = [];}
     ;
 
 expr
