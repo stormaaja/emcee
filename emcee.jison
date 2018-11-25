@@ -165,7 +165,9 @@ expr
 
 assgnmt_stmt
     : id EQUALSSIGN expr
+      {$$ = createNode("assignment", [$1, $3], $1);}
     | type id EQUALSSIGN expr
+      {$$ = createNode("assignment", [$2, $4], $2, {valueType: $1});}
     ;
 
 value
