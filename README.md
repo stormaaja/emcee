@@ -6,7 +6,11 @@ Compiler for hybrid C/JS/Java language.
 
 ## Run
 
-    npm run build-examples
+    npm run compile-examples
+
+## Test
+
+    npm test
 
 ## License
 
