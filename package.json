@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Simple compiler",
   "main": "parse.js",
+  "engine": ">=8.12",
   "directories": {
     "example": "examples"
   },
