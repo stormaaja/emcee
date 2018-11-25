@@ -14,5 +14,5 @@ function appendNodeChild(node, child) {
 }
 
 module.exports = {
-  createNode, appendChild
+  createNode, appendChild, appendNodeChild
 }
