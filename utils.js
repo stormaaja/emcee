@@ -1,32 +1,18 @@
 "use strict"
 
 function createNode(nodeType, children, id, meta, expr) {
-  return { nodeType, children, id, meta, expr}
+  return { nodeType, children, id, meta, expr }
 }
 
-function appendNode(children, x) {
+function appendChild(children, x) {
   return [x].concat(children)
 }
 
-function createReturn(expr) {
-  return createNode(
-    "return", [], undefined, {}, expr)
+function appendNodeChild(node, child) {
+  return Object.assign(
+    node, {children: appendChild(node.children, child)})
 }
 
-function createFunction(children, id, returnType, argList) {
-  return createNode("function", children, id, {returnType, argList})
-}
-
-function createComparision(comparisionType, left, right) {
-  return createNode(
-    "comparision", [], undefined, {left, right, comparisionType})
-}
-
-function createFnCall(id, params) {
-  return createNode("fn_call", [], id, {params})
-}
-
-export {
-  createNode, appendNode, createFunction, createComparision, createFnCall,
-  createReturn
+module.exports = {
+  createNode, appendChild
 }
