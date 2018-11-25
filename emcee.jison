@@ -1,8 +1,7 @@
 %{
     const path = require("path");
     const {
-      createNode, appendNode, createReturn, createFunction, createComparision,
-      createFnCall
+      createNode, appendChild
     } = require(path.normalize("../../../utils.js"));
 %}
 
@@ -53,16 +52,19 @@ pgm
 
 pgm_block
     : assgnmt_stmt
-    | pgm_block assgnmt_stmt
-      {$$ = appendNode($1, $2);}
+      {$$ = [$1]}
+    | assgnmt_stmt pgm_block
+      {$$ = appendChild($2, $1);}
     | function
-    | pgm_block function
-      {$$ = appendNode($1, $2);}
+      {$$ = [$1]}
+    | function pgm_block
+      {$$ = appendChild($2, $1);}
     ;
 
 function
     : type id PAROPEN arglist PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createFunction($7, $2, $1, $3);}
+      {$$ = createNode("function", $7, $2,
+         {returnType: $1, argList: $4});}
     ;
 
 type
@@ -80,13 +82,18 @@ array
 
 arglist
     : arg
+      {$$ = [$1];}
     | arg COMMA arglist
+      {$$ = appendChild($2, $1);}
     | %empty
+      {$$ = []}
     ;
 
 arg
     : type
+      {$$ = createNode("argument", [], null, {valueType: $1});}
     | type id
+      {$$ = createNode("argument", [], $2, {valueType: $1});}
     ;
 
 id
@@ -97,16 +104,16 @@ block
     : stmt
       {$$ = [$1];}
     | stmt block
-      {$$ = appendNode($2, $1);}
+      {$$ = appendChild($2, $1);}
     | return
       {$$ = [$1];}
     ;
 
 return
     : RETURN expr SEMICOLON
-      {$$ = createNode("return", [], undefined, {}, $2);}
+      {$$ = createNode("return", [], null, {}, $2);}
     | RETURN SEMICOLON
-      {$$ = createNode("return", [], undefined, {});}
+      {$$ = createNode("return", [], null, {});}
     ;
 
 stmt
@@ -118,22 +125,25 @@ stmt
 
 while
     : WHILE PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createNode("while", $6, undefined, {expr: $3});}
     ;
 
 fn_call
     : id PAROPEN paramlist PARCLOSE
-      {$$ = createFnCall($1, $3);}
+      {$$ = createNode("function_call", [], $1,
+          {paramList: $3});}
     ;
 
 if
     : IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
+      {$$ = createNode("if", $6, null, {}, $3);}
     | if ELSE BRACEOPEN block BRACECLOSE
+      {$$ = appendNodeChild($1, $4);}
     ;
 
 paramlist
     : expr
     | expr COMMA paramlist
+      {$$ = appendChild($2, $1);}
     | %empty
     ;
 
@@ -142,8 +152,9 @@ expr
     | value
     | PAROPEN expr PARCLOSE
     | expr GT expr
+      {$$ = createNode("compare_gt", [$1, $3]);}
     | expr LT expr
-      {$$ = createComparision("lt", $1, $3);}
+      {$$ = createNode("compare_lt", [$1, $3]);}
     | expr MULTIPLY expr
     | expr DIVIDE expr
     | expr PLUS expr
@@ -154,9 +165,7 @@ expr
 
 assgnmt_stmt
     : id EQUALSSIGN expr
-      {$$ = createNode("assignment", [], $1, {value: $3});}
     | type id EQUALSSIGN expr
-      {$$ = createNode("assignment", [], $2, {value: $4, type: $1});}
     ;
 
 value
@@ -175,5 +184,5 @@ value_list
     | value
       {$$ = [$1];}
     | value COMMA value_list
-      {$$ = appendNode($3, $1);}
+      {$$ = appendChild($2, $1);}
     ;
