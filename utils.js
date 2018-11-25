@@ -10,7 +10,8 @@ function appendChild(children, x) {
 
 function appendNodeChild(node, child) {
   return Object.assign(
-    node, {children: appendChild(node.children, child)})
+    node,
+    {children: node.children.concat(child)})
 }
 
 module.exports = {
