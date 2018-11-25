@@ -1,8 +1,12 @@
 const parser = require('../parser.js');
 const {createNode} = require('../utils.js')
 
+function generateMain(block) {
+  return `int main() { ${block} }`
+}
+
 test("generates AST for if", () => {
-  const source = "int main() {if (2 > 1) {return 0;} return 1;}"
+  const source = generateMain("if (2 > 1) {return 0;} return 1;")
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
         createNode("function", [
