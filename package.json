@@ -7,10 +7,10 @@
     "example": "examples"
   },
   "scripts": {
-    "test":
-      "node_modules/jison/lib/cli.js emcee.jison && node parse.js",
-    "build-examples":
-      "find examples -name '*.emc' -exec npm test -- {} +"
+    "generate": "node_modules/jison/lib/cli.js emcee.jison -o lib/emcee.js",
+    "test": "npm generate && node parse.js",
+    "build-examples": "find examples -name '*.emc' -exec npm test -- {} +",
+    "lint": "node_modules/.bin/eslint *.js"
   },
   "repository": {
     "type": "git",
