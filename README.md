@@ -14,6 +14,10 @@ Please do not use this for anything serious.
 
     npm test
 
+## Lint
+
+    npm run lint
+
 ## License
 
 MIT License
