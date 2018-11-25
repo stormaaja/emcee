@@ -19,7 +19,7 @@ test("generates AST for if", () => {
   )
 })
 
-test("generates AST of if-else", () => {
+test("generates AST of if-else greater than", () => {
   const source = generateMain("if (2 > 1) {return 0;} else {return 1;}")
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
@@ -31,5 +31,18 @@ test("generates AST of if-else", () => {
         ], "main", {argList: [], returnType: "int"})
     ])
   )
+})
 
+test("generates AST of compare less than", () => {
+  const source = generateMain("if (2 < 1) {return 1;} else {return 0;}")
+  expect(parser.parse(source).result).toEqual(
+    createNode("root", [
+      createNode("function", [
+        createNode("if", [
+          createNode("return", [], null, {}, "1"),
+          createNode("return", [], null, {}, "0")
+          ], null, {}, createNode("compare_lt", ["2", "1"])),
+        ], "main", {argList: [], returnType: "int"})
+    ])
+  )
 })
