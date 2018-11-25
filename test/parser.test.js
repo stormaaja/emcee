@@ -46,3 +46,15 @@ test("generates AST of compare less than", () => {
     ])
   )
 })
+
+test("generates AST of assignment", () => {
+  const source = generateMain("int i = 0; return i;")
+  expect(parser.parse(source).result).toEqual(
+    createNode("root", [
+      createNode("function", [
+        createNode("assignment", ["i", "0"], "i", {valueType: "int"}),
+        createNode("return", [], null, {}, "i")
+      ], "main", {argList: [], returnType: "int"})
+    ])
+  )
+})
