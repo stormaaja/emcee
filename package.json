@@ -3,13 +3,12 @@
   "version": "0.0.1",
   "description": "Simple compiler",
   "main": "parse.js",
-  "engine": ">=8.12",
+  "engine": ">=11.2",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "generate": "node_modules/jison/lib/cli.js emcee.jison -o lib/emcee.js",
-    "test": "npm generate && node parse.js",
+    "test": "jest",
     "build-examples": "find examples -name '*.emc' -exec npm test -- {} +",
     "lint": "node_modules/.bin/eslint *.js"
   },
@@ -28,6 +27,7 @@
   },
   "devDependencies": {
     "eslint": "^5.9.0",
-    "eslint-plugin-node": "^8.0.0"
+    "eslint-plugin-node": "^8.0.0",
+    "jest": "^23.6.0"
   }
 }
