@@ -58,3 +58,27 @@ test("generates AST of assignment", () => {
     ])
   )
 })
+
+test("generates AST of function call", () => {
+  const main = generateMain("hello(\"Hello World!\"); return 0;")
+  const source = `void hello(string s) {print(s);} ${main}`
+  expect(parser.parse(source).result).toEqual(
+    createNode("root", [
+      createNode(
+        "function",
+        [
+          createNode("function_call", [], "print", {paramList: ["s"]})
+        ],
+        "hello",
+        {
+          argList: [createNode("argument", [], "s", {valueType: "string"})],
+          returnType: "void"
+        }),
+      createNode("function", [
+        createNode("function_call", [], "hello",
+                   {paramList: ["\"Hello World!\""]}),
+        createNode("return", [], null, {}, "0")
+      ], "main", {argList: [], returnType: "int"})
+    ])
+  )
+})
