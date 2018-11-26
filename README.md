@@ -6,6 +6,10 @@ Compiler for hybrid C/JS/Java language.
 
 Please do not use this for anything serious.
 
+## Initialize project
+
+    npn install
+
 ## Run
 
     npm run compile-examples
