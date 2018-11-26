@@ -5,15 +5,19 @@ function createNode(nodeType, children, id, meta, expr) {
 }
 
 function appendChild(children, x) {
+  return children.concat(x)
+}
+
+function prependChild(children, x) {
   return [x].concat(children)
 }
 
 function appendNodeChild(node, child) {
   return Object.assign(
     node,
-    {children: node.children.concat(child)})
+    {children: appendChild(node.children, child)})
 }
 
 module.exports = {
-  createNode, appendChild, appendNodeChild
+  createNode, appendChild, prependChild, appendNodeChild
 }
