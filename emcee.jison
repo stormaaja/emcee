@@ -29,6 +29,7 @@
 "]"                   return "SBCLOSE";
 ";"                   return "SEMICOLON";
 ","                   return "COMMA";
+"=="                  return "EQ";
 "="                   return "EQUALSSIGN";
 "+"                   return "PLUS";
 "-"                   return "MINUS";
@@ -40,7 +41,7 @@
 \"[^"]+\"             return "STR_VALUE";
 /lex
 
-%left GT LT PLUS MINUS
+%left EQ GT LT PLUS MINUS
 %left MULTIPLY DIVIDE
 
 %%
@@ -153,6 +154,8 @@ expr
     : id
     | value
     | PAROPEN expr PARCLOSE
+    | expr EQ expr
+      {$$ = createNode("compare_eq", [$1, $3]);}
     | expr GT expr
       {$$ = createNode("compare_gt", [$1, $3]);}
     | expr LT expr
