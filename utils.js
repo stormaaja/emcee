@@ -1,7 +1,7 @@
 "use strict"
 
-function createNode(nodeType, children, id, meta, expr) {
-  return { nodeType, children, id, meta, expr }
+function createNode(nodeType, children, id, meta) {
+  return { nodeType, children, id, meta}
 }
 
 function appendChild(children, x) {
