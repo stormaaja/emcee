@@ -1,7 +1,7 @@
 %{
     const path = require("path");
     const {
-      createNode, appendChild, appendNodeChild
+      createNode, appendChild, prependChild, appendNodeChild
     } = require(path.normalize("../../../utils.js"));
 %}
 
@@ -55,11 +55,11 @@ pgm_block
     : assgnmt_stmt
       {$$ = [$1]}
     | assgnmt_stmt pgm_block
-      {$$ = appendChild($2, $1);}
+      {$$ = prependChild($2, $1);}
     | function
       {$$ = [$1]}
     | function pgm_block
-      {$$ = appendChild($2, $1);}
+      {$$ = prependChild($2, $1);}
     ;
 
 function
@@ -85,7 +85,7 @@ arglist
     : arg
       {$$ = [$1];}
     | arg COMMA arglist
-      {$$ = appendChild($2, $1);}
+      {$$ = prependChild($3, $1);}
     | %empty
       {$$ = []}
     ;
@@ -105,7 +105,7 @@ block
     : stmt
       {$$ = [$1];}
     | stmt block
-      {$$ = appendChild($2, $1);}
+      {$$ = prependChild($2, $1);}
     | return
       {$$ = [$1];}
     ;
@@ -145,7 +145,7 @@ paramlist
     : expr
       {$$ = [$1];}
     | expr COMMA paramlist
-      {$$ = appendChild($2, $1);}
+      {$$ = prependChild($3, $1);}
     | %empty
       {$$ = [];}
     ;
@@ -191,5 +191,5 @@ value_list
     | value
       {$$ = [$1];}
     | value COMMA value_list
-      {$$ = appendChild($2, $1);}
+      {$$ = prependChild($3, $1);}
     ;
