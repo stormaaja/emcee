@@ -18,6 +18,11 @@ Please do not use this for anything serious.
 
     npm run lint
 
+## Technologies
+
+- [Jison](http://zaa.ch/jison/)
+- [Jest](https://jestjs.io)
+
 ## License
 
 MIT License
