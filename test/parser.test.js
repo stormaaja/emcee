@@ -11,9 +11,10 @@ test("generates AST of if-else greater than", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("return", [], null, {}, "0"),
-          createNode("return", [], null, {}, "1")
-          ], null, {}, createNode("compare_gt", ["2", "1"])),
+          createNode("compare_gt", ["2", "1"]),
+          createNode("return", ["0"]),
+          createNode("return", ["1"])
+          ]),
         ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -25,7 +26,7 @@ test("generates AST of assignment", () => {
     createNode("root", [
       createNode("function", [
         createNode("assignment", ["i", "0"], "i", {valueType: "int"}),
-        createNode("return", [], null, {}, "i")
+        createNode("return", ["i"])
       ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -39,7 +40,7 @@ test("generates AST of function call", () => {
       createNode(
         "function",
         [
-          createNode("function_call", [], "print", {paramList: ["s"]})
+          createNode("function_call", ["s"], "print")
         ],
         "hello",
         {
@@ -47,9 +48,8 @@ test("generates AST of function call", () => {
           returnType: "void"
         }),
       createNode("function", [
-        createNode("function_call", [], "hello",
-                   {paramList: ["\"Hello World!\""]}),
-        createNode("return", [], null, {}, "0")
+        createNode("function_call", ["\"Hello World!\""], "hello"),
+        createNode("return", ["0"])
       ], "main", {argList: [], returnType: "int"})
     ])
   )

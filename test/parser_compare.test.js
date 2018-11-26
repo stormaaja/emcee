@@ -11,9 +11,10 @@ test("generates AST of compare greater than", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("return", [], null, {}, "0")
-        ], null, {}, createNode("compare_gt", ["2", "1"])),
-        createNode("return", [], null, {}, "1")
+          createNode("compare_gt", ["2", "1"]),
+          createNode("return", ["0"])
+        ]),
+        createNode("return", ["1"])
       ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -25,9 +26,10 @@ test("generates AST of compare less than", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("return", [], null, {}, "1"),
-          createNode("return", [], null, {}, "0")
-          ], null, {}, createNode("compare_lt", ["2", "1"])),
+          createNode("compare_lt", ["2", "1"]),
+          createNode("return", ["1"]),
+          createNode("return", ["0"])
+          ]),
         ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -39,9 +41,10 @@ test("generates AST of compare equals", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("return", [], null, {}, "0")
-        ], null, {}, createNode("compare_eq", ["1", "1"])),
-        createNode("return", [], null, {}, "1")
+          createNode("compare_eq", ["1", "1"]),
+          createNode("return", ["0"])
+        ]),
+        createNode("return", ["1"])
       ], "main", {argList: [], returnType: "int"})
     ])
   )
