@@ -15,11 +15,11 @@ Kohdekieli on joko ES5-JS tai WebAssembly. Tämä tarkentuu myöhemmin.
 
 ## Työkalut
 
-Isäntäkielenä on JavaScript (ES6).
+Isäntäkielenä on JavaScript (NodeJS, ES6).
 
 Parserigeneraattorina toimii Jison.
 
-Muut työkalut tarkentuvat myöhemmin.
+[Lista käytetyistä teknologioista](README.md#Technologies) löytyy README:sta.
 
 ## Testaus
 
