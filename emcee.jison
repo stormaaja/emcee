@@ -112,9 +112,9 @@ block
 
 return
     : RETURN expr SEMICOLON
-      {$$ = createNode("return", [], null, {}, $2);}
+      {$$ = createNode("return", [$2]);}
     | RETURN SEMICOLON
-      {$$ = createNode("return", [], null, {});}
+      {$$ = createNode("return", [$2]);}
     ;
 
 stmt
@@ -130,13 +130,12 @@ while
 
 fn_call
     : id PAROPEN paramlist PARCLOSE
-      {$$ = createNode("function_call", [], $1,
-          {paramList: $3});}
+      {$$ = createNode("function_call", $3, $1);}
     ;
 
 if
     : IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createNode("if", $6, null, {}, $3);}
+      {$$ = createNode("if", prependChild($6, $3));}
     | if ELSE BRACEOPEN block BRACECLOSE
       {$$ = appendNodeChild($1, $4);}
     ;
