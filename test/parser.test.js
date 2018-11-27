@@ -1,6 +1,6 @@
 const parser = require("../parser.js");
 const {createNode} = require("../utils.js")
-const {generateMain} = require("../test_utils.js")
+const {generateMain, generateProgramNode} = require("../test_utils.js")
 
 test("generates AST of if-else greater than", () => {
   const source = generateMain("if (2 > 1) {return 0;} else {return 1;}")
@@ -11,8 +11,8 @@ test("generates AST of if-else greater than", () => {
           createNode("compare_gt", ["2", "1"]),
           createNode("if_body", [createNode("return", ["0"])]),
           createNode("else_body", [createNode("return", ["1"])])
-          ]),
-        ], "main", {argList: [], returnType: "int"})
+        ]),
+      ], "main", {argList: [], returnType: "int"})
     ])
   )
 })
@@ -49,5 +49,26 @@ test("generates AST of function call", () => {
         createNode("return", ["0"])
       ], "main", {argList: [], returnType: "int"})
     ])
+  )
+})
+
+
+test("generates AST of array", () => {
+  const source = generateMain(
+    "int[] a = [0, 1, 2, 3]; print(a[2]); return a[0];")
+  expect(parser.parse(source).result).toEqual(
+    generateProgramNode(
+      [
+        createNode(
+          "assignment", [
+            "a",
+            createNode("array_values", ["0", "1", "2", "3"])
+          ],
+          "a", {valueType: "array_int"}),
+        createNode(
+          "function_call", [createNode("array_access", ["a", "2"])], "print"),
+        createNode("return", [createNode("array_access", ["a", "0"])])
+      ]
+    )
   )
 })
