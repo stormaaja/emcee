@@ -20,7 +20,8 @@
 "else"                return "ELSE";
 "while"               return "WHILE";
 [a-zA-Z][a-zA-Z0-9_]* return "ID";
-[0-9]+                return "NATLITERAL";
+[0-9]+"."[0-9]+\b     return "DOUBLEVALUE";
+[0-9]+                return "INTVALUE";
 "("                   return "PAROPEN";
 ")"                   return "PARCLOSE";
 "{"                   return "BRACEOPEN";
@@ -182,7 +183,8 @@ assgnmt_stmt
     ;
 
 value
-    : NATLITERAL
+    : INTVALUE
+    | DOUBLEVALUE
     | STR_VALUE
     | array_value
     ;
