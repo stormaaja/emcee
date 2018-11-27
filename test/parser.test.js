@@ -1,5 +1,5 @@
-const parser = require('../parser.js');
-const {createNode} = require('../utils.js')
+const parser = require("../parser.js");
+const {createNode} = require("../utils.js")
 const {generateMain} = require("../test_utils.js")
 
 test("generates AST of if-else greater than", () => {
