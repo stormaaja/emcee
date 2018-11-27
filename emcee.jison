@@ -161,6 +161,7 @@ expr
     : id
     | value
     | PAROPEN expr PARCLOSE
+      {$$ = $2;}
     | expr EQ expr
       {$$ = createNode("compare_eq", [$1, $3]);}
     | expr GT expr
@@ -168,9 +169,13 @@ expr
     | expr LT expr
       {$$ = createNode("compare_lt", [$1, $3]);}
     | expr MULTIPLY expr
+      {$$ = createNode("mul_expr", [$1, $3]);}
     | expr DIVIDE expr
+      {$$ = createNode("div_expr", [$1, $3]);}
     | expr PLUS expr
+      {$$ = createNode("add_expr", [$1, $3]);}
     | expr MINUS expr
+      {$$ = createNode("sub_expr", [$1, $3]);}
     | fn_call
     | id SBOPEN expr SBCLOSE
     ;
