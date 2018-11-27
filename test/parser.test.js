@@ -12,8 +12,8 @@ test("generates AST of if-else greater than", () => {
       createNode("function", [
         createNode("if", [
           createNode("compare_gt", ["2", "1"]),
-          createNode("return", ["0"]),
-          createNode("return", ["1"])
+          createNode("if_body", [createNode("return", ["0"])]),
+          createNode("else_body", [createNode("return", ["1"])])
           ]),
         ], "main", {argList: [], returnType: "int"})
     ])
