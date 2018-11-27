@@ -178,6 +178,7 @@ expr
       {$$ = createNode("sub_expr", [$1, $3]);}
     | fn_call
     | id SBOPEN expr SBCLOSE
+      {$$ = createNode("array_access", [$1, $3]);}
     ;
 
 assgnmt_stmt
