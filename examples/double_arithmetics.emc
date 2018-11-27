@@ -1,0 +1,10 @@
+// Double arithmetics
+
+int main() {
+  double x = 2.0;
+  double y = 3.0;
+  double div = x / y;
+  double mul = x * y;
+  double nat = 4.0 * 5.0 / 2;
+  return 0;
+}
