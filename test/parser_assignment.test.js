@@ -27,3 +27,19 @@ test("generates AST of usage of an assignment", () => {
     ])
   )
 })
+
+test("generates AST of an array assignment", () => {
+  const source = generateMain("string[] a = [\"Hello\", \"World\"]; return 0;")
+  expect(parser.parse(source).result).toEqual(
+    createNode("root", [
+      createNode("function", [
+        createNode("assignment", [
+          "a",
+          createNode(
+            "array_values", ["\"Hello\"", "\"World\""])
+        ], "a", {valueType: "array_string"}),
+        createNode("return", ["0"])
+        ], "main", {argList: [], returnType: "int"})
+    ])
+  )
+})
