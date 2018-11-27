@@ -141,9 +141,9 @@ fn_call
 
 if
     : IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createNode("if", prependChild($6, $3));}
+      {$$ = createNode("if", [$3, createNode("if_body", $6)]);}
     | if ELSE BRACEOPEN block BRACECLOSE
-      {$$ = appendNodeChild($1, $4);}
+      {$$ = appendNodeChild($1, createNode("else_body", $4));}
     ;
 
 paramlist
