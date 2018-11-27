@@ -25,6 +25,7 @@ function main(argv) {
   const options = args.filter(f => f.startsWith("--"))
 
   const printTree = options.includes("--print-tree")
+  const objects = options.includes("--objects")
 
   const results = compile(files)
 
@@ -32,7 +33,8 @@ function main(argv) {
     if (r.success) {
       console.log("%s: \x1b[32mOK\x1b[0m", r.file)
       if (printTree) {
-        console.log(JSON.stringify(r.result, null, 2))
+        const tree = objects ? r.result : JSON.stringify(r.result, null, 2)
+        console.log(tree)
       }
     } else {
       console.log("%s: \x1b[31mFail\x1b[0m", r.file)
