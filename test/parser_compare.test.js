@@ -1,9 +1,6 @@
 const parser = require('../parser.js');
 const {createNode} = require('../utils.js')
-
-function generateMain(block) {
-  return `int main() { ${block} }`
-}
+const {generateMain} = require("../test_utils.js")
 
 test("generates AST of compare greater than", () => {
   const source = generateMain("if (2 > 1) {return 0;} return 1;")
