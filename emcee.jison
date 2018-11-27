@@ -79,6 +79,7 @@ type
 
 array
     : type SBOPEN SBCLOSE
+      {$$ = "array_" + $1;}
     ;
 
 arglist
@@ -188,6 +189,7 @@ value
 
 array_value
     : SBOPEN value_list SBCLOSE
+      {$$ = createNode("array_values", $2);}
     ;
 
 value_list
