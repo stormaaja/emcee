@@ -8,10 +8,18 @@ test("generates AST of compare greater than", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("compare_gt", ["2", "1"]),
-          createNode("if_body", [createNode("return", ["0"])])
+          createNode("compare_gt", [
+            createNode("integer_value", ["2"]),
+            createNode("integer_value", ["1"])
+          ]),
+          createNode("if_body", [
+            createNode("return", [
+              createNode("integer_value", ["0"])
+            ])])
         ]),
-        createNode("return", ["1"])
+        createNode("return", [
+          createNode("integer_value", ["1"])
+        ])
       ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -23,9 +31,18 @@ test("generates AST of compare less than", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("compare_lt", ["2", "1"]),
-          createNode("if_body", [createNode("return", ["1"])]),
-          createNode("else_body", [createNode("return", ["0"])])
+          createNode("compare_lt", [
+            createNode("integer_value", ["2"]),
+            createNode("integer_value", ["1"])
+          ]),
+          createNode("if_body", [
+            createNode("return", [
+              createNode("integer_value", ["1"])
+            ])]),
+          createNode("else_body", [
+            createNode("return", [
+              createNode("integer_value", ["0"])
+            ])])
           ]),
         ], "main", {argList: [], returnType: "int"})
     ])
@@ -38,9 +55,17 @@ test("generates AST of compare equals", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("compare_eq", ["1", "1"]),
-          createNode("if_body", [createNode("return", ["0"])])]),
-        createNode("return", ["1"])
+          createNode("compare_eq", [
+            createNode("integer_value", ["1"]),
+            createNode("integer_value", ["1"])
+          ]),
+          createNode("if_body", [
+            createNode("return", [
+              createNode("integer_value", ["0"])
+            ])])]),
+        createNode("return", [
+          createNode("integer_value", ["1"])
+        ])
       ], "main", {argList: [], returnType: "int"})
     ])
   )

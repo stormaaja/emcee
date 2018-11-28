@@ -8,9 +8,17 @@ test("generates AST of if-else greater than", () => {
     createNode("root", [
       createNode("function", [
         createNode("if", [
-          createNode("compare_gt", ["2", "1"]),
-          createNode("if_body", [createNode("return", ["0"])]),
-          createNode("else_body", [createNode("return", ["1"])])
+          createNode("compare_gt", [
+            createNode("integer_value", ["2"]),
+            createNode("integer_value", ["1"])
+          ]),
+          createNode("if_body", [
+            createNode("return", [
+              createNode("integer_value", ["0"])
+            ])]),
+          createNode("else_body", [
+            createNode("return", [
+              createNode("integer_value", ["1"])])])
         ]),
       ], "main", {argList: [], returnType: "int"})
     ])
@@ -22,7 +30,10 @@ test("generates AST of assignment", () => {
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
       createNode("function", [
-        createNode("assignment", ["i", "0"], "i", {valueType: "int"}),
+        createNode("assignment", [
+          "i",
+          createNode("integer_value", ["0"])
+        ], "i", {valueType: "int"}),
         createNode("return", ["i"])
       ], "main", {argList: [], returnType: "int"})
     ])
@@ -45,8 +56,12 @@ test("generates AST of function call", () => {
           returnType: "void"
         }),
       createNode("function", [
-        createNode("function_call", ["\"Hello World!\""], "hello"),
-        createNode("return", ["0"])
+        createNode("function_call", [
+          createNode("string_value", ["\"Hello World!\""])
+        ], "hello"),
+        createNode("return", [
+          createNode("integer_value", ["0"])
+        ])
       ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -62,12 +77,23 @@ test("generates AST of array", () => {
         createNode(
           "assignment", [
             "a",
-            createNode("array_values", ["0", "1", "2", "3"])
+            createNode("array_values", [
+              createNode("integer_value", ["0"]),
+              createNode("integer_value", ["1"]),
+              createNode("integer_value", ["2"]),
+              createNode("integer_value", ["3"])])
           ],
           "a", {valueType: "array_int"}),
         createNode(
-          "function_call", [createNode("array_access", ["a", "2"])], "print"),
-        createNode("return", [createNode("array_access", ["a", "0"])])
+          "function_call", [
+            createNode("array_access", [
+              "a",
+              createNode("integer_value", ["2"])])],
+          "print"),
+        createNode("return", [
+          createNode("array_access", [
+            "a",
+            createNode("integer_value", ["0"])])])
       ]
     )
   )

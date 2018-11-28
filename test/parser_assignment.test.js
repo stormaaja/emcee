@@ -7,7 +7,10 @@ test("generates AST of simple assignment", () => {
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
       createNode("function", [
-        createNode("assignment", ["x", "0"], "x", {valueType: "int"}),
+        createNode("assignment", [
+          "x",
+          createNode("integer_value", ["0"])
+        ], "x", {valueType: "int"}),
         createNode("return", ["x"])
         ], "main", {argList: [], returnType: "int"})
     ])
@@ -20,9 +23,15 @@ test("generates AST of usage of an assignment", () => {
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
       createNode("function", [
-        createNode("assignment", ["s", "\"Hello\""], "s", {valueType: "string"}),
+        createNode(
+          "assignment",
+          [
+            "s",
+            createNode("string_value", ["\"Hello\""])
+          ],
+          "s", {valueType: "string"}),
         createNode("function_call", ["s"], "print"),
-        createNode("return", ["0"])
+        createNode("return", [createNode("integer_value", ["0"])])
         ], "main", {argList: [], returnType: "int"})
     ])
   )
@@ -36,9 +45,11 @@ test("generates AST of an array assignment", () => {
         createNode("assignment", [
           "a",
           createNode(
-            "array_values", ["\"Hello\"", "\"World\""])
+            "array_values", [
+              createNode("string_value", ["\"Hello\""]),
+              createNode("string_value", ["\"World\""])])
         ], "a", {valueType: "array_string"}),
-        createNode("return", ["0"])
+        createNode("return", [createNode("integer_value", ["0"])])
         ], "main", {argList: [], returnType: "int"})
     ])
   )
