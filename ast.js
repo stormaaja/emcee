@@ -20,22 +20,34 @@ function generateNode({nodeType, children, id, meta}) {
   case "integer_value": {
     return new ValueNode("integer", children[0])
   }
+  case "argument": {
+    return new ArgumentNode(id, meta.valueType)
+  }
+  case "assignment": {
+    return new AssignmentNode(id, children[1], meta.valueType)
+  }
+  case "compare_gt": {
+    return new CompareNode("gt", children[0], children[1])
+  }
+  case "if": {
+    return new IfNode(children[0], children[1])
+  }
   default: {
-    return {}
+    throw Error("Unknown node type: " + nodeType)
   }
   }
 }
 
 class RootNode {
   constructor(children) {
-    this.children = children.map(generateNode)
+    this.children = children
   }
 }
 
 class FunctionNode {
   constructor(id, children, meta) {
     this.id = id
-    this.children = children.map(generateNode)
+    this.children = children
     this.returnType = meta.returnType
     this.argList = meta.argList
   }
@@ -43,15 +55,14 @@ class FunctionNode {
 
 class ReturnNode{
   constructor(expression) {
-    this.expression = expression ?
-      generateNode(expression) : new ValueNode("void")
+    this.expression = expression
   }
 }
 
 class FunctionCallNode {
   constructor(id, params) {
     this.id = id
-    this.params = params.map(generateNode)
+    this.params = params
   }
 }
 
@@ -71,10 +82,10 @@ class WhileNode {
 }
 
 class IfNode {
-  constructor(expression, ifBlock, elseBlock) {
+  constructor(expression, ifBody, elseBody) {
     this.expression = expression
-    this.ifBlock = ifBlock
-    this.elseBlock = elseBlock
+    this.ifBody = ifBody
+    this.elseBody = elseBody
   }
 }
 
@@ -95,9 +106,9 @@ class ArithmeticsNode {
 }
 
 class AssignmentNode {
-  constructor(id, value, type) {
+  constructor(id, expression, type) {
     this.id = id
-    this.value = value
+    this.expression = expression
     this.type = type
   }
 }
@@ -109,4 +120,13 @@ class ValueNode {
   }
 }
 
-module.exports = {generateNode, RootNode, FunctionNode, ValueNode, ReturnNode}
+class ArgumentNode{
+  constructor(type, id) {
+    this.type = type
+    this.id = id
+  }
+}
+
+module.exports = {
+  generateNode
+}
