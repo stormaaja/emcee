@@ -1,5 +1,6 @@
 const parser = require("./parser.js")
 const file = require("./file.js")
+const astGenerator = require("./ast_generator.js")
 
 "use strict"
 
@@ -26,6 +27,7 @@ function main(argv) {
 
   const printTree = options.includes("--print-tree")
   const objects = options.includes("--objects")
+  const printAST = options.includes("--print-ast")
 
   const results = compile(files)
 
@@ -34,6 +36,11 @@ function main(argv) {
       console.log("%s: \x1b[32mOK\x1b[0m", r.file)
       if (printTree) {
         const tree = objects ? r.result : JSON.stringify(r.result, null, 2)
+        console.log(tree)
+      }
+      if (printAST) {
+        const ast = astGenerator.generateAST(r.result)
+        const tree = objects ? ast : JSON.stringify(ast, null, 2)
         console.log(tree)
       }
     } else {
