@@ -190,8 +190,11 @@ assgnmt_stmt
 
 value
     : INTVALUE
+      {$$ = createNode("integer_value", [$1])}
     | DOUBLEVALUE
+      {$$ = createNode("double_value", [$1])}
     | STR_VALUE
+      {$$ = createNode("string_value", [$1])}
     | array_value
     ;
 
