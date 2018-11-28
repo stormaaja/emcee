@@ -1,7 +1,9 @@
 "use strict"
 
+const {generateNode} = require("./ast.js")
+
 function createNode(nodeType, children, id, meta) {
-  return {nodeType, children, id, meta}
+  return generateNode({nodeType, children, id, meta})
 }
 
 function appendChild(children, x) {
