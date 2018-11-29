@@ -93,6 +93,11 @@ test("typecheck of if node", () => {
   expect(node.typeCheck({})).toBeTruthy()
 })
 
+test("typecheck of assignment node of assignment", () => {
+  const node = new AssignmentNode("x", new ValueNode("integer", "0"), "integer")
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
 test("typecheck of assignment node of reassignment", () => {
   const node = new RootNode([
     new AssignmentNode("x", new ValueNode("integer", "0"), "integer"),
