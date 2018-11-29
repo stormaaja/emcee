@@ -138,11 +138,19 @@ class CompareNode {
   }
 }
 
+const operators = {
+  "add": (x, y) => x + y
+}
+
 class ArithmeticsNode {
   constructor(operator, left, right) {
     this.operator = operator
     this.left = left
     this.right = right
+  }
+
+  eval(env) {
+    return operators[this.operator](this.left.eval(env), this.right.eval(env))
   }
 }
 
@@ -202,6 +210,9 @@ class ValueNode {
   }
   typeCheck() {
     return !(this.value instanceof InvalidValueType)
+  }
+  eval() {
+    return this.value
   }
 }
 
