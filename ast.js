@@ -133,6 +133,9 @@ class CompareNode {
     this.left = left
     this.right = right
   }
+  typeCheck() {
+    return this.left.type === this.right.type
+  }
 }
 
 class ArithmeticsNode {
@@ -151,10 +154,54 @@ class AssignmentNode {
   }
 }
 
-class ValueNode {
+class InvalidValueType {
   constructor(type, value) {
     this.type = type
     this.value = value
+  }
+}
+
+function parseNumber(parser, pattern, value) {
+  const parsedValue = parser(value)
+  if (value.match(pattern) && !isNaN(parsedValue) && isFinite(parsedValue))
+    return parsedValue
+  else
+    return new InvalidValueType("", value)
+}
+
+const integerPattern = /^\-?\d+$/
+
+function parseInteger(value) {
+  return parseNumber(parseInt, integerPattern, value)
+}
+
+const doublePattern = /^[0-9]+(\.[0-9]+)?$/
+
+function parseDouble(value) {
+  return parseNumber(parseFloat, doublePattern, value)
+}
+
+const parsers = {
+  "integer": (x) => parseInteger(x),
+  "string": (x) => x,
+  "double": (x) => parseDouble(x)
+}
+
+function parseValue(type, value) {
+  const parser = parsers[type]
+  if (parser)
+    return parser(value)
+  else
+    return new InvalidValueType(type)
+}
+
+class ValueNode {
+  constructor(type, value) {
+    this.type = type
+    this.value = parseValue(type, value)
+  }
+  typeCheck() {
+    return !(this.value instanceof InvalidValueType)
   }
 }
 
@@ -166,5 +213,5 @@ class ArgumentNode{
 }
 
 module.exports = {
-  generateNode
+  generateNode, ValueNode, CompareNode
 }
