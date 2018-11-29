@@ -19,6 +19,8 @@
 "if"                  return "IF";
 "else"                return "ELSE";
 "while"               return "WHILE";
+"true"                return "TRUE"
+"false"               return "FALSE"
 [a-zA-Z][a-zA-Z0-9_]* return "ID";
 [0-9]+"."[0-9]+\b     return "DOUBLEVALUE";
 [0-9]+                return "INTVALUE";
@@ -192,6 +194,10 @@ value
       {$$ = createNode("string_value", [$1])}
     | SBOPEN value_list SBCLOSE
       {$$ = createNode("array_values", $2);}
+    | TRUE
+      {$$ = createNode("boolean_value", [$1])}
+    | FALSE
+      {$$ = createNode("boolean_value", [$1])}
     ;
 
 value_list

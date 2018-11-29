@@ -23,6 +23,9 @@ function generateNode({nodeType, children, id, meta}) {
   case "double_value": {
     return new ValueNode("double", children[0])
   }
+  case "boolean_value": {
+    return new ValueNode("boolean", children[0])
+  }
   case "array_values": {
     return new ValueNode("array", children)
   }
@@ -192,7 +195,14 @@ function parseDouble(value) {
 const parsers = {
   "integer": (x) => parseInteger(x),
   "string": (x) => x,
-  "double": (x) => parseDouble(x)
+  "double": (x) => parseDouble(x),
+  "boolean": (x) => {
+    switch(x) {
+      case "true": return true
+      case "false": return false
+      default: return new InvalidValueType(x)
+    }
+  }
 }
 
 function parseValue(type, value) {
