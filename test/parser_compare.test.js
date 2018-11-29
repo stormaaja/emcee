@@ -1,5 +1,5 @@
 const parser = require("../parser.js");
-const {createNode} = require("../utils.js")
+const {createNode, addElse} = require("../utils.js")
 const {generateMain} = require("../test_utils.js")
 
 test("generates AST of compare greater than", () => {
@@ -12,10 +12,7 @@ test("generates AST of compare greater than", () => {
             createNode("integer_value", ["2"]),
             createNode("integer_value", ["1"])
           ]),
-          createNode("if_body", [
-            createNode("return", [
-              createNode("integer_value", ["0"])
-            ])])
+          [createNode("return", [createNode("integer_value", ["0"])])]
         ]),
         createNode("return", [
           createNode("integer_value", ["1"])
@@ -30,21 +27,16 @@ test("generates AST of compare less than", () => {
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
       createNode("function", [
-        createNode("if", [
-          createNode("compare_lt", [
-            createNode("integer_value", ["2"]),
-            createNode("integer_value", ["1"])
-          ]),
-          createNode("if_body", [
-            createNode("return", [
+        addElse(
+          createNode("if", [
+            createNode("compare_lt", [
+              createNode("integer_value", ["2"]),
               createNode("integer_value", ["1"])
-            ])]),
-          createNode("else_body", [
-            createNode("return", [
-              createNode("integer_value", ["0"])
-            ])])
+            ]),
+            [createNode("return", [createNode("integer_value", ["1"])])]
           ]),
-        ], "main", {argList: [], returnType: "int"})
+          [createNode("return", [createNode("integer_value", ["0"])])]),
+      ], "main", {argList: [], returnType: "int"})
     ])
   )
 })
@@ -59,12 +51,8 @@ test("generates AST of compare equals", () => {
             createNode("integer_value", ["1"]),
             createNode("integer_value", ["1"])
           ]),
-          createNode("if_body", [
-            createNode("return", [
-              createNode("integer_value", ["0"])
-            ])])]),
-        createNode("return", [
-          createNode("integer_value", ["1"])
+          [createNode("return", [createNode("integer_value", ["0"])])]]),
+        createNode("return", [createNode("integer_value", ["1"])
         ])
       ], "main", {argList: [], returnType: "int"})
     ])

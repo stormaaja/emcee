@@ -1,5 +1,5 @@
 const parser = require("../parser.js");
-const {createNode} = require("../utils.js")
+const {createNode, addElse} = require("../utils.js")
 const {generateMain, generateProgramNode} = require("../test_utils.js")
 
 test("generates AST of if-else greater than", () => {
@@ -7,19 +7,18 @@ test("generates AST of if-else greater than", () => {
   expect(parser.parse(source).result).toEqual(
     createNode("root", [
       createNode("function", [
-        createNode("if", [
-          createNode("compare_gt", [
-            createNode("integer_value", ["2"]),
-            createNode("integer_value", ["1"])
-          ]),
-          createNode("if_body", [
+        addElse(
+          createNode("if", [
+            createNode("compare_gt", [
+              createNode("integer_value", ["2"]),
+              createNode("integer_value", ["1"])
+            ]),
             createNode("return", [
               createNode("integer_value", ["0"])
-            ])]),
-          createNode("else_body", [
-            createNode("return", [
-              createNode("integer_value", ["1"])])])
-        ]),
+            ])
+          ]),
+          createNode("return", [
+            createNode("integer_value", ["1"])]))
       ], "main", {argList: [], returnType: "int"})
     ])
   )
