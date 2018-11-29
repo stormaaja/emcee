@@ -1,4 +1,6 @@
-const {ValueNode, CompareNode} = require("../ast.js")
+const {
+  ValueNode, CompareNode, IfNode, AssignmentNode, RootNode
+} = require("../ast.js")
 
 test("typecheck of positive integer", () => {
   const node = new ValueNode("integer", "5")
@@ -79,5 +81,30 @@ test("typecheck of compare eq mismatch", () => {
     "eq", new ValueNode("integer", "2"), new ValueNode("string", "hello"))
   expect(node.left.value).toBe(2)
   expect(node.right.value).toBe("hello")
+  expect(node.typeCheck({})).toBeFalsy()
+})
+
+test("typecheck of if node", () => {
+  const node = new IfNode(
+    new CompareNode(
+      "eq", new ValueNode("integer", "2"), new ValueNode("integer", "2")),
+    new AssignmentNode("x", new ValueNode("integer", "10"), "integer"),
+    new AssignmentNode("y", new ValueNode("boolean", "true"), "boolean"))
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+test("typecheck of assignment node of reassignment", () => {
+  const node = new RootNode([
+    new AssignmentNode("x", new ValueNode("integer", "0"), "integer"),
+    new AssignmentNode("x", new ValueNode("integer", "1"))
+  ])
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+test("typecheck of assignment node of invalid reassignment", () => {
+  const node = new RootNode([
+    new AssignmentNode("x", new ValueNode("integer", "0"), "integer"),
+    new AssignmentNode("x", new ValueNode("double", "1.0"))
+  ])
   expect(node.typeCheck({})).toBeFalsy()
 })
