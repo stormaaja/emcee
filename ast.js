@@ -1,5 +1,7 @@
 "use strict"
 
+// TODO change typechecks to return results instead of success boolean
+
 function generateNode({nodeType, children, id, meta}) {
   switch (nodeType) {
   case "root": {
