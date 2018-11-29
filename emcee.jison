@@ -127,13 +127,8 @@ stmt
     ;
 
 while
-    : WHILE PAROPEN expr PARCLOSE BRACEOPEN while_body BRACECLOSE
+    : WHILE PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
       {$$ = createNode("while", [$3, $6]);}
-    ;
-
-while_body
-    : block
-      {$$ = createNode("while_body", $1);}
     ;
 
 fn_call
