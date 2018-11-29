@@ -190,11 +190,7 @@ value
       {$$ = createNode("double_value", [$1])}
     | STR_VALUE
       {$$ = createNode("string_value", [$1])}
-    | array_value
-    ;
-
-array_value
-    : SBOPEN value_list SBCLOSE
+    | SBOPEN value_list SBCLOSE
       {$$ = createNode("array_values", $2);}
     ;
 
