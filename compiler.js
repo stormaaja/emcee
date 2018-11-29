@@ -1,6 +1,5 @@
 const parser = require("./parser.js")
 const file = require("./file.js")
-const astGenerator = require("./ast_generator.js")
 
 "use strict"
 
