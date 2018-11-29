@@ -224,5 +224,5 @@ class ArgumentNode{
 }
 
 module.exports = {
-  generateNode, ValueNode, CompareNode
+  generateNode, ValueNode, CompareNode, ArithmeticsNode
 }
