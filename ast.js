@@ -20,6 +20,15 @@ function generateNode({nodeType, children, id, meta}) {
   case "integer_value": {
     return new ValueNode("integer", children[0])
   }
+  case "double_value": {
+    return new ValueNode("double", children[0])
+  }
+  case "array_values": {
+    return new ValueNode("array", children)
+  }
+  case "array_access": {
+    return new ArrayAccessNode(id, children[0])
+  }
   case "argument": {
     return new ArgumentNode(id, meta.valueType)
   }
@@ -29,9 +38,31 @@ function generateNode({nodeType, children, id, meta}) {
   case "compare_gt": {
     return new CompareNode("gt", children[0], children[1])
   }
+  case "compare_lt": {
+    return new CompareNode("lt", children[0], children[1])
+  }
+  case "compare_eq": {
+    return new CompareNode("eq", children[0], children[1])
+  }
   case "if": {
     return new IfNode(children[0], children[1])
   }
+  case "while": {
+    return new WhileNode(children[0], children[1])
+  }
+  case "add_expr": {
+    return new ArithmeticsNode("add", children[0], children[1])
+  }
+  case "sub_expr": {
+    return new ArithmeticsNode("subtract", children[0], children[1])
+  }
+  case "mul_expr": {
+    return new ArithmeticsNode("multiply", children[0], children[1])
+  }
+  case "div_expr": {
+    return new ArithmeticsNode("div", children[0], children[1])
+  }
+
   default: {
     throw Error("Unknown node type: " + nodeType)
   }
@@ -74,10 +105,17 @@ class ArrayNode {
   }
 }
 
-class WhileNode {
-  constructor(expression, block) {
+class ArrayAccessNode {
+  constructor(id, expression) {
+    this.id = id
     this.expression = expression
-    this.block = block
+  }
+}
+
+class WhileNode {
+  constructor(expression, body) {
+    this.expression = expression
+    this.body = body
   }
 }
 
@@ -101,7 +139,7 @@ class ArithmeticsNode {
   constructor(operator, left, right) {
     this.operator = operator
     this.left = left
-    this.right
+    this.right = right
   }
 }
 
