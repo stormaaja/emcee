@@ -177,10 +177,15 @@ class AssignmentNode {
     this.type = type
   }
   typeCheck(typeEnv) {
-    if (this.type)
-      typeEnv[this.id] = this.type
-    return this.expression.typeCheck(typeEnv) &&
-      (!this.type || this.type === this.expression.type)
+    const types = {}
+    if (this.type) {
+      types[this.id] = this.type
+    }
+
+    const nodeTypeEnv = Object.assign(typeEnv, types)
+
+    return this.expression.typeCheck(nodeTypeEnv) &&
+      nodeTypeEnv[this.id] === this.expression.type
   }
 }
 
