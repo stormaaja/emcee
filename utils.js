@@ -25,5 +25,5 @@ function addElse(ifNode, elseBody) {
 }
 
 module.exports = {
-  createNode, appendChild, prependChild, appendNodeChild
+  createNode, appendChild, prependChild, appendNodeChild, addElse
 }

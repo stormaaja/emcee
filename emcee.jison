@@ -1,7 +1,7 @@
 %{
     const path = require("path");
     const {
-      createNode, appendChild, prependChild, appendNodeChild
+      createNode, appendChild, prependChild, appendNodeChild, addElse
     } = require(path.normalize("../../../utils.js"));
 %}
 
