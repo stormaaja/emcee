@@ -25,27 +25,25 @@ function main(argv) {
   const files = args.filter(f => !f.startsWith("--"))
   const options = args.filter(f => f.startsWith("--"))
 
-  const printTree = options.includes("--print-tree")
   const objects = options.includes("--objects")
   const printAST = options.includes("--print-ast")
+  const debug = options.includes("--debug")
 
   const results = compile(files)
 
   results.forEach(r => {
     if (r.success) {
       console.log("%s: \x1b[32mOK\x1b[0m", r.file)
-      if (printTree) {
-        const tree = objects ? r.result : JSON.stringify(r.result, null, 2)
-        console.log(tree)
-      }
       if (printAST) {
-        const ast = astGenerator.generateAST(r.result)
-        const tree = objects ? ast : JSON.stringify(ast, null, 2)
+        const tree = objects ? r.result : JSON.stringify(r.result, null, 2)
         console.log(tree)
       }
     } else {
       console.log("%s: \x1b[31mFail\x1b[0m", r.file)
       console.log(r.result.message)
+      if (debug) {
+        console.log(r.result)
+      }
     }
   })
   return 0
