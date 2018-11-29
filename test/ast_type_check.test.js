@@ -12,7 +12,6 @@ test("typecheck of negative integer", () => {
   expect(node.typeCheck({})).toBeTruthy()
 })
 
-
 test("typecheck of integer mismatch double", () => {
   const node = new ValueNode("integer", "5.0")
   expect(node.value).not.toBe(5)
@@ -46,6 +45,24 @@ test("typecheck of double", () => {
 test("typecheck of double mismatch", () => {
   const node = new ValueNode("double", "hello")
   expect(node.value).not.toBe("hello")
+  expect(node.typeCheck({})).toBeFalsy()
+})
+
+test("typecheck of boolean true", () => {
+  const node = new ValueNode("boolean", "true")
+  expect(node.value).toBeTruthy()
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+test("typecheck of boolean false", () => {
+  const node = new ValueNode("boolean", "false")
+  expect(node.value).toBeFalsy()
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+test("typecheck of boolean mismatch", () => {
+  const node = new ValueNode("boolean", "something")
+  expect(node.value).not.toBe(false)
   expect(node.typeCheck({})).toBeFalsy()
 })
 
