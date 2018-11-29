@@ -78,6 +78,9 @@ class RootNode {
   constructor(children) {
     this.children = children
   }
+  typeCheck(typeEnv) {
+    return this.children.reduce((a, c) => a && c.typeCheck(typeEnv), true)
+  }
 }
 
 class FunctionNode {
@@ -130,6 +133,12 @@ class IfNode {
     this.ifBody = ifBody
     this.elseBody = elseBody
   }
+  typeCheck(typeEnv) {
+    return this.expression.typeCheck(typeEnv) &&
+      this.expression.type === "boolean" &&
+      this.ifBody.typeCheck(typeEnv) &&
+      (!this.elseBody || this.elseBody.typeCheck(typeEnv))
+  }
 }
 
 class CompareNode {
@@ -137,6 +146,7 @@ class CompareNode {
     this.comparision = comparision
     this.left = left
     this.right = right
+    this.type = "boolean"
   }
   typeCheck() {
     return this.left.type === this.right.type
@@ -152,8 +162,9 @@ class ArithmeticsNode {
     this.operator = operator
     this.left = left
     this.right = right
+    this.type = left.type === right.type ?
+      left.type : new InvalidValueType(left.type)
   }
-
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
   }
@@ -164,6 +175,12 @@ class AssignmentNode {
     this.id = id
     this.expression = expression
     this.type = type
+  }
+  typeCheck(typeEnv) {
+    if (this.type)
+      typeEnv[this.id] = this.type
+    return this.expression.typeCheck(typeEnv) &&
+      (!this.type || this.type === this.expression.type)
   }
 }
 
@@ -236,5 +253,6 @@ class ArgumentNode{
 }
 
 module.exports = {
-  generateNode, ValueNode, CompareNode, ArithmeticsNode
+  generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
+  RootNode
 }
