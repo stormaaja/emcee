@@ -152,10 +152,17 @@ class IfNode {
     this.elseBody = elseBody
   }
   typeCheck(typeEnv) {
-    return this.expression.typeCheck(typeEnv) &&
-      this.expression.type === "boolean" &&
-      this.ifBody.typeCheck(typeEnv) &&
-      (!this.elseBody || this.elseBody.typeCheck(typeEnv))
+    const env = this.expression.type === "boolean" ?
+      typeEnv :
+      typeEnv.setIn(["errors", this.line], "Expression must return boolean")
+
+    const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
+    const ifErrors = typeCheckEach(this.ifBody, typeEnv).get("errors")
+    const elseErrors = this.elseBody ?
+      typeCheckEach(this.elseBody, typeEnv).get("errors") : Map()
+
+    return env.update("errors", v => v.merge(
+      exprErrors, ifErrors, elseErrors))
   }
 }
 
@@ -166,8 +173,11 @@ class CompareNode {
     this.right = right
     this.type = "boolean"
   }
-  typeCheck() {
+  typeCheck(typeEnv) {
     return this.left.type === this.right.type
+      ? typeEnv : typeEnv.setIn(
+        ["errors", this.line],
+        `Comparing mismatching types: ${this.left.type} and ${this.right.type}`)
   }
 }
 
@@ -196,9 +206,14 @@ class ArithmeticsNode {
       left.type : new InvalidValueType(left.type)
   }
   typeCheck(typeEnv) {
-    return this.left.typeCheck(typeEnv) &&
-      this.right.typeCheck(typeEnv) &&
-      isValid(this.type)
+    const env = isValid(this.type) ?
+      typeEnv : typeEnv.setIn(
+        ["errors", this.line],
+        `Can't ${this.operator} ${this.left.type} and ${this.right.type}`)
+    return env.update(
+      "errors",
+      (v) => v.merge(this.left.typeCheck(env),
+                     this.right.typeCheck(env)))
   }
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
@@ -280,8 +295,11 @@ class ValueNode {
     this.type = type
     this.value = parseValue(type, value)
   }
-  typeCheck() {
-    return isValid(this.value)
+  typeCheck(typeEnv) {
+    return isValid(this.value) ?
+      typeEnv : typeEnv.setIn(
+        ["errors", this.line],
+        `Invalid type ${this.type} for value ${this.value}`)
   }
   eval() {
     return this.value
