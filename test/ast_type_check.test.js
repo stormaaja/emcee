@@ -113,3 +113,11 @@ test("typecheck of assignment node of invalid reassignment", () => {
   ])
   expect(node.typeCheck({})).toBeFalsy()
 })
+
+test("typecheck of assignment node of invalid reiniti", () => {
+  const node = new RootNode([
+    new AssignmentNode("x", new ValueNode("integer", "0"), "integer"),
+    new AssignmentNode("x", new ValueNode("integer", "1"), "integer")
+  ])
+  expect(node.typeCheck({})).toBeFalsy()
+})
