@@ -74,6 +74,13 @@ function generateNode({nodeType, children, id, meta}) {
   }
 }
 
+// Adds value to map and returns new one
+function addValue(m, k, v) {
+  const mk = {}
+  mk[k] = v
+  return Object.assign(m, mk)
+}
+
 class RootNode {
   constructor(children) {
     this.children = children
