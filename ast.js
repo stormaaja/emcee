@@ -1,38 +1,41 @@
 "use strict"
+const { Map, List } = require("immutable")
 
 // TODO change typechecks to return results instead of success boolean
 
-function generateNode({nodeType, children, id, meta}) {
+function generateNode(data) {
+  const {nodeType, id, meta} = data
+  const children = List(data.children)
   switch (nodeType) {
   case "root": {
-    return new RootNode(children)
+    return new RootNode(List(children))
   }
   case "function": {
-    return new FunctionNode(id, children, meta)
+    return new FunctionNode(id, List(children), meta)
   }
   case "function_call": {
-    return new FunctionCallNode(id, children)
+    return new FunctionCallNode(id, List(children))
   }
   case "return": {
-    return new ReturnNode(children[0])
+    return new ReturnNode(children.first())
   }
   case "string_value": {
-    return new ValueNode("string", children[0])
+    return new ValueNode("string", children.first())
   }
   case "integer_value": {
-    return new ValueNode("integer", children[0])
+    return new ValueNode("integer", children.first())
   }
   case "double_value": {
-    return new ValueNode("double", children[0])
+    return new ValueNode("double", children.first())
   }
   case "boolean_value": {
-    return new ValueNode("boolean", children[0])
+    return new ValueNode("boolean", children.first())
   }
   case "array_values": {
     return new ValueNode("array", children)
   }
   case "array_access": {
-    return new ArrayAccessNode(id, children[0])
+    return new ArrayAccessNode(id, children.first())
   }
   case "argument": {
     return new ArgumentNode(id, meta.valueType)
@@ -41,31 +44,31 @@ function generateNode({nodeType, children, id, meta}) {
     return new AssignmentNode(id, children[1], meta.valueType)
   }
   case "compare_gt": {
-    return new CompareNode("gt", children[0], children[1])
+    return new CompareNode("gt", children.first(), children.get(1))
   }
   case "compare_lt": {
-    return new CompareNode("lt", children[0], children[1])
+    return new CompareNode("lt", children.first(), children.get(1))
   }
   case "compare_eq": {
-    return new CompareNode("eq", children[0], children[1])
+    return new CompareNode("eq", children.first(), children.get(1))
   }
   case "if": {
-    return new IfNode(children[0], children[1])
+    return new IfNode(children.first(), children.get(1))
   }
   case "while": {
-    return new WhileNode(children[0], children[1])
+    return new WhileNode(children.first(), children.get(1))
   }
   case "add_expr": {
-    return new ArithmeticsNode("add", children[0], children[1])
+    return new ArithmeticsNode("add", children.first(), children.get(1))
   }
   case "sub_expr": {
-    return new ArithmeticsNode("subtract", children[0], children[1])
+    return new ArithmeticsNode("subtract", children.first(), children.get(1))
   }
   case "mul_expr": {
-    return new ArithmeticsNode("multiply", children[0], children[1])
+    return new ArithmeticsNode("multiply", children.first(), children.get(1))
   }
   case "div_expr": {
-    return new ArithmeticsNode("div", children[0], children[1])
+    return new ArithmeticsNode("div", children.first(), children.get(1))
   }
 
   default: {
@@ -283,7 +286,7 @@ class ArgumentNode{
     this.id = id
   }
   typeCheck(typeEnv) {
-    return addValue(typeEnv, this.id, this.type)
+    return typeEnv.set(this.id, this.type)
   }
 }
 
