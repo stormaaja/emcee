@@ -172,6 +172,11 @@ class ArithmeticsNode {
     this.type = left.type === right.type ?
       left.type : new InvalidValueType(left.type)
   }
+  typeCheck(typeEnv) {
+    return this.left.typeCheck(typeEnv) &&
+      this.right.typeCheck(typeEnv) &&
+      isValid(this.type)
+  }
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
   }
@@ -203,6 +208,8 @@ class InvalidValueType {
     this.value = value
   }
 }
+
+const isValid = (valueType) => !(valueType instanceof InvalidValueType)
 
 function parseNumber(parser, pattern, value) {
   const parsedValue = parser(value)
@@ -251,7 +258,7 @@ class ValueNode {
     this.value = parseValue(type, value)
   }
   typeCheck() {
-    return !(this.value instanceof InvalidValueType)
+    return isValid(this.value)
   }
   eval() {
     return this.value
