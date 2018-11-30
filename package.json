@@ -10,8 +10,7 @@
   "scripts": {
     "test": "jest",
     "compile": "node compiler.js",
-    "compile-examples":
-    "find examples -name '*.emc' -exec node compiler.js {} +",
+    "compile-examples": "find examples -name '*.emc' -exec node compiler.js {} +",
     "lint": "node_modules/.bin/eslint *.js"
   },
   "repository": {
@@ -25,6 +24,7 @@
   },
   "homepage": "https://github.com/stormaaja/emcee#readme",
   "dependencies": {
+    "immutable": "^4.0.0-rc.12",
     "jison": "^0.4.18"
   },
   "devDependencies": {
