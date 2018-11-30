@@ -77,19 +77,21 @@ function generateNode(data) {
   }
 }
 
-// Adds value to map and returns new one
-function addValue(m, k, v) {
-  const mk = {}
-  mk[k] = v
-  return Object.assign(m, mk)
+function typeCheckEach(nodes, typeEnv) {
+  if (nodes.isEmpty()) {
+    return typeEnv
+  } else {
+    return typeCheckEach(nodes.shift(), nodes.first().typeCheck(typeEnv))
+  }
 }
 
 class RootNode {
   constructor(children) {
     this.children = children
   }
-  typeCheck(typeEnv) {
-    return this.children.reduce((a, c) => a && c.typeCheck(typeEnv), true)
+  typeCheck() {
+    const typeEnv = Map({types: Map(), errors: Map()})
+    return typeCheckEach(this.children, typeEnv)
   }
 }
 
