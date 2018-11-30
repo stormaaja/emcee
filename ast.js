@@ -226,17 +226,31 @@ class AssignmentNode {
     this.expression = expression
     this.type = type
   }
+
+  checkTypeMatch() {
+    return this.type === this.expression.type ?
+      null :
+      `Assignment type ${this.type} does not match expression type ${this.expression.type}`
+  }
+
+  checkReinit(typeEnv) {
+    this.type && typeEnv.getIn(["types", this.id]) ?
+      `${this.id} is already initialized` : null
+  }
+
   typeCheck(typeEnv) {
-    const types = {}
-    if (this.type && typeEnv[this.id]) {
-      return false
-    }
+    const errors = [
+      this.checkTypeMatch(), this.checkReinit(typeEnv)
+    ].filter(x => x)
+
+    const env = errors.length > 0 ?
+      typeEnv.setIn(["errors", this.line], errors.join(",")) : typeEnv
 
     const nodeTypeEnv =
-      this.type ? addValue(typeEnv, this.id, this.type) : typeEnv
+      this.type ? env.setIn(["types", this.id], this.type) : env
 
-    return this.expression.typeCheck(nodeTypeEnv) &&
-      nodeTypeEnv[this.id] === this.expression.type
+    return nodeTypeEnv.update("errors", (v) => v.merge(
+      this.expression.typeCheck(nodeTypeEnv).get("errors")))
   }
 }
 
