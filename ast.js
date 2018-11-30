@@ -164,12 +164,24 @@ const operators = {
   "add": (x, y) => x + y
 }
 
+const isOneString = (t1, t2) =>
+      t1 === "string" ||
+      t2 === "string"
+
+const numberTypes = ["double", "integer"]
+
+const isBothNumbers = (t1, t2) =>
+      numberTypes.includes(t1) && numberTypes.includes(t2)
+
+const matchingTypes = (t1, t2) =>
+      t1 === t2 || isOneString(t1, t2) || isBothNumbers(t1, t2)
+
 class ArithmeticsNode {
   constructor(operator, left, right) {
     this.operator = operator
     this.left = left
     this.right = right
-    this.type = left.type === right.type ?
+    this.type = matchingTypes(this.left.type, this.right.type) ?
       left.type : new InvalidValueType(left.type)
   }
   typeCheck(typeEnv) {
