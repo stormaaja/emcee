@@ -1,5 +1,5 @@
 const {
-  ValueNode, CompareNode, IfNode, AssignmentNode, RootNode
+  ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode
 } = require("../ast.js")
 
 test("typecheck of positive integer", () => {
@@ -119,5 +119,86 @@ test("typecheck of assignment node of invalid reiniti", () => {
     new AssignmentNode("x", new ValueNode("integer", "0"), "integer"),
     new AssignmentNode("x", new ValueNode("integer", "1"), "integer")
   ])
+  expect(node.typeCheck({})).toBeFalsy()
+})
+
+function checkArithmetics(operator, valueType, left, right) {
+  const node = new ArithmeticsNode(
+    operator,
+    new ValueNode(valueType, left),
+    new ValueNode(valueType, right))
+  expect(node.typeCheck({})).toBeTruthy()
+}
+
+// Valid arithmetics
+
+test("typecheck of add integer arithmetics node", () =>
+  checkArithmetics("add", "integer", "0", "2"))
+
+test("typecheck of subtract integer arithmetics node", () =>
+  checkArithmetics("subtract", "integer", "5", "3"))
+
+test("typecheck of divide integer arithmetics node", () =>
+  checkArithmetics("divide", "integer", "5", "3"))
+
+test("typecheck of multiply integer arithmetics node", () =>
+  checkArithmetics("multiply", "integer", "5", "3"))
+
+test("typecheck of add double arithmetics node", () =>
+  checkArithmetics("add", "double", "2.0", "5.0"))
+
+test("typecheck of subtract double arithmetics node", () =>
+  checkArithmetics("subtract", "double", "2.0", "5.0"))
+
+test("typecheck of divide double arithmetics node", () =>
+  checkArithmetics("divide", "double", "5.0", "3.0"))
+
+test("typecheck of multiply double arithmetics node", () =>
+  checkArithmetics("multiply", "double", "5.0", "3.0"))
+
+test("typecheck of add string arithmetics node", () =>
+  checkArithmetics("add", "string", "hello ", "world"))
+
+test("typecheck of add string and integer", () => {
+  const node = new ArithmeticsNode(
+    "add",
+    new ValueNode("integer", "2"),
+    new ValueNode("string", " value"))
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+test("typecheck of add string and double", () => {
+  const node = new ArithmeticsNode(
+    "add",
+    new ValueNode("double", "2.0"),
+    new ValueNode("string", " value"))
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+test("typecheck of add string and boolean", () => {
+  const node = new ArithmeticsNode(
+    "add",
+    new ValueNode("string", "is"),
+    new ValueNode("boolean", "true"))
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+
+test("typecheck of type add of numbers", () => {
+  const node = new ArithmeticsNode(
+    "add",
+    new ValueNode("double", "2.0"),
+    new ValueNode("integer", "3"))
+  expect(node.typeCheck({})).toBeTruthy()
+})
+
+
+// Invalid arithmetics
+
+test("typecheck of mismatch type add", () => {
+  const node = new ArithmeticsNode(
+    "add",
+    new ValueNode("double", "2.0"),
+    new ValueNode("boolean", "true"))
   expect(node.typeCheck({})).toBeFalsy()
 })
