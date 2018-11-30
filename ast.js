@@ -185,13 +185,12 @@ class AssignmentNode {
   }
   typeCheck(typeEnv) {
     const types = {}
-    if (this.type) {
-      if (typeEnv[this.id])
-        return false
-      types[this.id] = this.type
+    if (this.type && typeEnv[this.id]) {
+      return false
     }
 
-    const nodeTypeEnv = Object.assign(typeEnv, types)
+    const nodeTypeEnv =
+      this.type ? addValue(typeEnv, this.id, this.type) : typeEnv
 
     return this.expression.typeCheck(nodeTypeEnv) &&
       nodeTypeEnv[this.id] === this.expression.type
@@ -263,6 +262,9 @@ class ArgumentNode{
   constructor(type, id) {
     this.type = type
     this.id = id
+  }
+  typeCheck(typeEnv) {
+    return addValue(typeEnv, this.id, this.type)
   }
 }
 
