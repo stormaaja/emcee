@@ -179,6 +179,8 @@ class AssignmentNode {
   typeCheck(typeEnv) {
     const types = {}
     if (this.type) {
+      if (typeEnv[this.id])
+        return false
       types[this.id] = this.type
     }
 
