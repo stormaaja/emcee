@@ -183,7 +183,6 @@ test("typecheck of add string and boolean", () => {
   expect(node.typeCheck({})).toBeTruthy()
 })
 
-
 test("typecheck of type add of numbers", () => {
   const node = new ArithmeticsNode(
     "add",
@@ -192,13 +191,20 @@ test("typecheck of type add of numbers", () => {
   expect(node.typeCheck({})).toBeTruthy()
 })
 
-
 // Invalid arithmetics
 
-test("typecheck of mismatch type add", () => {
+test("typecheck of mismatch type add boolean and double", () => {
   const node = new ArithmeticsNode(
     "add",
     new ValueNode("double", "2.0"),
+    new ValueNode("boolean", "true"))
+  expect(node.typeCheck({})).toBeFalsy()
+})
+
+test("typecheck of mismatch type add boolean and integer", () => {
+  const node = new ArithmeticsNode(
+    "add",
+    new ValueNode("integer", "4"),
     new ValueNode("boolean", "true"))
   expect(node.typeCheck({})).toBeFalsy()
 })
