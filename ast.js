@@ -102,6 +102,12 @@ class FunctionNode {
     this.returnType = meta.returnType
     this.argList = meta.argList
   }
+  typeCheck(typeEnv) {
+    const env = typeEnv.set(this.id, this.returnType)
+    // TODO args
+    // TODO return type to match return expression
+    return typeCheckEach(this.children, env)
+  }
 }
 
 class ReturnNode{
