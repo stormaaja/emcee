@@ -299,3 +299,5 @@ test("typecheck for global conflict", () => {
 // TODO argument config
 // TODO function param arg typecheck
 // TODO function id conflict
+// TODO function and variable conflict
+// TODO function call exists
