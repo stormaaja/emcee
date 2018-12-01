@@ -193,7 +193,10 @@ assgnmt_stmt
 
 value
     : INTVALUE
-      {$$ = generateNode({nodeType: "integer_value", children: [$1]})}
+      {$$ = generateNode({
+         nodeType: "integer_value",
+         children: [$1],
+         info: {line: @1.first_line, column: @1.first_column}})}
     | DOUBLEVALUE
       {$$ = generateNode({nodeType: "double_value", children: [$1]})}
     | STR_VALUE
@@ -203,7 +206,11 @@ value
     | TRUE
       {$$ = generateNode({nodeType: "boolean_value", children: [$1]})}
     | FALSE
-      {$$ = generateNode({nodeType: "boolean_value", children: [$1]})}
+      {$$ = generateNode({
+         nodeType:
+         "boolean_value",
+         children: [$1],
+         info: {line: @1.first_line, column: @1.first_column}})}
     ;
 
 value_list
