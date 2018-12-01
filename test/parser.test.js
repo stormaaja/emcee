@@ -101,3 +101,5 @@ test("generates AST of array", () => {
     )
   )
 })
+
+// TODO tests for booleans
