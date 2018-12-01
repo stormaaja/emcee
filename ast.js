@@ -225,8 +225,8 @@ class ArithmeticsNode {
         `Can't ${this.operator} ${this.left.type} and ${this.right.type}`)
     return env.update(
       "errors",
-      (v) => v.merge(this.left.typeCheck(env),
-                     this.right.typeCheck(env)))
+      (v) => v.merge(this.left.typeCheck(env).get("errors"),
+                     this.right.typeCheck(env).get("errors")))
   }
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
