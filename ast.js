@@ -204,6 +204,8 @@ const isOneString = (t1, t2) =>
       t1 === "string" ||
       t2 === "string"
 
+const typePriorities = ["boolean", "integer", "double", "string"]
+
 const numberTypes = ["double", "integer"]
 
 const isBothNumbers = (t1, t2) =>
@@ -212,14 +214,20 @@ const isBothNumbers = (t1, t2) =>
 const matchingTypes = (t1, t2) =>
       t1 === t2 || isOneString(t1, t2) || isBothNumbers(t1, t2)
 
+const getTopType = (t1, t2) =>
+      typePriorities.indexOf(t1) > typePriorities.indexOf(t2) ? t1 : t2
+
+const detectType = (t1, t2) =>
+      matchingTypes(t1, t2) ?
+      getTopType(t1, t2) : new InvalidValueType(t1)
+
 class ArithmeticsNode {
   constructor(info, operator, left, right) {
     this.info = info
     this.operator = operator
     this.left = left
     this.right = right
-    this.type = matchingTypes(this.left.type, this.right.type) ?
-      left.type : new InvalidValueType(left.type)
+    this.type = detectType(this.left.type, this.right.type)
   }
   typeCheck(typeEnv) {
     const env = isValid(this.type) ?
