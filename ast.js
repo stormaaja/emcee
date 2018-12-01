@@ -110,7 +110,8 @@ class FunctionNode {
     const env = typeEnv.set(this.id, this.returnType)
     // TODO args
     // TODO return type to match return expression
-    return typeCheckEach(this.children, env)
+    return typeEnv.set(
+      "errors", typeCheckEach(this.children, env).get("errors"))
   }
 }
 
@@ -172,8 +173,9 @@ class IfNode {
     const elseErrors = this.elseBody ?
       typeCheckEach(this.elseBody, typeEnv).get("errors") : Map()
 
-    return env.update("errors", v => v.merge(
-      exprErrors, ifErrors, elseErrors))
+    const errors = env.get("errors").merge(exprErrors, ifErrors, elseErrors)
+
+    return typeEnv.set("errors", errors)
   }
 }
 
