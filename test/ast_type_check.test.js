@@ -285,9 +285,9 @@ test("typecheck for global conflict", () => {
     new AssignmentNode(
       Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
       "integer"),
-    new FunctionNode(Map({line: 0}), "fun_one", List([
+    new FunctionNode(Map({line: 2}), "fun_one", List([
       new AssignmentNode(
-        Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
+        Map({line: 3}), "x", new ValueNode(Map({line: 3}), "integer", "0"),
         "integer")
     ]), {returnType: "void"})
   ]))
