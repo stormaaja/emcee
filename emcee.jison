@@ -196,7 +196,7 @@ value
       {$$ = generateNode({
          nodeType: "integer_value",
          children: [$1],
-         info: {line: @1.first_line, column: @1.first_column}})}
+         info: @1})}
     | DOUBLEVALUE
       {$$ = generateNode({nodeType: "double_value", children: [$1]})}
     | STR_VALUE
@@ -210,7 +210,7 @@ value
          nodeType:
          "boolean_value",
          children: [$1],
-         info: {line: @1.first_line, column: @1.first_column}})}
+         info: @1})}
     ;
 
 value_list

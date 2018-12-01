@@ -8,7 +8,11 @@ let currentLine = 0
 function generateNode(data) {
   const {nodeType, id} = data
   const children = List(data.children)
-  const info = Map(data.info || {line: 0, column: 0})
+  const info = Map(data.info ||
+                   {first_line: 0,
+                    last_line: 0,
+                    first_column: 0,
+                    last_column: 0})
   const meta = data.meta || Map()
   switch (nodeType) {
   case "root": {
