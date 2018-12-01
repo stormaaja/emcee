@@ -32,7 +32,11 @@ test("generates AST of usage of an assignment", () => {
           id: "s", meta: {valueType: "string"}}),
         generateNode({nodeType: "function_call", children: ["s"], id: "print"}),
         generateNode({nodeType: "return", children: [
-          generateNode({nodeType: "integer_value", children: ["0"]})]})
+          generateNode({
+            nodeType: "integer_value",
+            children: ["0"],
+            info: {line: 1, column: 50}
+          })]})
         ], id: "main", meta: {argList: [], returnType: "int"}})
     ]})
   )
@@ -52,7 +56,11 @@ test("generates AST of an array assignment", () => {
         ], id: "a", meta: {valueType: "array_string"}}),
         generateNode({
           nodeType: "return",
-          children: [generateNode({nodeType: "integer_value", children: ["0"]})]})
+          children: [
+            generateNode({
+              nodeType: "integer_value",
+              children: ["0"],
+              info: {line: 1, column: 53}})]})
         ], id: "main", meta: {argList: [], returnType: "int"}})
     ]})
   )

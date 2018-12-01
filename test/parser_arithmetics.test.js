@@ -1,6 +1,7 @@
 const parser = require("../parser.js")
 const {createNode} = require("../utils.js")
 const {generateMain, generateProgramNode} = require("../test_utils.js")
+const {generateNode} = require("../ast.js")
 
 test("generates AST of multiply integer", () => {
   const source = generateMain("int x = 2 * 3; return 0;")
@@ -13,7 +14,11 @@ test("generates AST of multiply integer", () => {
             createNode("integer_value", ["3"])])
         ], "x", {valueType: "int"}),
         createNode("return", [
-          createNode("integer_value", ["0"])
+          generateNode({
+            nodeType: "integer_value",
+            children: ["0"],
+            info: {line: 1, column: 35}
+          })
         ])
       ]
     )
@@ -31,7 +36,10 @@ test("generates AST of subtract integer", () => {
           createNode("integer_value", ["2"])])
       ],"x", {valueType: "int"}),
       createNode("return", [
-        createNode("integer_value", ["0"])])
+        generateNode({
+          nodeType: "integer_value",
+          children: ["0"],
+          info: {line: 1, column: 35}})])
     ]))
 })
 
@@ -46,7 +54,10 @@ test("generates AST of divide integer", () => {
           createNode("integer_value", ["3"])])
       ], "x", {valueType: "int"}),
       createNode("return", [
-        createNode("integer_value", ["0"])])
+        generateNode({
+          nodeType: "integer_value",
+          children: ["0"],
+          info: {line: 1, column: 35}})])
     ])
   )
 })
@@ -62,9 +73,11 @@ test("generates AST of divide double", () => {
           createNode("double_value", ["3.0"])
         ])], "x", {valueType: "double"}),
       createNode("return", [
-        createNode("integer_value", ["0"])])
-    ]
-                       )
+        generateNode({
+          nodeType: "integer_value",
+          children: ["0"],
+          info: {line: 1, column: 42}})])
+    ])
   )
 })
 
@@ -88,5 +101,8 @@ test("generates AST of more complex arithmetics", () => {
           ])
         ])], "x", {valueType: "double"}),
       createNode("return", [
-        createNode("integer_value", ["0"])])]))
+        generateNode({
+          nodeType: "integer_value",
+          children: ["0"],
+          info: {line: 1, column: 56}})])]))
 })
