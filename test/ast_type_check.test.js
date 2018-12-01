@@ -280,6 +280,21 @@ test("typecheck to ignore function cross variables", () => {
   expect(noErrors(node.typeCheck(Map({errors: Map()})))).toBeTruthy()
 })
 
+test("typecheck for global conflict", () => {
+  const node = new RootNode(List([
+    new AssignmentNode(
+      Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
+      "integer"),
+    new FunctionNode(Map({line: 0}), "fun_one", List([
+      new AssignmentNode(
+        Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
+        "integer")
+    ]), {returnType: "void"})
+  ]))
+  expect(node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
+})
+
+
 // TODO global assignment allow and conflict
 // TODO argument config
 // TODO function param arg typecheck
