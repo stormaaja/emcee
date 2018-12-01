@@ -2,6 +2,7 @@
 
 const {generateNode} = require("./ast.js")
 
+// Obsolete
 function createNode(nodeType, children, id, meta) {
   return generateNode({nodeType, children, id, meta})
 }
