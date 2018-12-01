@@ -6,9 +6,10 @@ const { Map, List } = require("immutable")
 let currentLine = 0
 
 function generateNode(data) {
-  const {nodeType, id, meta} = data
+  const {nodeType, id} = data
   const children = List(data.children)
-  const info = Map({line: currentLine++})
+  const info = Map(data.info || {line: 0, column: 0})
+  const meta = data.meta || Map()
   switch (nodeType) {
   case "root": {
     return new RootNode(children)
