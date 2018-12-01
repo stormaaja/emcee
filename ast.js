@@ -241,20 +241,25 @@ class AssignmentNode {
     this.type = type
   }
 
-  checkTypeMatch() {
-    return this.type === this.expression.type ?
-      null :
-      `Assignment type ${this.type} does not match expression type ${this.expression.type}`
+  checkTypeMatch(typeEnv) {
+    const type = this.type ? this.type : typeEnv.getIn(["types", this.id])
+    if (type) {
+      return type !== this.expression.type ?
+        `Assignment type ${this.type} does not match expression type ${this.expression.type}` :
+        null
+    } else {
+      return `${this.id} is not initialized`
+    }
   }
 
   checkReinit(typeEnv) {
-    this.type && typeEnv.getIn(["types", this.id]) ?
+    return this.type && typeEnv.hasIn(["types", this.id]) ?
       `${this.id} is already initialized` : null
   }
 
   typeCheck(typeEnv) {
     const errors = [
-      this.checkTypeMatch(), this.checkReinit(typeEnv)
+      this.checkTypeMatch(typeEnv), this.checkReinit(typeEnv)
     ].filter(x => x)
 
     const env = errors.length > 0 ?
