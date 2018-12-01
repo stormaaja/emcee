@@ -279,3 +279,7 @@ test("typecheck to ignore function cross variables", () => {
   ]))
   expect(noErrors(node.typeCheck(Map({errors: Map()})))).toBeTruthy()
 })
+
+// TODO global assignment allow and conflict
+// TODO argument config
+// TODO function param arg typecheck
