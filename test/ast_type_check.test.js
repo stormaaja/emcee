@@ -22,21 +22,21 @@ test("typecheck of integer mismatch double", () => {
   const node = new ValueNode(Map({line: 0}), "integer", "5.0")
   expect(node.value).not.toBe(5)
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of integer mismatch scandic double", () => {
   const node = new ValueNode(Map({line: 0}), "integer", "5,0")
   expect(node.value).not.toBe(5)
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of integer mismatch string", () => {
   const node = new ValueNode(Map({line: 0}), "integer", "hello")
   expect(node.value).not.toBe(5)
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of string", () => {
@@ -57,7 +57,7 @@ test("typecheck of double mismatch", () => {
   const node = new ValueNode(Map({line: 0}), "double", "hello")
   expect(node.value).not.toBe("hello")
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of boolean true", () => {
@@ -78,7 +78,7 @@ test("typecheck of boolean mismatch", () => {
   const node = new ValueNode(Map({line: 0}), "boolean", "something")
   expect(node.value).not.toBe(false)
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of compare eq", () => {
@@ -102,7 +102,7 @@ test("typecheck of compare eq mismatch", () => {
   expect(node.left.value).toBe(2)
   expect(node.right.value).toBe("hello")
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of if node", () => {
@@ -153,7 +153,7 @@ test("typecheck of assignment node of invalid reassignment", () => {
       Map({line: 0}), "x", new ValueNode(Map({line: 0}), "double", "1.0"))
   ]))
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 test("typecheck of assignment node of invalid reinit", () => {
@@ -166,7 +166,7 @@ test("typecheck of assignment node of invalid reinit", () => {
       "integer")
   ]))
   expect(
-    node.typeCheck(Map({errors: Map()})).get("errors").isEmpty()).toBeFalsy()
+    node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
 })
 
 function checkArithmetics(operator, valueType, left, right) {
