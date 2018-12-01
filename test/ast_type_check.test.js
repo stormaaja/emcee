@@ -271,7 +271,7 @@ test("typecheck to ignore function cross variables", () => {
         Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
         "integer")
     ]), {returnType: "void"}),
-    new FunctionNode(Map({line: 0}), "fun_one", List([
+    new FunctionNode(Map({line: 0}), "fun_two", List([
       new AssignmentNode(
         Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
         "integer")
