@@ -1,6 +1,8 @@
 const parser = require("../parser.js")
 const {createNode} = require("../utils.js")
-const {generateMain, generateProgramNode} = require("../test_utils.js")
+const {
+  generateMain, generateProgramNode, createInfo
+} = require("../test_utils.js")
 const {generateNode} = require("../ast.js")
 
 test("generates AST of multiply integer", () => {
@@ -17,7 +19,7 @@ test("generates AST of multiply integer", () => {
           generateNode({
             nodeType: "integer_value",
             children: ["0"],
-            info: {line: 1, column: 35}
+            info: createInfo(1, 1, 35, 36)
           })
         ])
       ]
@@ -39,7 +41,8 @@ test("generates AST of subtract integer", () => {
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
-          info: {line: 1, column: 35}})])
+          info: createInfo(1, 1, 35, 36)
+        })])
     ]))
 })
 
@@ -57,7 +60,7 @@ test("generates AST of divide integer", () => {
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
-          info: {line: 1, column: 35}})])
+          info: createInfo(1, 1, 35, 36)})])
     ])
   )
 })
@@ -76,7 +79,7 @@ test("generates AST of divide double", () => {
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
-          info: {line: 1, column: 42}})])
+          info: createInfo(1, 1, 42, 43)})])
     ])
   )
 })
@@ -104,7 +107,7 @@ test("generates AST of more complex arithmetics", () => {
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
-          info: {line: 1, column: 56}})])]))
+          info: createInfo(1, 1, 56, 57)})])]))
 })
 
 // TODO test int-double combination type
