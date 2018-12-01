@@ -1,8 +1,11 @@
 const {
-  ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode
+  ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode,
+  FunctionNode
 } = require("../ast.js")
 
 const { Map, List } = require("immutable")
+
+const noErrors = (x) => x.get("errors").isEmpty()
 
 test("typecheck of positive integer", () => {
   const node = new ValueNode(Map({line: 0}), "integer", "5")
@@ -259,4 +262,20 @@ test("typecheck of mismatch type add boolean and integer", () => {
     new ValueNode(Map({line: 0}), "integer", "4"),
     new ValueNode(Map({line: 1}), "boolean", "true"))
   expect(node.typeCheck(Map({errors: Map()})).get("errors").size).toBe(1)
+})
+
+test("typecheck to ignore function cross variables", () => {
+  const node = new RootNode(List([
+    new FunctionNode(Map({line: 0}), "fun_one", List([
+      new AssignmentNode(
+        Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
+        "integer")
+    ]), {returnType: "void"}),
+    new FunctionNode(Map({line: 0}), "fun_one", List([
+      new AssignmentNode(
+        Map({line: 1}), "x", new ValueNode(Map({line: 1}), "integer", "0"),
+        "integer")
+    ]), {returnType: "void"})
+  ]))
+  expect(noErrors(node.typeCheck(Map({errors: Map()})))).toBeTruthy()
 })
