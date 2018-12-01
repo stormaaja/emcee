@@ -283,3 +283,4 @@ test("typecheck to ignore function cross variables", () => {
 // TODO global assignment allow and conflict
 // TODO argument config
 // TODO function param arg typecheck
+// TODO function id conflict
