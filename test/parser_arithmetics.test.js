@@ -106,3 +106,6 @@ test("generates AST of more complex arithmetics", () => {
           children: ["0"],
           info: {line: 1, column: 56}})])]))
 })
+
+// TODO test int-double combination type
+// TODO test value priorities (string vs double vs integer vs boolean)
