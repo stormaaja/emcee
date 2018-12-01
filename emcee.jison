@@ -1,7 +1,8 @@
 %{
     const path = require("path");
+    const { generateNode } = require(path.normalize("../../../ast.js"))
     const {
-      createNode, appendChild, prependChild, appendNodeChild, addElse
+      appendChild, prependChild, appendNodeChild, addElse
     } = require(path.normalize("../../../utils.js"));
 %}
 
@@ -51,7 +52,7 @@
 
 pgm
     : pgm_block
-      {return createNode("root", $1);}
+      {return generateNode({nodeType: "root", children: $1});}
     ;
 
 pgm_block
@@ -67,8 +68,8 @@ pgm_block
 
 function
     : type id PAROPEN arglist PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createNode("function", $7, $2,
-         {returnType: $1, argList: $4});}
+      {$$ = generateNode({nodeType: "function", children: $7, id: $2,
+         meta: {returnType: $1, argList: $4}});}
     ;
 
 type
@@ -96,9 +97,10 @@ arglist
 
 arg
     : type
-      {$$ = createNode("argument", [], null, {valueType: $1});}
+      {$$ = generateNode({
+        nodeType: "argument", meta: {valueType: $1}});}
     | type id
-      {$$ = createNode("argument", [], $2, {valueType: $1});}
+      {$$ = generateNode({nodeType: "argument", id: $2, meta: {valueType: $1}});}
     ;
 
 id
@@ -116,9 +118,9 @@ block
 
 return
     : RETURN expr SEMICOLON
-      {$$ = createNode("return", [$2]);}
+      {$$ = generateNode({nodeType: "return", children: [$2]});}
     | RETURN SEMICOLON
-      {$$ = createNode("return", [$2]);}
+      {$$ = generateNode({nodeType: "return", children: [$2]});}
     ;
 
 stmt
@@ -130,17 +132,17 @@ stmt
 
 while
     : WHILE PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createNode("while", [$3, $6]);}
+      {$$ = generateNode({nodeType: "while", children: [$3, $6]});}
     ;
 
 fn_call
     : id PAROPEN paramlist PARCLOSE
-      {$$ = createNode("function_call", $3, $1);}
+      {$$ = generateNode({nodeType: "function_call", children: $3, id: $1});}
     ;
 
 if
     : IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = createNode("if", [$3, $6]);}
+      {$$ = generateNode({nodeType: "if", children: [$3, $6]});}
     | if ELSE BRACEOPEN block BRACECLOSE
       {$$ = addElse($1, $4);}
     ;
@@ -160,44 +162,48 @@ expr
     | PAROPEN expr PARCLOSE
       {$$ = $2;}
     | expr EQ expr
-      {$$ = createNode("compare_eq", [$1, $3]);}
+      {$$ = generateNode({nodeType: "compare_eq", children: [$1, $3]});}
     | expr GT expr
-      {$$ = createNode("compare_gt", [$1, $3]);}
+      {$$ = generateNode({nodeType: "compare_gt", children: [$1, $3]});}
     | expr LT expr
-      {$$ = createNode("compare_lt", [$1, $3]);}
+      {$$ = generateNode({nodeType: "compare_lt", children: [$1, $3]});}
     | expr MULTIPLY expr
-      {$$ = createNode("mul_expr", [$1, $3]);}
+      {$$ = generateNode({nodeType: "mul_expr", children: [$1, $3]});}
     | expr DIVIDE expr
-      {$$ = createNode("div_expr", [$1, $3]);}
+      {$$ = generateNode({nodeType: "div_expr", children: [$1, $3]});}
     | expr PLUS expr
-      {$$ = createNode("add_expr", [$1, $3]);}
+      {$$ = generateNode({nodeType: "add_expr", children: [$1, $3]});}
     | expr MINUS expr
-      {$$ = createNode("sub_expr", [$1, $3]);}
+      {$$ = generateNode({nodeType: "sub_expr", children: [$1, $3]});}
     | fn_call
     | id SBOPEN expr SBCLOSE
-      {$$ = createNode("array_access", [$1, $3]);}
+      {$$ = generateNode({nodeType: "array_access", children: [$1, $3]});}
     ;
 
 assgnmt_stmt
     : id EQUALSSIGN expr
-      {$$ = createNode("assignment", [$1, $3], $1, {});}
+      {$$ = generateNode({nodeType: "assignment", children: [$1, $3], id: $1});}
     | type id EQUALSSIGN expr
-      {$$ = createNode("assignment", [$2, $4], $2, {valueType: $1});}
+      {$$ = generateNode({
+        nodeType: "assignment",
+        children: [$2, $4],
+        id: $2,
+        meta: {valueType: $1}});}
     ;
 
 value
     : INTVALUE
-      {$$ = createNode("integer_value", [$1])}
+      {$$ = generateNode({nodeType: "integer_value", children: [$1]})}
     | DOUBLEVALUE
-      {$$ = createNode("double_value", [$1])}
+      {$$ = generateNode({nodeType: "double_value", children: [$1]})}
     | STR_VALUE
-      {$$ = createNode("string_value", [$1])}
+      {$$ = generateNode({nodeType: "string_value", children: [$1]})}
     | SBOPEN value_list SBCLOSE
-      {$$ = createNode("array_values", $2);}
+      {$$ = generateNode({nodeType: "array_values", children: $2});}
     | TRUE
-      {$$ = createNode("boolean_value", [$1])}
+      {$$ = generateNode({nodeType: "boolean_value", children: [$1]})}
     | FALSE
-      {$$ = createNode("boolean_value", [$1])}
+      {$$ = generateNode({nodeType: "boolean_value", children: [$1]})}
     ;
 
 value_list
