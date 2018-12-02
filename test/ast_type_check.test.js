@@ -290,3 +290,4 @@ test("typecheck for global conflict", () => {
 // TODO function id conflict
 // TODO function and variable conflict
 // TODO function call exists
+// TODO function return type
