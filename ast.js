@@ -83,13 +83,14 @@ function generateNode(data) {
 }
 
 const errorMessages = {
-  ifExprMustBeBool: "Expression must return boolean",
+  ifExprMustBeBool: "If expression must return boolean",
   invalidArithmetics: "Invalid arithmetics expression",
   comparingMismatch: "Comparision must be done with values of the same type",
   assignExprConflict: "Assignment type does not match expression type",
   notInitialized: "Value is not initialized",
   alreadyInitialized: "Value is already initialized",
   invalidType: "Invalid type for value",
+  whileExprMustBeBool: "While expression must return boolean"
 }
 
 function createError(id, node) {
@@ -163,6 +164,13 @@ class WhileNode {
     this.info = info
     this.expression = expression
     this.body = body
+  }
+  typeCheck(typeEnv) {
+    const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
+    const errors = this.expression.type === "boolean" ?
+          [] : [createError("whileExprMustBeBool", this)]
+    return typeEnv.update("errors", (e) => e.concat(
+      exprErrors, errors))
   }
 }
 
@@ -369,5 +377,5 @@ class ArgumentNode{
 
 module.exports = {
   generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
-  RootNode, FunctionNode
+  RootNode, FunctionNode, WhileNode
 }
