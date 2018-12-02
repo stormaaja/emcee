@@ -308,7 +308,7 @@ function parseNumber(parser, pattern, value) {
     return new InvalidValueType("", value)
 }
 
-const integerPattern = /^\-?\d+$/
+const integerPattern = /^-?\d+$/
 
 function parseInteger(value) {
   return parseNumber(parseInt, integerPattern, value)
