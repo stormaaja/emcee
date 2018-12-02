@@ -137,7 +137,8 @@ while
 
 fn_call
     : id PAROPEN paramlist PARCLOSE
-      {$$ = generateNode({nodeType: "function_call", children: $3, id: $1});}
+      {$$ = generateNode({
+         nodeType: "function_call", children: $3, id: $1, info: @1});}
     ;
 
 if
