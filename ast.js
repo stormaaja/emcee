@@ -216,7 +216,7 @@ class WhileNode {
   typeCheck(typeEnv) {
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     const errors = this.expression.type === "boolean" ?
-          [] : [createError("whileExprMustBeBool", this)]
+      [] : [createError("whileExprMustBeBool", this)]
     return typeEnv.update("errors", (e) => e.concat(
       exprErrors, errors))
   }
