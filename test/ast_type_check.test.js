@@ -5,8 +5,6 @@ const {
 
 const { Map, List } = require("immutable")
 
-const noErrors = (x) => x.get("errors").isEmpty()
-
 const typeEnv = Map({errors: List(), types: Map()})
 
 const createInfo = (line, column) => Map({line, column})
@@ -17,18 +15,20 @@ function expectErrors(typeEnv, errors, count) {
   errors.forEach(e => expect(typeErrorIds).toContain(e))
 }
 
+function expectNoErrors(typeEnv) {
+  expect(typeEnv.get("errors").isEmpty()).toBeTruthy()
+}
+
 test("typecheck of positive integer", () => {
   const node = new ValueNode(createInfo(0, 0), "integer", "5")
   expect(node.value).toBe(5)
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of negative integer", () => {
   const node = new ValueNode(createInfo(0, 0), "integer", "-20")
   expect(node.value).toBe(-20)
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of integer mismatch double", () => {
@@ -52,15 +52,13 @@ test("typecheck of integer mismatch string", () => {
 test("typecheck of string", () => {
   const node = new ValueNode(createInfo(0, 0), "string", "hello")
   expect(node.value).toBe("hello")
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of double", () => {
   const node = new ValueNode(createInfo(0, 0), "double", "2.5")
   expect(node.value).toBe(2.5)
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of double mismatch", () => {
@@ -72,15 +70,13 @@ test("typecheck of double mismatch", () => {
 test("typecheck of boolean true", () => {
   const node = new ValueNode(createInfo(0, 0), "boolean", "true")
   expect(node.value).toBeTruthy()
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of boolean false", () => {
   const node = new ValueNode(createInfo(0, 0), "boolean", "false")
   expect(node.value).toBeFalsy()
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of boolean mismatch", () => {
@@ -97,8 +93,7 @@ test("typecheck of compare eq", () => {
     new ValueNode(createInfo(2, 0), "integer", "2"))
   expect(node.left.value).toBe(2)
   expect(node.right.value).toBe(2)
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of compare eq mismatch", () => {
@@ -127,16 +122,14 @@ test("typecheck of if node", () => {
       new AssignmentNode(
         createInfo(5, 0), "y", new ValueNode(createInfo(6, 0), "boolean", "true"),
         "boolean")]))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of assignment node of assignment", () => {
   const node = new AssignmentNode(
     createInfo(0, 0), "x", new ValueNode(createInfo(0, 0), "integer", "0"),
     "integer")
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of assignment node of reassignment", () => {
@@ -147,8 +140,7 @@ test("typecheck of assignment node of reassignment", () => {
     new AssignmentNode(
       createInfo(0, 0), "x", new ValueNode(createInfo(0, 0), "integer", "1"))
   ]))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of assignment node of invalid reassignment", () => {
@@ -179,8 +171,7 @@ function checkArithmetics(operator, valueType, left, right) {
     operator,
     new ValueNode(createInfo(0, 0), valueType, left),
     new ValueNode(createInfo(0, 0), valueType, right))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 }
 
 // Valid arithmetics
@@ -217,8 +208,7 @@ test("typecheck of add string and integer", () => {
     "add",
     new ValueNode(createInfo(0, 0), "integer", "2"),
     new ValueNode(createInfo(1, 0), "string", " value"))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of add string and double", () => {
@@ -226,8 +216,7 @@ test("typecheck of add string and double", () => {
     "add",
     new ValueNode(createInfo(0, 0), "double", "2.0"),
     new ValueNode(createInfo(1, 0), "string", " value"))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of add string and boolean", () => {
@@ -235,8 +224,7 @@ test("typecheck of add string and boolean", () => {
     "add",
     new ValueNode(createInfo(0, 0), "string", "is"),
     new ValueNode(createInfo(1, 0), "boolean", "true"))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck of type add of numbers", () => {
@@ -244,8 +232,7 @@ test("typecheck of type add of numbers", () => {
     "add",
     new ValueNode(createInfo(0, 0), "double", "2.0"),
     new ValueNode(createInfo(1, 0), "integer", "3"))
-  expect(
-    node.typeCheck(typeEnv).get("errors").isEmpty()).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 // Invalid arithmetics
@@ -279,7 +266,7 @@ test("typecheck to ignore function cross variables", () => {
         "integer")
     ]), {returnType: "void"})
   ]))
-  expect(noErrors(node.typeCheck(typeEnv))).toBeTruthy()
+  expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck for global conflict", () => {
