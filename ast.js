@@ -5,10 +5,12 @@ function generateNode(data) {
   const {nodeType, id} = data
   const children = List(data.children)
   const info = Map(data.info ||
-                   {first_line: 0,
-                    last_line: 0,
-                    first_column: 0,
-                    last_column: 0})
+                   {
+                     first_line: 0,
+                     last_line: 0,
+                     first_column: 0,
+                     last_column: 0
+                   })
   const meta = data.meta || Map()
   switch (nodeType) {
   case "root": {
@@ -218,25 +220,25 @@ const operators = {
 }
 
 const isOneString = (t1, t2) =>
-      t1 === "string" ||
-      t2 === "string"
+  t1 === "string" ||
+  t2 === "string"
 
 const typePriorities = ["boolean", "integer", "double", "string"]
 
 const numberTypes = ["double", "integer"]
 
 const isBothNumbers = (t1, t2) =>
-      numberTypes.includes(t1) && numberTypes.includes(t2)
+  numberTypes.includes(t1) && numberTypes.includes(t2)
 
 const matchingTypes = (t1, t2) =>
-      t1 === t2 || isOneString(t1, t2) || isBothNumbers(t1, t2)
+  t1 === t2 || isOneString(t1, t2) || isBothNumbers(t1, t2)
 
 const getTopType = (t1, t2) =>
-      typePriorities.indexOf(t1) > typePriorities.indexOf(t2) ? t1 : t2
+  typePriorities.indexOf(t1) > typePriorities.indexOf(t2) ? t1 : t2
 
 const detectType = (t1, t2) =>
-      matchingTypes(t1, t2) ?
-      getTopType(t1, t2) : new InvalidValueType(t1)
+  matchingTypes(t1, t2) ?
+    getTopType(t1, t2) : new InvalidValueType(t1)
 
 class ArithmeticsNode {
   constructor(info, operator, left, right) {
@@ -249,10 +251,11 @@ class ArithmeticsNode {
   typeCheck(typeEnv) {
     return typeEnv.update(
       "errors",
-      v => v.concat(this.left.typeCheck(typeEnv).get("errors"),
-                    this.right.typeCheck(typeEnv).get("errors"),
-                    isValid(this.type) ?
-                    [] : [createError("invalidArithmetics", this)]))
+      v => v.concat(
+        this.left.typeCheck(typeEnv).get("errors"),
+        this.right.typeCheck(typeEnv).get("errors"),
+        isValid(this.type) ?
+          [] : [createError("invalidArithmetics", this)]))
   }
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
@@ -332,9 +335,9 @@ const parsers = {
   "double": (x) => parseDouble(x),
   "boolean": (x) => {
     switch(x) {
-      case "true": return true
-      case "false": return false
-      default: return new InvalidValueType(x)
+    case "true": return true
+    case "false": return false
+    default: return new InvalidValueType(x)
     }
   }
 }
