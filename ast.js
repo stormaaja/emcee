@@ -157,6 +157,22 @@ class ArrayAccessNode {
     this.id = id
     this.expression = expression
   }
+
+  checkExpr() {
+    return this.expression.type === "integer" ?
+      createError("arrayAccessExprMustBeInteger", this) : null
+  }
+  checkArrayExists(typeEnv) {
+    return typeEnv.hasIn(["types", this.id]) ?
+      null : createError("valueDoesNoteExists")
+  }
+  typeCheck(typeEnv) {
+    const errors = [
+      checkArrayExists(typeEnv), checkExpr()
+    ].filter(x => x)
+    const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
+    return typeEnv.update("errors", e => e.concat(errors, exprErrors))
+  }
 }
 
 class WhileNode {
@@ -377,5 +393,5 @@ class ArgumentNode{
 
 module.exports = {
   generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
-  RootNode, FunctionNode, WhileNode
+  RootNode, FunctionNode, WhileNode, ArrayAccessNode
 }
