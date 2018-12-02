@@ -1,4 +1,3 @@
-const {createNode} = require("./utils.js")
 const {generateNode} = require("./ast.js")
 const {List} = require("immutable")
 
