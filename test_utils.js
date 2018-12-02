@@ -1,14 +1,22 @@
 const {createNode} = require("./utils.js")
+const {generateNode} = require("./ast.js")
+const {List} = require("immutable")
 
 function generateMain(block) {
   return `int main() { ${block} }`
 }
 
 function generateProgramNode(children) {
-  return createNode("root", [
-    createNode(
-      "function", children, "main", {argList: [], returnType: "int"})
-  ])
+  return generateNode({
+    nodeType: "root",
+    children: List([
+      generateNode({
+        nodeType: "function",
+        children: List(children),
+        id: "main",
+        meta: {argList: [], returnType: "int"},
+        info: createInfo(1, 1, 0, 3)})]),
+    info: createInfo(0, 0, 0, 0)})
 }
 
 function createInfo(fl, ll, fc, lc) {
