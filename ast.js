@@ -90,7 +90,9 @@ const errorMessages = {
   notInitialized: "Value is not initialized",
   alreadyInitialized: "Value is already initialized",
   invalidType: "Invalid type for value",
-  whileExprMustBeBool: "While expression must return boolean"
+  whileExprMustBeBool: "While expression must return boolean",
+  functionDoesNotExist: "Function does not exist",
+  fnParamInvalidType: "Function parameter type is invalid"
 }
 
 function createError(id, node) {
@@ -125,14 +127,23 @@ class FunctionNode {
     this.id = id
     this.children = children
     this.returnType = meta.returnType
-    this.argList = meta.argList
+    this.argList = meta.argList || List()
   }
   typeCheck(typeEnv) {
-    const env = typeEnv.set(this.id, this.returnType)
-    // TODO args
+    const argTypes = this.argList.map(a => a.type)
+    const env = typeEnv.setIn(["types", this.id], Map({
+      arguments: argTypes,
+      returnType: this.returnType
+    }))
+    const envT = typeCheckEach(this.argList, env)
     // TODO return type to match return expression
-    return typeEnv.set(
-      "errors", typeCheckEach(this.children, env).get("errors"))
+    return env.update(
+      "errors",
+      e => e.concat(
+        typeCheckEach(this.children, envT).get("errors"),
+        envT.get("errors")
+      )
+    )
   }
 }
 
@@ -141,6 +152,9 @@ class ReturnNode{
     this.info = info
     this.expression = expression
   }
+  typeCheck(typeEnv) {
+    return this.expression.typeCheck(typeEnv)
+  }
 }
 
 class FunctionCallNode {
@@ -148,6 +162,23 @@ class FunctionCallNode {
     this.info = info
     this.id = id
     this.params = params
+  }
+  typeCheck(typeEnv) {
+    // TODO check that param types matches function signature
+    // TODO check if assignment matches function return value
+    const errors = [
+      typeEnv.getIn(["types", this.id]) ?
+        null : createError("functionDoesNotExist", this)
+    ].filter(x => x)
+    const paramErrors = typeCheckEach(this.params, typeEnv).get("errors")
+    const fnTypes = typeEnv.getIn(["types", this.id, "arguments"])
+    const paramTypeErrors = fnTypes ? this.params.map(
+      (p, i) => p.type === fnTypes.get(i) ?
+        null : createError("fnParamInvalidType", p)
+    ).filter(x => x) : []
+    return typeEnv.update("errors", (e) => e.concat(
+      errors, paramErrors, paramTypeErrors
+    ))
   }
 }
 
@@ -393,5 +424,6 @@ class ArgumentNode{
 
 module.exports = {
   generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
-  RootNode, FunctionNode, WhileNode, ArrayAccessNode
+  RootNode, FunctionNode, WhileNode, ArrayAccessNode, FunctionCallNode,
+  ReturnNode, ArgumentNode
 }
