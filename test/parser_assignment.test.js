@@ -1,6 +1,6 @@
 const parser = require("../parser.js");
 const {generateNode} = require("../ast.js")
-const {generateMain} = require("../test_utils.js")
+const {generateMain, createInfo}  = require("../test_utils.js")
 
 test("generates AST of simple assignment", () => {
   const source = generateMain("int x = 0; return x;")
@@ -35,7 +35,7 @@ test("generates AST of usage of an assignment", () => {
           generateNode({
             nodeType: "integer_value",
             children: ["0"],
-            info: {line: 1, column: 50}
+            info: createInfo(1, 1, 50, 51)
           })]})
         ], id: "main", meta: {argList: [], returnType: "int"}})
     ]})
@@ -60,7 +60,7 @@ test("generates AST of an array assignment", () => {
             generateNode({
               nodeType: "integer_value",
               children: ["0"],
-              info: {line: 1, column: 53}})]})
+              info: createInfo(1, 1, 53, 54)})]})
         ], id: "main", meta: {argList: [], returnType: "int"}})
     ]})
   )

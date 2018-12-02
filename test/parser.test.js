@@ -1,6 +1,8 @@
 const parser = require("../parser.js");
 const {createNode, addElse} = require("../utils.js")
-const {generateMain, generateProgramNode} = require("../test_utils.js")
+const {
+  generateMain, generateProgramNode, createInfo
+} = require("../test_utils.js")
 const {generateNode} = require("../ast.js")
 
 test("generates AST of if-else greater than", () => {
@@ -63,7 +65,7 @@ test("generates AST of function call", () => {
           generateNode({
             nodeType: "integer_value",
             children: ["0"],
-            info: {line: 1, column: 76}})
+            info: createInfo(1, 1, 76, 77)})
         ])
       ], "main", {argList: [], returnType: "int"})
     ])

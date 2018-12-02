@@ -1,6 +1,6 @@
 const parser = require("../parser.js");
 const {createNode, addElse} = require("../utils.js")
-const {generateMain} = require("../test_utils.js")
+const {generateMain, createInfo} = require("../test_utils.js")
 const {generateNode} = require("../ast.js")
 
 test("generates AST of compare greater than", () => {
@@ -13,23 +13,23 @@ test("generates AST of compare greater than", () => {
             generateNode(
               {nodeType: "integer_value",
                children: ["2"],
-               info: {line: 1, column: 17}}),
+               info: createInfo(1, 1, 17, 18)}),
             generateNode({
               nodeType: "integer_value",
               children: ["1"],
-              info: {line: 1, column: 21}})
+              info: createInfo(1, 1, 21, 22)})
           ]),
           [createNode("return", [
             generateNode({
               nodeType: "integer_value",
               children: ["0"],
-              info: {line: 1, column: 32}})])]
+              info: createInfo(1, 1, 32, 33)})])]
         ]),
         createNode("return", [
           generateNode({
             nodeType: "integer_value",
             children: ["1"],
-            info: {line: 1, column: 43}})
+            info: createInfo(1, 1, 43, 44)})
         ])
       ], "main", {argList: [], returnType: "int"})
     ])
@@ -65,22 +65,22 @@ test("generates AST of compare equals", () => {
             generateNode({
               nodeType: "integer_value",
               children: ["1"],
-              info: {line: 1, column: 17}}),
+              info: createInfo(1, 1, 17, 18)}),
             generateNode({
               nodeType: "integer_value",
               children: ["1"],
-              info: {line: 1, column: 22}})
+              info: createInfo(1, 1, 22, 23)})
           ]),
           [createNode("return", [
             generateNode({
               nodeType: "integer_value",
               children: ["0"],
-              info: {line: 1, column: 33}})])]]),
+              info: createInfo(1, 1, 33, 34)})])]]),
         createNode("return", [
           generateNode({
             nodeType: "integer_value",
             children: ["1"],
-            info: {line: 1, column: 44}})
+            info: createInfo(1, 1, 44, 45)})
         ])
       ], "main", {argList: [], returnType: "int"})
     ])
