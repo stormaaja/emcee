@@ -1,6 +1,6 @@
 const {
   ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode,
-  FunctionNode, WhileNode
+  FunctionNode, WhileNode, FunctionCallNode, ReturnNode, ArgumentNode
 } = require("../ast.js")
 
 const { Map, List } = require("immutable")
@@ -309,6 +309,63 @@ test("typecheck of while with invalid expression", () => {
   expectErrors(node.typeCheck(typeEnv), ["whileExprMustBeBool"], 1)
 })
 
+test("typecheck for function call", () => {
+  const node = new RootNode(List([
+    new FunctionNode(
+      createInfo(0, 0),
+      "fun_one",
+      List([
+        new ReturnNode(
+          createInfo(1, 0),
+          new ValueNode(createInfo(1, 0), "integer", "0"))
+      ]),
+      {
+        returnType: "integer",
+        argList: List([
+          new ArgumentNode(createInfo(1, 0), "string", "z")
+        ])
+      }),
+    new FunctionCallNode(
+      createInfo(0, 0),
+      "fun_one",
+      List([new ValueNode(createInfo(1, 0), "string", "hello")]))
+  ]))
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck for function call with invalid type param", () => {
+  const node = new RootNode(List([
+    new FunctionNode(
+      createInfo(0, 0),
+      "fun_one",
+      List([
+        new ReturnNode(
+          createInfo(1, 0),
+          new ValueNode(createInfo(1, 0), "integer", "0"))
+      ]),
+      {
+        returnType: "integer",
+        argList: List([
+          new ArgumentNode(createInfo(1, 0), "string", "z")
+        ])
+      }),
+    new FunctionCallNode(
+      createInfo(0, 0),
+      "fun_one",
+      List([new ValueNode(createInfo(1, 0), "integer", "0")]))
+  ]))
+  expectErrors(node.typeCheck(typeEnv), ["fnParamInvalidType"], 1)
+})
+
+test("typecheck for non existing function call", () => {
+  const node = new RootNode(List([
+    new FunctionCallNode(
+      createInfo(0, 0),
+      "fun_missing",
+      List([new ValueNode(createInfo(1, 0), "integer", "0")]))
+  ]))
+  expectErrors(node.typeCheck(typeEnv), ["functionDoesNotExist"], 1)
+})
 
 // TODO global assignment allow and conflict
 // TODO argument config
