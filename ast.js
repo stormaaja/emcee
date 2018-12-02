@@ -1,10 +1,6 @@
 "use strict"
 const { Map, List } = require("immutable")
 
-// TODO change typechecks to return results instead of success boolean
-
-let currentLine = 0
-
 function generateNode(data) {
   const {nodeType, id} = data
   const children = List(data.children)
