@@ -132,7 +132,7 @@ stmt
 
 while
     : WHILE PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
-      {$$ = generateNode({nodeType: "while", children: [$3, $6]});}
+      {$$ = generateNode({nodeType: "while", children: [$3, $6], info: @1});}
     ;
 
 fn_call
