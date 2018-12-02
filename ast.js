@@ -200,7 +200,7 @@ class ArrayAccessNode {
   }
   typeCheck(typeEnv) {
     const errors = [
-      checkArrayExists(typeEnv), checkExpr()
+      this.checkArrayExists(typeEnv), this.checkExpr()
     ].filter(x => x)
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     return typeEnv.update("errors", e => e.concat(errors, exprErrors))
