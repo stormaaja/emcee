@@ -1,6 +1,6 @@
 const {
   ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode,
-  FunctionNode
+  FunctionNode, WhileNode
 } = require("../ast.js")
 
 const { Map, List } = require("immutable")
@@ -281,6 +281,32 @@ test("typecheck for global conflict", () => {
     ]), {returnType: "void"})
   ]))
   expectErrors(node.typeCheck(typeEnv), ["alreadyInitialized"], 1)
+})
+
+test("typecheck of while", () => {
+  const node = new WhileNode(
+    createInfo(0, 0),
+    new CompareNode(
+      createInfo(0, 0),
+      "gt",
+      new ValueNode(createInfo(1, 0), "integer", "2"),
+      new ValueNode(createInfo(2, 0), "integer", "3")),
+    new AssignmentNode(
+      createInfo(3, 0), "x", new ValueNode(createInfo(3, 0), "integer", "0"),
+      "integer"))
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck of while with invalid expression", () => {
+  const node = new WhileNode(
+    createInfo(0, 0),
+    new AssignmentNode(
+      createInfo(3, 0), "x", new ValueNode(createInfo(3, 0), "integer", "0"),
+      "integer"),
+    new AssignmentNode(
+      createInfo(3, 0), "y", new ValueNode(createInfo(3, 0), "integer", "0"),
+      "integer"))
+  expectErrors(node.typeCheck(typeEnv), ["whileExprMustBeBool"], 1)
 })
 
 
