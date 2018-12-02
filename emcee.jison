@@ -69,7 +69,7 @@ pgm_block
 function
     : type id PAROPEN arglist PARCLOSE BRACEOPEN block BRACECLOSE
       {$$ = generateNode({nodeType: "function", children: $7, id: $2,
-         meta: {returnType: $1, argList: $4}});}
+         meta: {returnType: $1, argList: $4}, info: @1});}
     ;
 
 type
