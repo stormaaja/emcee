@@ -85,6 +85,24 @@ function generateNode(data) {
   }
 }
 
+const errorMessages = {
+  ifExprMustBeBool: "Expression must return boolean",
+  invalidArithmetics: "Invalid arithmetics expression",
+  comparingMismatch: "Comparision must be done with values of the same type",
+  assignExprConflict: "Assignment type does not match expression type",
+  notInitialized: "Value is not initialized",
+  alreadyInitialized: "Value is already initialized",
+  invalidType: "Invalid type for value",
+}
+
+function createError(id, node) {
+  return Map({
+    id: id,
+    message: errorMessages[id],
+    node: node
+  })
+}
+
 function typeCheckEach(nodes, typeEnv) {
   if (nodes.isEmpty()) {
     return typeEnv
@@ -98,7 +116,7 @@ class RootNode {
     this.children = children
   }
   typeCheck() {
-    const typeEnv = Map({types: Map(), errors: Map()})
+    const typeEnv = Map({types: Map(), errors: List()})
     return typeCheckEach(this.children, typeEnv)
   }
 }
@@ -170,17 +188,16 @@ class IfNode {
   typeCheck(typeEnv) {
     const env = this.expression.type === "boolean" ?
       typeEnv :
-      typeEnv.setIn(["errors", this.info.get("line")],
-                    "Expression must return boolean")
+      typeEnv.update(
+        "errors", l => l.push(createError("ifExprMustBeBool", this)))
 
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     const ifErrors = typeCheckEach(this.ifBody, typeEnv).get("errors")
     const elseErrors = this.elseBody ?
-      typeCheckEach(this.elseBody, typeEnv).get("errors") : Map()
+      typeCheckEach(this.elseBody, typeEnv).get("errors") : List()
 
-    const errors = env.get("errors").merge(exprErrors, ifErrors, elseErrors)
-
-    return typeEnv.set("errors", errors)
+    return typeEnv.set(
+      "errors", env.get("errors").concat(exprErrors, ifErrors, elseErrors))
   }
 }
 
@@ -194,9 +211,9 @@ class CompareNode {
   }
   typeCheck(typeEnv) {
     return this.left.type === this.right.type
-      ? typeEnv : typeEnv.setIn(
-        ["errors", this.info.get("line")],
-        `Comparing mismatching types: ${this.left.type} and ${this.right.type}`)
+      ? typeEnv : typeEnv.update(
+        "errors", v => v.push(createError(
+          "comparingMismatch", this)))
   }
 }
 
@@ -234,14 +251,12 @@ class ArithmeticsNode {
     this.type = detectType(this.left.type, this.right.type)
   }
   typeCheck(typeEnv) {
-    const env = isValid(this.type) ?
-      typeEnv : typeEnv.setIn(
-        ["errors", this.info.get("line")],
-        `Can't ${this.operator} ${this.left.type} and ${this.right.type}`)
-    return env.update(
+    return typeEnv.update(
       "errors",
-      (v) => v.merge(this.left.typeCheck(env).get("errors"),
-                     this.right.typeCheck(env).get("errors")))
+      v => v.concat(this.left.typeCheck(typeEnv).get("errors"),
+                    this.right.typeCheck(typeEnv).get("errors"),
+                    isValid(this.type) ?
+                    [] : [createError("invalidArithmetics", this)]))
   }
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
@@ -260,16 +275,16 @@ class AssignmentNode {
     const type = this.type ? this.type : typeEnv.getIn(["types", this.id])
     if (type) {
       return type !== this.expression.type ?
-        `Assignment type ${this.type} does not match expression type ${this.expression.type}` :
+        createError("assignExprConflict", this) :
         null
     } else {
-      return `${this.id} is not initialized`
+      return createError("notInitialized", this)
     }
   }
 
   checkReinit(typeEnv) {
     return this.type && typeEnv.hasIn(["types", this.id]) ?
-      `${this.id} is already initialized` : null
+      createError("alreadyInitialized", this) : null
   }
 
   typeCheck(typeEnv) {
@@ -277,15 +292,12 @@ class AssignmentNode {
       this.checkTypeMatch(typeEnv), this.checkReinit(typeEnv)
     ].filter(x => x)
 
-    const env = errors.length > 0 ?
-      typeEnv.setIn(
-        ["errors", this.info.get("line")], errors.join(",")) : typeEnv
-
     const nodeTypeEnv =
-      this.type ? env.setIn(["types", this.id], this.type) : env
+      this.type ? typeEnv.setIn(["types", this.id], this.type) : typeEnv
 
-    return nodeTypeEnv.update("errors", (v) => v.merge(
-      this.expression.typeCheck(nodeTypeEnv).get("errors")))
+    return nodeTypeEnv.update("errors", (v) => v.concat(
+      this.expression.typeCheck(nodeTypeEnv).get("errors"),
+      errors))
   }
 }
 
@@ -347,9 +359,8 @@ class ValueNode {
   }
   typeCheck(typeEnv) {
     return isValid(this.value) ?
-      typeEnv : typeEnv.setIn(
-        ["errors", this.info.get("line")],
-        `Invalid type ${this.type} for value ${this.value}`)
+      typeEnv : typeEnv.update(
+        "errors", v => v.push(createError("invalidType", this)))
   }
   eval() {
     return this.value
