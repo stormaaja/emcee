@@ -96,6 +96,7 @@ const errorMessages = {
 }
 
 function createError(id, node) {
+  if (!errorMessages[id]) throw Error(`Error ${id} does not exists`)
   return Map({
     id: id,
     message: errorMessages[id],
