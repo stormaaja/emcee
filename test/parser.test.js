@@ -60,7 +60,11 @@ test("generates AST of function call", () => {
       generateNode({
         nodeType: "function",
         children: List([
-          createNode("function_call", ["s"], "print")
+          generateNode({
+            nodeType: "function_call",
+            children: List(["s"]),
+            id: "print",
+            info: createInfo(1, 1, 22, 27)})
         ]),
         id: "hello",
         meta: {
@@ -71,9 +75,13 @@ test("generates AST of function call", () => {
       generateNode({
         nodeType: "function",
         children: List([
-          createNode("function_call", [
-            createNode("string_value", ["\"Hello World!\""])
-          ], "hello"),
+          generateNode({
+            nodeType: "function_call",
+            children: List([
+              createNode("string_value", ["\"Hello World!\""])
+            ]),
+            id: "hello",
+            info: createInfo(1, 1, 46, 51)}),
           createNode("return", [
             generateNode({
               nodeType: "integer_value",
@@ -104,12 +112,14 @@ test("generates AST of array", () => {
             createNode("integer_value", ["3"])])
         ],
         "a", {valueType: "array_int"}),
-      createNode(
-        "function_call", [
+      generateNode({
+        nodeType: "function_call",
+        children: List([
           createNode("array_access", [
             "a",
-            createNode("integer_value", ["2"])])],
-        "print"),
+            createNode("integer_value", ["2"])])]),
+        id: "print",
+        info: createInfo(1, 1, 37, 42)}),
       createNode("return", [
         createNode("array_access", [
           "a",

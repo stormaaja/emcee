@@ -48,7 +48,10 @@ test("generates AST of usage of an assignment", () => {
             id: "s",
             meta: {valueType: "string"}}),
           generateNode({
-            nodeType: "function_call", children: ["s"], id: "print"
+            nodeType: "function_call",
+            children: ["s"],
+            id: "print",
+            info: createInfo(1, 1, 33, 38)
           }),
           generateNode({nodeType: "return", children: [
             generateNode({
