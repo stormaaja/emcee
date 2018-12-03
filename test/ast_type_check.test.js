@@ -11,8 +11,8 @@ const createInfo = (line, column) => Map({line, column})
 
 function expectErrors(typeEnv, errors, count) {
   const typeErrorIds = typeEnv.get("errors").toJS().map(e => e.id)
-  expect(typeErrorIds.length).toBe(count)
   errors.forEach(e => expect(typeErrorIds).toContain(e))
+  expect(typeErrorIds.length).toBe(count)
 }
 
 function expectNoErrors(typeEnv) {
