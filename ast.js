@@ -92,7 +92,8 @@ const errorMessages = {
   invalidType: "Invalid type for value",
   whileExprMustBeBool: "While expression must return boolean",
   functionDoesNotExist: "Function does not exist",
-  fnParamInvalidType: "Function parameter type is invalid"
+  fnParamInvalidType: "Function parameter type is invalid",
+  invalidReturnValue: "Return value type does not match function signature"
 }
 
 function createError(id, node) {
@@ -137,12 +138,18 @@ class FunctionNode {
       returnType: this.returnType
     }))
     const envT = typeCheckEach(this.argList, env)
-    // TODO return type to match return expression
+    const lastChild = this.children.last()
+    const returnValueType = (lastChild instanceof ReturnNode) ?
+      lastChild.type : "void"
+    const errors = returnValueType === this.returnType ?
+      [] : [createError("invalidReturnValue")]
+
     return env.update(
       "errors",
       e => e.concat(
         typeCheckEach(this.children, envT).get("errors"),
-        envT.get("errors")
+        envT.get("errors"),
+        errors
       )
     )
   }
@@ -152,6 +159,7 @@ class ReturnNode{
   constructor(info, expression) {
     this.info = info
     this.expression = expression
+    this.type = this.expression.type
   }
   typeCheck(typeEnv) {
     return this.expression.typeCheck(typeEnv)
