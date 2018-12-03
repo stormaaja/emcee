@@ -367,6 +367,30 @@ test("typecheck for non existing function call", () => {
   expectErrors(node.typeCheck(typeEnv), ["functionDoesNotExist"], 1)
 })
 
+test("typecheck for function return value", () => {
+  const node = new FunctionNode(
+    createInfo(0, 0),
+    "fun",
+    List([
+      new ReturnNode(
+        createInfo(1, 0),
+        new ValueNode(createInfo(1, 0), "integer", "0"))]),
+    {returnType: "integer"})
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck for invalid function return value", () => {
+  const node = new FunctionNode(
+    createInfo(0, 0),
+    "fun",
+    List([
+      new ReturnNode(
+        createInfo(1, 0),
+        new ValueNode(createInfo(1, 0), "string", "hello"))]),
+    {returnType: "integer"})
+  expectErrors(node.typeCheck(typeEnv), ["invalidReturnValue"], 1)
+})
+
 // TODO global assignment allow and conflict
 // TODO argument config
 // TODO function param arg typecheck
