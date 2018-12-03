@@ -391,6 +391,23 @@ test("typecheck for invalid function return value", () => {
   expectErrors(node.typeCheck(typeEnv), ["invalidReturnValue"], 1)
 })
 
+test("typecheck for function already exists", () => {
+  const node = new RootNode(
+    List([
+      new FunctionNode(
+        createInfo(0, 0),
+        "fun",
+        List([]),
+        {returnType: "void"}),
+      new FunctionNode(
+        createInfo(0, 0),
+        "fun",
+        List([]),
+        {returnType: "void"})]))
+  expectErrors(node.typeCheck(typeEnv), ["fnAlreadyExists"], 1)
+})
+
+
 // TODO global assignment allow and conflict
 // TODO argument config
 // TODO function param arg typecheck
