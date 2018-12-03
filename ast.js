@@ -93,7 +93,8 @@ const errorMessages = {
   whileExprMustBeBool: "While expression must return boolean",
   functionDoesNotExist: "Function does not exist",
   fnParamInvalidType: "Function parameter type is invalid",
-  invalidReturnValue: "Return value type does not match function signature"
+  invalidReturnValue: "Return value type does not match function signature",
+  fnAlreadyExists: "Function or variable of given name already exists"
 }
 
 function createError(id, node) {
@@ -131,18 +132,30 @@ class FunctionNode {
     this.returnType = meta.returnType
     this.argList = meta.argList || List()
   }
+
+  checkReturnType() {
+    const lastChild = this.children.last()
+    const returnValueType = (lastChild instanceof ReturnNode) ?
+      lastChild.type : "void"
+    return returnValueType === this.returnType ?
+      null : createError("invalidReturnValue")
+  }
+
+  checkReinit(typeEnv) {
+    return typeEnv.hasIn(["types", this.id]) ?
+      createError("fnAlreadyExists") : null
+  }
+
   typeCheck(typeEnv) {
+    const errors = [
+      this.checkReturnType(), this.checkReinit(typeEnv)].filter(x => x)
+
     const argTypes = this.argList.map(a => a.type)
     const env = typeEnv.setIn(["types", this.id], Map({
       arguments: argTypes,
       returnType: this.returnType
     }))
     const envT = typeCheckEach(this.argList, env)
-    const lastChild = this.children.last()
-    const returnValueType = (lastChild instanceof ReturnNode) ?
-      lastChild.type : "void"
-    const errors = returnValueType === this.returnType ?
-      [] : [createError("invalidReturnValue")]
 
     return env.update(
       "errors",
