@@ -410,8 +410,5 @@ test("typecheck for function already exists", () => {
 
 // TODO global assignment allow and conflict
 // TODO argument config
-// TODO function param arg typecheck
 // TODO function id conflict
 // TODO function and variable conflict
-// TODO function call exists
-// TODO function return type
