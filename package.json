@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "jest",
-    "compile": "node compiler.js",
-    "compile-examples": "find examples -name '*.emc' -exec node compiler.js {} +",
+    "compile": "node emcee.js",
+    "compile-examples": "find examples -name '*.emc' -exec node emcee.js {} +",
     "lint": "node_modules/.bin/eslint *.js"
   },
   "repository": {
