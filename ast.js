@@ -231,7 +231,7 @@ class ArrayAccessNode {
   }
   checkArrayExists(typeEnv) {
     return typeEnv.hasIn(["types", this.id]) ?
-      null : createError("valueDoesNoteExists")
+      null : createError("valueDoesNoteExists", this)
   }
   typeCheck(typeEnv) {
     const errors = [
