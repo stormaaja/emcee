@@ -125,6 +125,14 @@ function typeCheckEach(nodes, typeEnv) {
   }
 }
 
+function evalEach(nodes, env) {
+  if (nodes.isEmpty()) {
+    return env
+  } else {
+    return evalEach(nodes.shift(), nodes.first().eval(env))
+  }
+}
+
 class RootNode {
   constructor(children) {
     this.children = children
@@ -132,6 +140,9 @@ class RootNode {
   typeCheck() {
     const typeEnv = Map({types: Map(), errors: List()})
     return typeCheckEach(this.children, typeEnv)
+  }
+  eval() {
+    return evalEach(this.children, Map({result: 0})).get("result")
   }
 }
 
