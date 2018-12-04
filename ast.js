@@ -1,6 +1,14 @@
 "use strict"
 const { Map, List } = require("immutable")
 
+const types = {
+  string: "string",
+  int: "integer",
+  double: "double",
+  bool: "boolean",
+  array: "array"
+}
+
 function generateNode(data) {
   const {nodeType, id} = data
   const children = List(data.children)
@@ -16,7 +24,8 @@ function generateNode(data) {
     return new RootNode(children)
   }
   case "function": {
-    return new FunctionNode(info, id, List(children), meta)
+    return new FunctionNode(
+      info, id, List(children), List(meta.argList), types[meta.returnType])
   }
   case "function_call": {
     return new FunctionCallNode(info, id, List(children))
