@@ -136,12 +136,12 @@ class RootNode {
 }
 
 class FunctionNode {
-  constructor(info, id, children, meta) {
+  constructor(info, id, children, argList, returnType) {
     this.info = info
     this.id = id
     this.children = children
-    this.returnType = meta.returnType
-    this.argList = meta.argList || List()
+    this.returnType = returnType
+    this.argList = argList || List()
   }
 
   checkReturnType() {
