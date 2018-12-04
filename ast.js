@@ -94,6 +94,8 @@ const errorMessages = {
   functionDoesNotExist: "Function does not exist",
   fnParamInvalidType: "Function parameter type is invalid",
   invalidReturnValue: "Return value type does not match function signature",
+  multipleDifferentReturnValues:
+  "Function has multiple different return values",
   fnAlreadyExists: "Function or variable of given name already exists"
 }
 
@@ -134,9 +136,12 @@ class FunctionNode {
   }
 
   checkReturnType() {
-    const lastChild = this.children.last()
-    const returnValueType = (lastChild instanceof ReturnNode) ?
-      lastChild.type : "void"
+    const returnNodes = this.children.filter(
+      c => (c instanceof ReturnNode))
+    if (returnNodes.countBy(v => v.type).size > 1)
+      return createError("multipleDifferentReturnValues", this)
+    const returnValueType = returnNodes.isEmpty() ?
+      "void" : returnNodes.first().type
     return returnValueType === this.returnType ?
       null : createError("invalidReturnValue")
   }
