@@ -283,6 +283,35 @@ test("typecheck for global conflict", () => {
   expectErrors(node.typeCheck(typeEnv), ["alreadyInitialized"], 1)
 })
 
+test("typecheck for variable function conflict", () => {
+  const node = new RootNode(List([
+    new AssignmentNode(
+      createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
+      "integer"),
+    new FunctionNode(createInfo(2, 0), "x", List([
+    ]), {returnType: "void"})
+  ]))
+  expectErrors(node.typeCheck(typeEnv), ["fnAlreadyExists"], 1)
+})
+
+
+test("typecheck for function variable conflict", () => {
+  const node = new RootNode(List([
+    new FunctionNode(createInfo(2, 0), "fun_one", List([
+      new AssignmentNode(
+        createInfo(3, 0), "x", new ValueNode(createInfo(3, 0), "integer", "0"),
+        "integer")
+    ]), {returnType: "void"}),
+    new FunctionNode(createInfo(2, 0), "fun_two", List([
+      new AssignmentNode(
+        createInfo(3, 0), "fun_one", new ValueNode(createInfo(3, 0), "integer", "0"),
+        "integer")
+    ]), {returnType: "void"})
+  ]))
+  expectErrors(node.typeCheck(typeEnv), ["alreadyInitialized"], 1)
+})
+
+
 test("typecheck of while", () => {
   const node = new WhileNode(
     createInfo(0, 0),
@@ -421,9 +450,3 @@ test("typecheck for function already exists", () => {
         {returnType: "void"})]))
   expectErrors(node.typeCheck(typeEnv), ["fnAlreadyExists"], 1)
 })
-
-
-// TODO global assignment allow and conflict
-// TODO argument config
-// TODO function id conflict
-// TODO function and variable conflict
