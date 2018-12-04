@@ -143,12 +143,12 @@ class FunctionNode {
     const returnValueType = returnNodes.isEmpty() ?
       "void" : returnNodes.first().type
     return returnValueType === this.returnType ?
-      null : createError("invalidReturnValue")
+      null : createError("invalidReturnValue", this)
   }
 
   checkReinit(typeEnv) {
     return typeEnv.hasIn(["types", this.id]) ?
-      createError("fnAlreadyExists") : null
+      createError("fnAlreadyExists", this) : null
   }
 
   typeCheck(typeEnv) {
