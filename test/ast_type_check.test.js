@@ -391,6 +391,21 @@ test("typecheck for invalid function return value", () => {
   expectErrors(node.typeCheck(typeEnv), ["invalidReturnValue"], 1)
 })
 
+test("typecheck for function with multiple different return values", () => {
+  const node = new FunctionNode(
+    createInfo(0, 0),
+    "fun",
+    List([
+      new ReturnNode(
+        createInfo(1, 0),
+        new ValueNode(createInfo(1, 0), "integer", "0")),
+      new ReturnNode(
+        createInfo(1, 0),
+        new ValueNode(createInfo(1, 0), "string", "hello"))]),
+    {returnType: "integer"})
+  expectErrors(node.typeCheck(typeEnv), ["multipleDifferentReturnValues"], 1)
+})
+
 test("typecheck for function already exists", () => {
   const node = new RootNode(
     List([
