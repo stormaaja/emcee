@@ -24,7 +24,7 @@ function main(argv) {
 
     if (printAST) {
       const tree = objects ?
-        r.parseResult : JSON.stringify(r.parseResult, null, 2)
+        r.parseResult.result : JSON.stringify(r.parseResult.result, null, 2)
       console.log(tree)
     }
     if (!r.parseResult.success) {
@@ -33,6 +33,7 @@ function main(argv) {
       if (debug) {
         console.log(r.result)
       }
+      console.log(r.parseResult.result.message)
     } else if (!r.typeCheckResult.get("errors").isEmpty()) {
       console.log("%s: \x1b[31mTypecheck failed\x1b[0m", r.file)
       r.typeCheckResult.get("errors").forEach((e) => {
