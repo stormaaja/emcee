@@ -450,3 +450,13 @@ test("typecheck for function already exists", () => {
         {returnType: "void"})]))
   expectErrors(node.typeCheck(typeEnv), ["fnAlreadyExists"], 1)
 })
+
+test("typecheck for symbol does not exist", () => {
+  const node = new RootNode(
+    List([
+      new FunctionCallNode(
+        createInfo(0, 0),
+        "nonexist",
+        List([]),)]))
+  expectErrors(node.typeCheck(typeEnv), ["symbolDoestNotExist"], 1)
+})
