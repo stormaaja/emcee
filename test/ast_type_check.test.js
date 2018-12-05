@@ -471,3 +471,5 @@ test("typecheck for symbol does not exist", () => {
 // TODO function arg typecheck
 // TODO typecheck arithmetics node as return value
 // TODO function call node typecheck
+// TODO multiple times typechecking the same thing (returning errors multiple times)
+// TODO return values inside blocks
