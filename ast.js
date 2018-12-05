@@ -377,9 +377,8 @@ class AssignmentNode {
   checkTypeMatch(typeEnv) {
     const type = this.type ? this.type : typeEnv.getIn(["types", this.id])
     if (type) {
-      return type !== this.expression.type ?
-        createError("assignExprConflict", this) :
-        null
+      return matchingTypes(type, this.expression.type) ?
+        null : createError("assignExprConflict", this)
     } else {
       return createError("notInitialized", this)
     }
