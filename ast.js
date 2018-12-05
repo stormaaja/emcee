@@ -235,6 +235,12 @@ class FunctionCallNode {
     return this.type
   }
   typeCheck(typeEnv) {
+    const type = typeEnv.getIn(["types", this.id])
+
+    // TODO Fix (look at SymbolNode)
+    if (!this.type && type) {
+      this.type = type.get("returnType")
+    }
     // TODO check that param types matches function signature
     // TODO check if assignment matches function return value
     const errors = [
@@ -505,7 +511,7 @@ class SymbolNode {
   typeCheck(typeEnv) {
     const type = typeEnv.getIn(["types", this.id])
 
-  // Following is not sustainable and system wide consistent solution
+    // Following is not sustainable and system wide consistent solution
     // TODO Fix it
     if (!this.type) {
       this.type = type
