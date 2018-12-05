@@ -1,7 +1,7 @@
 // String concatenation
 
 string add_str(string base, int x) {
-  return base + to_str(i);
+  return base + to_str(x);
 }
 
 void main() {
