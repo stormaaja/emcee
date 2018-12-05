@@ -295,8 +295,7 @@ class IfNode {
 
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     const ifErrors = typeCheckEach(this.ifBody, typeEnv).get("errors")
-    const elseErrors = this.elseBody ?
-      typeCheckEach(this.elseBody, typeEnv).get("errors") : List()
+    const elseErrors = typeCheckEach(this.elseBody, typeEnv).get("errors")
 
     return typeEnv.set(
       "errors", env.get("errors").concat(exprErrors, ifErrors, elseErrors))
