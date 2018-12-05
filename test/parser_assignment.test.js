@@ -14,14 +14,24 @@ test("generates AST of simple assignment", () => {
             generateNode({
               nodeType: "assignment",
               children: [
-                "x",
+                generateNode({
+                  nodeType: "symbol",
+                  id: "x",
+                  info: createInfo(0, 0, 0, 0)}),
                 generateNode({
                   nodeType: "integer_value",
-                  children: ["0"]})
+                  children: ["0"],
+                  info: createInfo(1, 1, 21, 22)})
               ],
               id: "x",
               meta: {valueType: "int"}}),
-            generateNode({nodeType: "return", children: ["x"]})
+            generateNode({
+              nodeType: "return",
+              children: [
+                generateNode({
+                  nodeType: "symbol",
+                  id: "x",
+                  info: createInfo(1, 1, 31, 32)})]})
           ],
           id: "main",
           meta: {argList: [], returnType: "int"},
@@ -49,7 +59,9 @@ test("generates AST of usage of an assignment", () => {
             meta: {valueType: "string"}}),
           generateNode({
             nodeType: "function_call",
-            children: ["s"],
+            children: [
+              generateNode({
+                nodeType: "symbol", id: "s", info: createInfo(1, 1, 39, 40)})],
             id: "print",
             info: createInfo(1, 1, 33, 38)
           }),
