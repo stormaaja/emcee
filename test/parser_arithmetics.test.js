@@ -12,18 +12,24 @@ test("generates AST of multiply integer", () => {
       createNode("assignment", [
         "x",
         createNode("mul_expr", [
-          createNode("integer_value", ["2"]),
-            createNode("integer_value", ["3"])])
-        ], "x", {valueType: "int"}),
-        createNode("return", [
           generateNode({
             nodeType: "integer_value",
-            children: ["0"],
-            info: createInfo(1, 1, 35, 36)
-          })
-        ])
-      ]
-    )
+            children: ["2"],
+            info: createInfo(1, 1, 21, 22)}),
+          generateNode({
+            nodeType: "integer_value",
+            children: ["3"],
+            info: createInfo(1, 1, 25, 26)})])
+      ], "x", {valueType: "int"}),
+      createNode("return", [
+        generateNode({
+          nodeType: "integer_value",
+          children: ["0"],
+          info: createInfo(1, 1, 35, 36)
+        })
+      ])
+    ]
+                       )
   )
 })
 
@@ -34,8 +40,14 @@ test("generates AST of subtract integer", () => {
       createNode("assignment", [
         "x",
         createNode("sub_expr", [
-          createNode("integer_value", ["3"]),
-          createNode("integer_value", ["2"])])
+          generateNode({
+            nodeType: "integer_value",
+            children: ["3"],
+            info: createInfo(1, 1, 21, 22)}),
+          generateNode({
+            nodeType: "integer_value",
+            children: ["2"],
+            info: createInfo(1, 1, 25, 26)})])
       ],"x", {valueType: "int"}),
       createNode("return", [
         generateNode({
@@ -53,8 +65,14 @@ test("generates AST of divide integer", () => {
       createNode("assignment", [
         "x",
         createNode("div_expr", [
-          createNode("integer_value", ["2"]),
-          createNode("integer_value", ["3"])])
+          generateNode({
+            nodeType: "integer_value",
+            children: ["2"],
+            info: createInfo(1, 1, 21, 22)}),
+          generateNode({
+            nodeType: "integer_value",
+            children: ["3"],
+            info: createInfo(1, 1, 25, 26)})])
       ], "x", {valueType: "int"}),
       createNode("return", [
         generateNode({
@@ -94,13 +112,26 @@ test("generates AST of more complex arithmetics", () => {
         "x",
         createNode("sub_expr", [
           createNode("div_expr", [
-            createNode("double_value", ["2.0"]),
+            generateNode({
+              nodeType: "double_value",
+              children: ["2.0"],
+              info: createInfo(0, 0, 0, 0)}),
             createNode("double_value", ["3.0"])]),
           createNode("mul_expr", [
-            createNode("integer_value", ["4"]),
+            generateNode({
+              nodeType: "integer_value",
+              children: ["4"],
+              info: createInfo(1, 1, 36, 37)}),
             createNode("add_expr", [
-              createNode("integer_value", ["1"]),
-              createNode("integer_value", ["4"])])
+              generateNode({
+                nodeType: "integer_value",
+                children: ["1"],
+                info: createInfo(1, 1, 41, 42)}),
+              generateNode({
+                nodeType: "integer_value",
+                children: ["4"],
+                info: createInfo(1, 1, 45, 46)})
+            ])
           ])
         ])], "x", {valueType: "double"}),
       createNode("return", [
