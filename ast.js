@@ -18,6 +18,10 @@ const systemFunctions = Map({
   to_str: Map({
     arguments: List(["integer"]),
     returnType: "sring"
+  }),
+  len: Map({
+    arguments: List(["array"]),
+    returnType: "integer"
   })
 })
 
