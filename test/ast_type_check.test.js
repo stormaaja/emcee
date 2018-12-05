@@ -465,3 +465,9 @@ test("typecheck for symbol does not exist", () => {
 // TODO assign cross cast (string, integer, double etc.)
 // TODO fn call type cast (string, integer, double etc.)
 // TODO Add symbol typecheck test
+// TODO function param typecheck
+// TODO if expression typecheck
+// TODO comparision left right typecheck
+// TODO function arg typecheck
+// TODO typecheck arithmetics node as return value
+// TODO function call node typecheck
