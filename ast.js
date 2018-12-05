@@ -263,9 +263,10 @@ class FunctionCallNode {
     const paramErrors = typeCheckEach(this.params, typeEnv).get("errors")
     const fnTypes = typeEnv.getIn(["types", this.id, "arguments"])
     const paramTypeErrors = fnTypes ? this.params.map(
-      (p, i) => matchingTypes(p.getType(), fnTypes.get(i)) ?
+      (p, i) => paramTypesMatches(p.getType(), fnTypes.get(i)) ?
         null : createError("fnParamInvalidType", p)
     ).filter(x => x) : []
+
     return typeEnv.update("errors", (e) => e.concat(
       errors, paramErrors, paramTypeErrors
     ))
