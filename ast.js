@@ -78,7 +78,8 @@ function generateNode(data) {
     return new CompareNode(info, "eq", children.first(), children.get(1))
   }
   case "if": {
-    return new IfNode(info, children.first(), List(children.get(1)))
+    return new IfNode(
+      info, children.first(), List(children.get(1)), List(children.get(2)))
   }
   case "while": {
     return new WhileNode(info, children.first(), children.get(1))

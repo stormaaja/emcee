@@ -144,8 +144,9 @@ fn_call
 if
     : IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
       {$$ = generateNode({nodeType: "if", children: [$3, $6], info: @1});}
-    | if ELSE BRACEOPEN block BRACECLOSE
-      {$$ = addElse($1, $4);}
+    | IF PAROPEN expr PARCLOSE BRACEOPEN block BRACECLOSE
+      ELSE BRACEOPEN block BRACECLOSE
+      {$$ = generateNode({nodeType: "if", children: [$3, $6, $10], info: @1});}
     ;
 
 paramlist
