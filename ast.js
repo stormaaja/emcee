@@ -508,6 +508,9 @@ class SymbolNode {
     this.info = info
     this.id = id
   }
+  getType() {
+    return this.type
+  }
   typeCheck(typeEnv) {
     const type = typeEnv.getIn(["types", this.id])
 
