@@ -460,3 +460,8 @@ test("typecheck for symbol does not exist", () => {
         List([]),)]))
   expectErrors(node.typeCheck(typeEnv), ["symbolDoestNotExist"], 1)
 })
+
+
+// TODO assign cross cast (string, integer, double etc.)
+// TODO fn call type cast (string, integer, double etc.)
+// TODO Add symbol typecheck test
