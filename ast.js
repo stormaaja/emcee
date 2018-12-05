@@ -188,7 +188,8 @@ class FunctionNode {
       return createError("multipleDifferentReturnValues", this)
     const returnValueType = returnNodes.isEmpty() ?
       "void" : returnNodes.first().getType()
-    return matchingTypes(returnValueType, this.returnType) ?
+    return (returnValueType === this.returnType ||
+            isBothNumbers(returnValueType, this.returnType)) ?
       null : createError("invalidReturnValue", this)
   }
 
@@ -231,6 +232,10 @@ class ReturnNode{
   getType() {
     return this.expression.getType()
   }
+}
+
+function paramTypesMatches(t1, t2) {
+  return t1 === t2 || isBothNumbers(t1, t2)
 }
 
 class FunctionCallNode {
@@ -328,6 +333,10 @@ class IfNode {
   }
 }
 
+function compareTypesMatches(t1, t2) {
+  return t1 === t2 || isBothNumbers(t1, t2)
+}
+
 class CompareNode {
   constructor(info, comparision, left, right) {
     this.info = info
@@ -341,7 +350,7 @@ class CompareNode {
   typeCheck(typeEnv) {
     const leftErrors = this.left.typeCheck(typeEnv)
     const rightErrors = this.right.typeCheck(typeEnv)
-    return matchingTypes(this.left.getType(), this.right.getType())
+    return compareTypesMatches(this.left.getType(), this.right.getType())
       ? typeEnv : typeEnv.update(
         "errors", v => v.push(createError(
           "comparingMismatch", this)))
@@ -409,9 +418,9 @@ class AssignmentNode {
   }
 
   checkTypeMatch(typeEnv) {
-    const type = this.getType() ? this.getType() : typeEnv.getIn(["types", this.id])
+    const type = this.type ? this.type : typeEnv.getIn(["types", this.id])
     if (type) {
-      return matchingTypes(type, this.expression.getType()) ?
+      return type === this.expression.getType() ?
         null : createError("assignExprConflict", this)
     } else {
       return createError("notInitialized", this)
