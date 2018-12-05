@@ -122,6 +122,7 @@ const errorMessages = {
 }
 
 function createError(id, node) {
+  if (!node) throw Error("Node can't be null. Error: " + id)
   if (!errorMessages[id]) throw Error(`Error ${id} does not exists`)
   return Map({
     id: id,
