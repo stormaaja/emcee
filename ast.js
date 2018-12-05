@@ -536,7 +536,7 @@ class ArgumentNode {
     return this.type
   }
   typeCheck(typeEnv) {
-    return typeEnv.set(this.id, this.type)
+    return typeEnv.setIn(["types", this.id], this.type)
   }
 }
 
