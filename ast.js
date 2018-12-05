@@ -311,7 +311,9 @@ class CompareNode {
     this.type = "boolean"
   }
   typeCheck(typeEnv) {
-    return this.left.type === this.right.type
+    const leftErrors = this.left.typeCheck(typeEnv)
+    const rightErrors = this.right.typeCheck(typeEnv)
+    return matchingTypes(this.left.type, this.right.type)
       ? typeEnv : typeEnv.update(
         "errors", v => v.push(createError(
           "comparingMismatch", this)))
