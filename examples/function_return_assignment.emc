@@ -6,6 +6,6 @@ int sum(int x, int y) {
 
 int main() {
   int v = sum(1, 2);
-  print(v);
+  print(to_str(v));
   return 0;
 }

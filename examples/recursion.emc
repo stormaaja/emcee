@@ -8,6 +8,6 @@ int sum_desc(int x) {
 }
 
 int main() {
-  print(sum_desc(10)); // -> 55
+  print(to_str(sum_desc(10))); // -> 55
   return 0;
 }

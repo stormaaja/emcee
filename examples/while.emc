@@ -5,6 +5,6 @@ int main() {
   while(x < 10) {
     x = x + 1;
   }
-  print(x);
+  print(to_str(x));
   return 0;
 }
