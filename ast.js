@@ -63,10 +63,10 @@ function generateNode(data) {
     return new ArrayAccessNode(info, id, children.first())
   }
   case "argument": {
-    return new ArgumentNode(info, id, meta.valueType)
+    return new ArgumentNode(info, id, types[meta.valueType])
   }
   case "assignment": {
-    return new AssignmentNode(info, id, children.get(1), meta.valueType)
+    return new AssignmentNode(info, id, children.get(1), types[meta.valueType])
   }
   case "compare_gt": {
     return new CompareNode(info, "gt", children.first(), children.get(1))
