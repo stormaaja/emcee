@@ -6,7 +6,8 @@ const types = {
   int: "integer",
   double: "double",
   bool: "boolean",
-  array: "array"
+  array: "array",
+  void: "void"
 }
 
 function generateNode(data) {
