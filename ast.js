@@ -10,6 +10,13 @@ const types = {
   void: "void"
 }
 
+const systemFunctions = Map({
+  print: Map({
+    arguments: List(["string"]),
+    returnType: "void"
+  })
+})
+
 function generateNode(data) {
   const {nodeType, id} = data
   const children = List(data.children)
@@ -139,7 +146,7 @@ class RootNode {
     this.children = children
   }
   typeCheck() {
-    const typeEnv = Map({types: Map(), errors: List()})
+    const typeEnv = Map({types: systemFunctions, errors: List()})
     return typeCheckEach(this.children, typeEnv)
   }
   eval() {
