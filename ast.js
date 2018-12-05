@@ -19,6 +19,10 @@ const systemFunctions = Map({
     arguments: List(["integer"]),
     returnType: "string"
   }),
+  d_to_str: Map({
+    arguments: List(["integer"]),
+    returnType: "string"
+  }),
   len: Map({
     arguments: List(["array"]),
     returnType: "integer"
