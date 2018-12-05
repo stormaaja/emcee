@@ -476,7 +476,15 @@ class SymbolNode {
     this.id = id
   }
   typeCheck(typeEnv) {
-    return typeEnv.hasIn(["types", this.id]) ?
+    const type = typeEnv.getIn(["types", this.id])
+
+  // Following is not sustainable and system wide consistent solution
+    // TODO Fix it
+    if (!this.type) {
+      this.type = type
+    }
+
+    return type ?
       typeEnv : typeEnv.update(
         "errors", e => e.concat([createError("symbolDoesNotExists")]))
   }
