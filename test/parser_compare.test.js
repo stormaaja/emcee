@@ -1,5 +1,5 @@
 const parser = require("../parser.js");
-const {createNode, addElse} = require("../utils.js")
+const {createNode} = require("../utils.js")
 const {generateMain, createInfo} = require("../test_utils.js")
 const {generateNode} = require("../ast.js")
 const {List} = require("immutable")
@@ -53,15 +53,46 @@ test("generates AST of compare less than", () => {
       generateNode({
         nodeType: "function",
         children: [
-        addElse(
-          createNode("if", [
-            createNode("compare_lt", [
-              createNode("integer_value", ["2"]),
-              createNode("integer_value", ["1"])
-            ]),
-            [createNode("return", [createNode("integer_value", ["1"])])]
-          ]),
-          [createNode("return", [createNode("integer_value", ["0"])])])],
+          generateNode({
+            nodeType: "if",
+            children: [
+              generateNode({
+                nodeType: "compare_lt",
+                children: [
+                  generateNode({
+                    nodeType: "integer_value",
+                    children: ["2"],
+                    info: createInfo(1, 1, 17, 18)}),
+                  generateNode({
+                    nodeType: "integer_value",
+                    children: ["1"],
+                    info: createInfo(1, 1, 21, 22)})
+                ],
+                info: createInfo(0, 0, 0, 0)}),
+              [
+                generateNode({
+                  nodeType: "return",
+                  children: [
+                    generateNode({
+                      nodeType: "integer_value",
+                      children: ["1"],
+                      info: createInfo(1, 1, 32, 33)})
+                  ],
+                  info: createInfo(0, 0, 0, 0)})],
+              [
+                generateNode({
+                  nodeType: "return",
+                  children: [
+                    generateNode({
+                      nodeType: "integer_value",
+                      children: ["0"],
+                      info: createInfo(1, 1, 49, 50)})
+                  ],
+                  info: createInfo(0, 0, 0, 0)})]
+            ],
+            info: createInfo(1, 1, 13, 15)
+          }),
+        ],
         id: "main",
         meta: {argList: [], returnType: "int"},
         info: createInfo(1, 1, 0, 3)})
@@ -78,7 +109,7 @@ test("generates AST of compare equals", () => {
         children: [
           generateNode({
             nodeType: "if",
-            children: List([
+            children: [
               createNode("compare_eq", [
                 generateNode({
                   nodeType: "integer_value",
@@ -89,18 +120,25 @@ test("generates AST of compare equals", () => {
                   children: ["1"],
                   info: createInfo(1, 1, 22, 23)})
               ]),
-              [createNode("return", [
+              [
                 generateNode({
-                  nodeType: "integer_value",
-                  children: ["0"],
-                  info: createInfo(1, 1, 33, 34)})])]]),
+                  nodeType: "return",
+                  children: [
+                    generateNode({
+                      nodeType: "integer_value",
+                      children: ["0"],
+                      info: createInfo(1, 1, 33, 34)})],
+                  info: createInfo(0, 0, 0, 0)})]],
             info: createInfo(1, 1, 13, 15)}),
-          createNode("return", [
-            generateNode({
-              nodeType: "integer_value",
-              children: ["1"],
-              info: createInfo(1, 1, 44, 45)})
-          ])
+          generateNode({
+            nodeType: "return",
+            children: [
+              generateNode({
+                nodeType: "integer_value",
+                children: ["1"],
+                info: createInfo(1, 1, 44, 45)})
+            ],
+            info: createInfo(0, 0, 0, 0)})
         ],
         id: "main",
         meta: {
