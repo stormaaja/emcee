@@ -5,10 +5,15 @@ const {Map} = require("immutable")
 "use strict"
 
 function compileFile(f) {
-  const parseResult = parser.parse(file.loadFile(f))
-  const typeCheckResult = parseResult.success ?
-    parseResult.result.typeCheck() : Map()
-  return {parseResult, typeCheckResult, file: f}
+  try {
+    const parseResult = parser.parse(file.loadFile(f))
+    const typeCheckResult = parseResult.success ?
+          parseResult.result.typeCheck() : Map()
+    return {parseResult, typeCheckResult, file: f}
+  } catch(e) {
+    console.error("Error while processing file: " + f)
+    throw e
+  }
 }
 
 function compile(files) {
