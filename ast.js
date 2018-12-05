@@ -41,6 +41,9 @@ function generateNode(data) {
   case "return": {
     return new ReturnNode(info, children.first())
   }
+  case "symbol": {
+    return new SymbolNode(info, id)
+  }
   case "string_value": {
     return new ValueNode(info, "string", children.first())
   }
@@ -113,7 +116,8 @@ const errorMessages = {
   invalidReturnValue: "Return value type does not match function signature",
   multipleDifferentReturnValues:
   "Function has multiple different return values",
-  fnAlreadyExists: "Function or variable of given name already exists"
+  fnAlreadyExists: "Function or variable of given name already exists",
+  symbolDoesNotExist: "Symbol does not exist"
 }
 
 function createError(id, node) {
@@ -466,7 +470,19 @@ class ValueNode {
   }
 }
 
-class ArgumentNode{
+class SymbolNode {
+  constructor(info, id) {
+    this.info = info
+    this.id = id
+  }
+  typeCheck(typeEnv) {
+    return typeEnv.hasIn(["types", this.id]) ?
+      typeEnv : typeEnv.update(
+        "errors", e => e.concat([createError("symbolDoesNotExists")]))
+  }
+}
+
+class ArgumentNode {
   constructor(info, type, id) {
     this.info = info
     this.type = type
