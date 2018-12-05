@@ -78,7 +78,7 @@ function generateNode(data) {
     return new CompareNode(info, "eq", children.first(), children.get(1))
   }
   case "if": {
-    return new IfNode(info, children.first(), children.get(1))
+    return new IfNode(info, children.first(), List(children.get(1)))
   }
   case "while": {
     return new WhileNode(info, children.first(), children.get(1))
@@ -284,8 +284,8 @@ class IfNode {
   constructor(info, expression, ifBody, elseBody) {
     this.info = info
     this.expression = expression
-    this.ifBody = ifBody
-    this.elseBody = elseBody
+    this.ifBody = ifBody || List()
+    this.elseBody = elseBody || List()
   }
   typeCheck(typeEnv) {
     const env = this.expression.type === "boolean" ?
