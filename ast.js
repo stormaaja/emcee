@@ -169,14 +169,18 @@ class FunctionNode {
     this.argList = argList || List()
   }
 
+  getType() {
+    return this.returnType
+  }
+
   checkReturnType() {
     const returnNodes = this.children.filter(
       c => (c instanceof ReturnNode))
-    if (returnNodes.countBy(v => v.type).size > 1)
+    if (returnNodes.countBy(v => v.getType()).size > 1)
       return createError("multipleDifferentReturnValues", this)
     const returnValueType = returnNodes.isEmpty() ?
-      "void" : returnNodes.first().type
-    return returnValueType === this.returnType ?
+      "void" : returnNodes.first().getType()
+    return matchingTypes(returnValueType, this.returnType) ?
       null : createError("invalidReturnValue", this)
   }
 
@@ -189,7 +193,7 @@ class FunctionNode {
     const errors = [
       this.checkReturnType(), this.checkReinit(typeEnv)].filter(x => x)
 
-    const argTypes = this.argList.map(a => a.type)
+    const argTypes = this.argList.map(a => a.getType())
     const env = typeEnv.setIn(["types", this.id], Map({
       arguments: argTypes,
       returnType: this.returnType
@@ -211,10 +215,12 @@ class ReturnNode{
   constructor(info, expression) {
     this.info = info
     this.expression = expression
-    this.type = this.expression.type
   }
   typeCheck(typeEnv) {
     return this.expression.typeCheck(typeEnv)
+  }
+  getType() {
+    return this.expression.getType()
   }
 }
 
@@ -223,6 +229,9 @@ class FunctionCallNode {
     this.info = info
     this.id = id
     this.params = params
+  }
+  getType() {
+    return this.type
   }
   typeCheck(typeEnv) {
     // TODO check that param types matches function signature
@@ -234,7 +243,7 @@ class FunctionCallNode {
     const paramErrors = typeCheckEach(this.params, typeEnv).get("errors")
     const fnTypes = typeEnv.getIn(["types", this.id, "arguments"])
     const paramTypeErrors = fnTypes ? this.params.map(
-      (p, i) => matchingTypes(p.type, fnTypes.get(i)) ?
+      (p, i) => matchingTypes(p.getType(), fnTypes.get(i)) ?
         null : createError("fnParamInvalidType", p)
     ).filter(x => x) : []
     return typeEnv.update("errors", (e) => e.concat(
@@ -251,7 +260,7 @@ class ArrayAccessNode {
   }
 
   checkExpr() {
-    return this.expression.type === "integer" ?
+    return this.expression.getType() === "integer" ?
       createError("arrayAccessExprMustBeInteger", this) : null
   }
   checkArrayExists(typeEnv) {
@@ -275,7 +284,7 @@ class WhileNode {
   }
   typeCheck(typeEnv) {
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
-    const errors = this.expression.type === "boolean" ?
+    const errors = this.expression.getType() === "boolean" ?
       [] : [createError("whileExprMustBeBool", this)]
     return typeEnv.update("errors", (e) => e.concat(
       exprErrors, errors))
@@ -310,12 +319,14 @@ class CompareNode {
     this.comparision = comparision
     this.left = left
     this.right = right
-    this.type = "boolean"
+  }
+  getType() {
+    return "boolean"
   }
   typeCheck(typeEnv) {
     const leftErrors = this.left.typeCheck(typeEnv)
     const rightErrors = this.right.typeCheck(typeEnv)
-    return matchingTypes(this.left.type, this.right.type)
+    return matchingTypes(this.left.getType(), this.right.getType())
       ? typeEnv : typeEnv.update(
         "errors", v => v.push(createError(
           "comparingMismatch", this)))
@@ -353,7 +364,9 @@ class ArithmeticsNode {
     this.operator = operator
     this.left = left
     this.right = right
-    this.type = detectType(this.left.type, this.right.type)
+  }
+  getType() {
+    return detectType(this.left.getType(), this.right.getType())
   }
   typeCheck(typeEnv) {
     return typeEnv.update(
@@ -361,7 +374,7 @@ class ArithmeticsNode {
       v => v.concat(
         this.left.typeCheck(typeEnv).get("errors"),
         this.right.typeCheck(typeEnv).get("errors"),
-        isValid(this.type) ?
+        isValid(this.getType()) ?
           [] : [createError("invalidArithmetics", this)]))
   }
   eval(env) {
@@ -376,11 +389,14 @@ class AssignmentNode {
     this.expression = expression
     this.type = type
   }
+  getType() {
+    return this.type
+  }
 
   checkTypeMatch(typeEnv) {
-    const type = this.type ? this.type : typeEnv.getIn(["types", this.id])
+    const type = this.getType() ? this.getType() : typeEnv.getIn(["types", this.id])
     if (type) {
-      return matchingTypes(type, this.expression.type) ?
+      return matchingTypes(type, this.expression.getType()) ?
         null : createError("assignExprConflict", this)
     } else {
       return createError("notInitialized", this)
@@ -388,7 +404,7 @@ class AssignmentNode {
   }
 
   checkReinit(typeEnv) {
-    return this.type && typeEnv.hasIn(["types", this.id]) ?
+    return this.getType() && typeEnv.hasIn(["types", this.id]) ?
       createError("alreadyInitialized", this) : null
   }
 
@@ -398,7 +414,7 @@ class AssignmentNode {
     ].filter(x => x)
 
     const nodeTypeEnv =
-      this.type ? typeEnv.setIn(["types", this.id], this.type) : typeEnv
+      this.getType() ? typeEnv.setIn(["types", this.id], this.getType()) : typeEnv
 
     return nodeTypeEnv.update("errors", (v) => v.concat(
       this.expression.typeCheck(nodeTypeEnv).get("errors"),
@@ -410,6 +426,9 @@ class InvalidValueType {
   constructor(type, value) {
     this.type = type
     this.value = value
+  }
+  getType() {
+    return this.type
   }
 }
 
@@ -462,6 +481,9 @@ class ValueNode {
     this.type = type
     this.value = parseValue(type, value)
   }
+  getType() {
+    return this.type
+  }
   typeCheck(typeEnv) {
     return isValid(this.value) ?
       typeEnv : typeEnv.update(
@@ -497,6 +519,9 @@ class ArgumentNode {
     this.info = info
     this.type = type
     this.id = id
+  }
+  getType() {
+    return this.type
   }
   typeCheck(typeEnv) {
     return typeEnv.set(this.id, this.type)
