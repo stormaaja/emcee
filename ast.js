@@ -522,7 +522,7 @@ class SymbolNode {
 
     return type ?
       typeEnv : typeEnv.update(
-        "errors", e => e.concat([createError("symbolDoesNotExists")]))
+        "errors", e => e.concat([createError("symbolDoesNotExist", this)]))
   }
 }
 
