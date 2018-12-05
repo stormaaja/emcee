@@ -411,6 +411,10 @@ class ArithmeticsNode {
   }
 }
 
+function assignTypesMatches(t1, t2) {
+  return t1 === t2 || (t1 === "double" && t2 === "integer")
+}
+
 class AssignmentNode {
   constructor(info, id, expression, type) {
     this.info = info
@@ -425,7 +429,7 @@ class AssignmentNode {
   checkTypeMatch(typeEnv) {
     const type = this.type ? this.type : typeEnv.getIn(["types", this.id])
     if (type) {
-      return type === this.expression.getType() ?
+      return assignTypesMatches(type, this.expression.getType()) ?
         null : createError("assignExprConflict", this)
     } else {
       return createError("notInitialized", this)
