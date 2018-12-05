@@ -190,20 +190,21 @@ class FunctionNode {
   }
 
   typeCheck(typeEnv) {
-    const errors = [
-      this.checkReturnType(), this.checkReinit(typeEnv)].filter(x => x)
-
     const argTypes = this.argList.map(a => a.getType())
     const env = typeEnv.setIn(["types", this.id], Map({
       arguments: argTypes,
       returnType: this.returnType
     }))
     const envT = typeCheckEach(this.argList, env)
+    const childEnv = typeCheckEach(this.children, envT)
+
+    const errors = [
+      this.checkReinit(typeEnv), this.checkReturnType()].filter(x => x)
 
     return env.update(
       "errors",
       e => e.concat(
-        typeCheckEach(this.children, envT).get("errors"),
+        childEnv.get("errors"),
         envT.get("errors"),
         errors
       )
@@ -299,14 +300,14 @@ class IfNode {
     this.elseBody = elseBody || List()
   }
   typeCheck(typeEnv) {
-    const env = this.expression.type === "boolean" ?
-      typeEnv :
-      typeEnv.update(
-        "errors", l => l.push(createError("ifExprMustBeBool", this)))
-
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     const ifErrors = typeCheckEach(this.ifBody, typeEnv).get("errors")
     const elseErrors = typeCheckEach(this.elseBody, typeEnv).get("errors")
+
+    const env = this.expression.getType() === "boolean" ?
+      typeEnv :
+      typeEnv.update(
+        "errors", l => l.push(createError("ifExprMustBeBool", this)))
 
     return typeEnv.set(
       "errors", env.get("errors").concat(exprErrors, ifErrors, elseErrors))
@@ -409,6 +410,7 @@ class AssignmentNode {
   }
 
   typeCheck(typeEnv) {
+    const expressionErrors = this.expression.typeCheck(typeEnv).get("errors")
     const errors = [
       this.checkTypeMatch(typeEnv), this.checkReinit(typeEnv)
     ].filter(x => x)
@@ -418,7 +420,8 @@ class AssignmentNode {
 
     return nodeTypeEnv.update("errors", (v) => v.concat(
       this.expression.typeCheck(nodeTypeEnv).get("errors"),
-      errors))
+      errors,
+      expressionErrors))
   }
 }
 
