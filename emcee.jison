@@ -2,7 +2,7 @@
     const path = require("path");
     const { generateNode } = require(path.normalize("../../../ast.js"))
     const {
-      appendChild, prependChild, appendNodeChild, addElse
+      appendChild, prependChild, appendNodeChild
     } = require(path.normalize("../../../utils.js"));
 %}
 

@@ -21,10 +21,6 @@ function appendNodeChild(node, child) {
     {children: appendChild(node.children, child)})
 }
 
-function addElse(ifNode, elseBody) {
-  ifNode.elseBody = elseBody
-}
-
 module.exports = {
-  createNode, appendChild, prependChild, appendNodeChild, addElse
+  createNode, appendChild, prependChild, appendNodeChild
 }
