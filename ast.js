@@ -63,7 +63,7 @@ function generateNode(data) {
     return new ArrayAccessNode(info, id, children.first())
   }
   case "argument": {
-    return new ArgumentNode(info, id, types[meta.valueType])
+    return new ArgumentNode(info, types[meta.valueType], id)
   }
   case "assignment": {
     return new AssignmentNode(info, id, children.get(1), types[meta.valueType])
