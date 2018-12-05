@@ -146,10 +146,14 @@ test("typecheck of assignment node of reassignment", () => {
 test("typecheck of assignment node of invalid reassignment", () => {
   const node = new RootNode( List([
     new AssignmentNode(
-      createInfo(0, 0), "x", new ValueNode(createInfo(0, 0), "integer", "0"),
+      createInfo(0, 0),
+      "x",
+      new ValueNode(createInfo(0, 0), "integer", "0"),
       "integer"),
     new AssignmentNode(
-      createInfo(0, 0), "x", new ValueNode(createInfo(0, 0), "double", "1.0"))
+      createInfo(0, 0),
+      "x",
+      new ValueNode(createInfo(0, 0), "double", "1.0"))
   ]))
   expectErrors(node.typeCheck(typeEnv), ["assignExprConflict"], 1)
 })
@@ -255,62 +259,98 @@ test("typecheck of mismatch type add boolean and integer", () => {
 
 test("typecheck to ignore function cross variables", () => {
   const node = new RootNode(List([
-    new FunctionNode(createInfo(0, 0), "fun_one", List([
-      new AssignmentNode(
-        createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
-        "integer")
-    ]), {returnType: "void"}),
-    new FunctionNode(createInfo(0, 0), "fun_two", List([
-      new AssignmentNode(
-        createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
-        "integer")
-    ]), {returnType: "void"})
-  ]))
+    new FunctionNode(
+      createInfo(0, 0),
+      "fun_one",
+      List([
+        new AssignmentNode(
+          createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
+          "integer")
+      ]),
+      List(),
+      "void"),
+    new FunctionNode(
+      createInfo(0, 0),
+      "fun_two",
+      List([
+        new AssignmentNode(
+          createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
+          "integer")
+      ]),
+      List(),
+      "void")]))
   expectNoErrors(node.typeCheck(typeEnv))
 })
 
 test("typecheck for global conflict", () => {
   const node = new RootNode(List([
     new AssignmentNode(
-      createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
+      createInfo(1, 0),
+      "x",
+      new ValueNode(createInfo(1, 0), "integer", "0"),
       "integer"),
-    new FunctionNode(createInfo(2, 0), "fun_one", List([
-      new AssignmentNode(
-        createInfo(3, 0), "x", new ValueNode(createInfo(3, 0), "integer", "0"),
-        "integer")
-    ]), {returnType: "void"})
-  ]))
+    new FunctionNode(
+      createInfo(2, 0),
+      "fun_one",
+      List([
+        new AssignmentNode(
+          createInfo(3, 0),
+          "x",
+          new ValueNode(createInfo(3, 0), "integer", "0"),
+          "integer")
+      ]),
+      List(),
+      "void")]))
   expectErrors(node.typeCheck(typeEnv), ["alreadyInitialized"], 1)
 })
 
 test("typecheck for variable function conflict", () => {
   const node = new RootNode(List([
     new AssignmentNode(
-      createInfo(1, 0), "x", new ValueNode(createInfo(1, 0), "integer", "0"),
+      createInfo(1, 0),
+      "x",
+      new ValueNode(createInfo(1, 0), "integer", "0"),
       "integer"),
-    new FunctionNode(createInfo(2, 0), "x", List([
-    ]), {returnType: "void"})
+    new FunctionNode(
+      createInfo(2, 0),
+      "x",
+      List(),
+      List(),
+      "void")
   ]))
   expectErrors(node.typeCheck(typeEnv), ["fnAlreadyExists"], 1)
 })
 
-
 test("typecheck for function variable conflict", () => {
   const node = new RootNode(List([
-    new FunctionNode(createInfo(2, 0), "fun_one", List([
-      new AssignmentNode(
-        createInfo(3, 0), "x", new ValueNode(createInfo(3, 0), "integer", "0"),
-        "integer")
-    ]), {returnType: "void"}),
-    new FunctionNode(createInfo(2, 0), "fun_two", List([
-      new AssignmentNode(
-        createInfo(3, 0), "fun_one", new ValueNode(createInfo(3, 0), "integer", "0"),
-        "integer")
-    ]), {returnType: "void"})
+    new FunctionNode(
+      createInfo(2, 0),
+      "fun_one",
+      List([
+        new AssignmentNode(
+          createInfo(3, 0),
+          "x",
+          new ValueNode(createInfo(3, 0), "integer", "0"),
+          "integer")
+      ]),
+      List(),
+      "void"
+    ),
+    new FunctionNode(
+      createInfo(2, 0),
+      "fun_two",
+      List([
+        new AssignmentNode(
+          createInfo(3, 0),
+          "fun_one",
+          new ValueNode(createInfo(3, 0), "integer", "0"),
+          "integer")
+      ]),
+      List(),
+      "void")
   ]))
   expectErrors(node.typeCheck(typeEnv), ["alreadyInitialized"], 1)
 })
-
 
 test("typecheck of while", () => {
   const node = new WhileNode(
@@ -348,12 +388,11 @@ test("typecheck for function call", () => {
           createInfo(1, 0),
           new ValueNode(createInfo(1, 0), "integer", "0"))
       ]),
-      {
-        returnType: "integer",
-        argList: List([
-          new ArgumentNode(createInfo(1, 0), "string", "z")
-        ])
-      }),
+      List([
+        new ArgumentNode(createInfo(1, 0), "string", "z")
+      ]),
+      "integer"
+    ),
     new FunctionCallNode(
       createInfo(0, 0),
       "fun_one",
@@ -372,12 +411,10 @@ test("typecheck for function call with invalid type param", () => {
           createInfo(1, 0),
           new ValueNode(createInfo(1, 0), "integer", "0"))
       ]),
-      {
-        returnType: "integer",
-        argList: List([
+      List([
           new ArgumentNode(createInfo(1, 0), "string", "z")
-        ])
-      }),
+        ]),
+      "integer"),
     new FunctionCallNode(
       createInfo(0, 0),
       "fun_one",
@@ -404,7 +441,8 @@ test("typecheck for function return value", () => {
       new ReturnNode(
         createInfo(1, 0),
         new ValueNode(createInfo(1, 0), "integer", "0"))]),
-    {returnType: "integer"})
+    List([]),
+    "integer")
   expectNoErrors(node.typeCheck(typeEnv))
 })
 
@@ -415,8 +453,9 @@ test("typecheck for invalid function return value", () => {
     List([
       new ReturnNode(
         createInfo(1, 0),
-        new ValueNode(createInfo(1, 0), "string", "hello"))]),
-    {returnType: "integer"})
+        new ValueNode(createInfo(1, 0), "boolean", "true"))]),
+    List([]),
+    "integer")
   expectErrors(node.typeCheck(typeEnv), ["invalidReturnValue"], 1)
 })
 
@@ -431,7 +470,8 @@ test("typecheck for function with multiple different return values", () => {
       new ReturnNode(
         createInfo(1, 0),
         new ValueNode(createInfo(1, 0), "string", "hello"))]),
-    {returnType: "integer"})
+    List([]),
+    "integer")
   expectErrors(node.typeCheck(typeEnv), ["multipleDifferentReturnValues"], 1)
 })
 
@@ -442,12 +482,14 @@ test("typecheck for function already exists", () => {
         createInfo(0, 0),
         "fun",
         List([]),
-        {returnType: "void"}),
+        List([]),
+        "void"),
       new FunctionNode(
         createInfo(0, 0),
         "fun",
         List([]),
-        {returnType: "void"})]))
+        List([]),
+        "void")]))
   expectErrors(node.typeCheck(typeEnv), ["fnAlreadyExists"], 1)
 })
 
@@ -458,7 +500,7 @@ test("typecheck for symbol does not exist", () => {
         createInfo(0, 0),
         "nonexist",
         List([]),)]))
-  expectErrors(node.typeCheck(typeEnv), ["symbolDoestNotExist"], 1)
+  expectErrors(node.typeCheck(typeEnv), ["functionDoesNotExist"], 1)
 })
 
 
@@ -473,3 +515,4 @@ test("typecheck for symbol does not exist", () => {
 // TODO function call node typecheck
 // TODO multiple times typechecking the same thing (returning errors multiple times)
 // TODO return values inside blocks
+// TODO allow only int to double cast
