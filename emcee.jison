@@ -159,6 +159,7 @@ paramlist
 
 expr
     : id
+      {$$ = generateNode({nodeType: "symbol", id: $1, info: @1})}
     | value
     | PAROPEN expr PARCLOSE
       {$$ = $2;}
