@@ -502,7 +502,7 @@ class AssignmentNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of assignment is not supported yet")
+    return env.set(this.id, this.expression.eval(env))
   }
 }
 
@@ -607,7 +607,7 @@ class SymbolNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of symbol is not supported yet")
+    return env.get(this.id)
   }
 }
 
