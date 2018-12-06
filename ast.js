@@ -223,6 +223,10 @@ class FunctionNode {
       )
     )
   }
+
+  eval(env) {
+    throw Error("Evaluation of function is not supported yet")
+  }
 }
 
 class ReturnNode{
@@ -230,11 +234,17 @@ class ReturnNode{
     this.info = info
     this.expression = expression
   }
+
   typeCheck(typeEnv) {
     return this.expression.typeCheck(typeEnv)
   }
+
   getType() {
     return this.expression.getType()
+  }
+
+  eval(env) {
+    return env.set("result", this.expression.eval(env))
   }
 }
 
@@ -248,9 +258,11 @@ class FunctionCallNode {
     this.id = id
     this.params = params
   }
+
   getType() {
     return this.type
   }
+
   typeCheck(typeEnv) {
     const type = typeEnv.getIn(["types", this.id])
 
@@ -275,6 +287,10 @@ class FunctionCallNode {
       errors, paramErrors, paramTypeErrors
     ))
   }
+
+  eval(env) {
+    throw Error("Evaluation of function call is not supported yet")
+  }
 }
 
 class ArrayAccessNode {
@@ -288,16 +304,22 @@ class ArrayAccessNode {
     return this.expression.getType() === "integer" ?
       createError("arrayAccessExprMustBeInteger", this) : null
   }
+
   checkArrayExists(typeEnv) {
     return typeEnv.hasIn(["types", this.id]) ?
       null : createError("valueDoesNoteExists", this)
   }
+
   typeCheck(typeEnv) {
     const errors = [
       this.checkArrayExists(typeEnv), this.checkExpr()
     ].filter(x => x)
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     return typeEnv.update("errors", e => e.concat(errors, exprErrors))
+  }
+
+  eval(env) {
+    throw Error("Evaluation of array access is not supported yet")
   }
 }
 
@@ -307,12 +329,17 @@ class WhileNode {
     this.expression = expression
     this.body = body
   }
+
   typeCheck(typeEnv) {
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     const errors = this.expression.getType() === "boolean" ?
       [] : [createError("whileExprMustBeBool", this)]
     return typeEnv.update("errors", (e) => e.concat(
       exprErrors, errors))
+  }
+
+  eval(env) {
+    throw Error("Evaluation of while is not supported yet")
   }
 }
 
@@ -323,6 +350,7 @@ class IfNode {
     this.ifBody = ifBody || List()
     this.elseBody = elseBody || List()
   }
+
   typeCheck(typeEnv) {
     const exprErrors = this.expression.typeCheck(typeEnv).get("errors")
     const ifErrors = typeCheckEach(this.ifBody, typeEnv).get("errors")
@@ -335,6 +363,10 @@ class IfNode {
 
     return typeEnv.set(
       "errors", env.get("errors").concat(exprErrors, ifErrors, elseErrors))
+  }
+
+  eval(env) {
+    throw Error("Evaluation of if block is not supported yet")
   }
 }
 
@@ -349,9 +381,11 @@ class CompareNode {
     this.left = left
     this.right = right
   }
+
   getType() {
     return "boolean"
   }
+
   typeCheck(typeEnv) {
     const leftErrors = this.left.typeCheck(typeEnv)
     const rightErrors = this.right.typeCheck(typeEnv)
@@ -359,6 +393,10 @@ class CompareNode {
       ? typeEnv : typeEnv.update(
         "errors", v => v.push(createError(
           "comparingMismatch", this)))
+  }
+
+  eval(env) {
+    throw Error("Evaluation of compare is not supported yet")
   }
 }
 
@@ -394,9 +432,11 @@ class ArithmeticsNode {
     this.left = left
     this.right = right
   }
+
   getType() {
     return detectType(this.left.getType(), this.right.getType())
   }
+
   typeCheck(typeEnv) {
     return typeEnv.update(
       "errors",
@@ -406,6 +446,7 @@ class ArithmeticsNode {
         isValid(this.getType()) ?
           [] : [createError("invalidArithmetics", this)]))
   }
+
   eval(env) {
     return operators[this.operator](this.left.eval(env), this.right.eval(env))
   }
@@ -422,6 +463,7 @@ class AssignmentNode {
     this.expression = expression
     this.type = type
   }
+
   getType() {
     return this.type
   }
@@ -455,6 +497,10 @@ class AssignmentNode {
       errors,
       expressionErrors))
   }
+
+  eval(env) {
+    throw Error("Evaluation of assignment is not supported yet")
+  }
 }
 
 class InvalidValueType {
@@ -462,6 +508,7 @@ class InvalidValueType {
     this.type = type
     this.value = value
   }
+
   getType() {
     return this.type
   }
@@ -516,14 +563,17 @@ class ValueNode {
     this.type = type
     this.value = parseValue(type, value)
   }
+
   getType() {
     return this.type
   }
+
   typeCheck(typeEnv) {
     return isValid(this.value) ?
       typeEnv : typeEnv.update(
         "errors", v => v.push(createError("invalidType", this)))
   }
+
   eval() {
     return this.value
   }
@@ -534,9 +584,11 @@ class SymbolNode {
     this.info = info
     this.id = id
   }
+
   getType() {
     return this.type
   }
+
   typeCheck(typeEnv) {
     const type = typeEnv.getIn(["types", this.id])
 
@@ -550,6 +602,10 @@ class SymbolNode {
       typeEnv : typeEnv.update(
         "errors", e => e.concat([createError("symbolDoesNotExist", this)]))
   }
+
+  eval(env) {
+    throw Error("Evaluation of symbol is not supported yet")
+  }
 }
 
 class ArgumentNode {
@@ -558,11 +614,17 @@ class ArgumentNode {
     this.type = type
     this.id = id
   }
+
   getType() {
     return this.type
   }
+
   typeCheck(typeEnv) {
     return typeEnv.setIn(["types", this.id], this.type)
+  }
+
+  eval(env) {
+    throw Error("Evaluation of argument is not supported yet")
   }
 }
 
