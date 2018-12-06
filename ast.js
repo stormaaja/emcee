@@ -401,7 +401,10 @@ class CompareNode {
 }
 
 const operators = {
-  "add": (x, y) => x + y
+  "add": (x, y) => x + y,
+  "subtract": (x, y) => x - y,
+  "div": (x, y) => x / y,
+  "multiply": (x, y) => x * y
 }
 
 const isOneString = (t1, t2) =>
