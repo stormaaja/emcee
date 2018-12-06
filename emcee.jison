@@ -64,6 +64,7 @@ pgm_block
       {$$ = [$1]}
     | function pgm_block
       {$$ = prependChild($2, $1);}
+    | block
     ;
 
 function
