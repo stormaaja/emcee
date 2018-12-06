@@ -239,7 +239,7 @@ class ReturnNode{
 }
 
 function paramTypesMatches(t1, t2) {
-  return t1 === t2 || assignTypesMatches(t2, t1)
+  return t1 === t2 || assignTypesMatches(t1, t2)
 }
 
 class FunctionCallNode {
