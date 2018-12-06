@@ -541,7 +541,7 @@ function parseDouble(value) {
 
 const parsers = {
   "integer": (x) => parseInteger(x),
-  "string": (x) => x,
+  "string": (x) => x.substring(1, x.length -1),
   "double": (x) => parseDouble(x),
   "boolean": (x) => {
     switch(x) {
