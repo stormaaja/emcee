@@ -193,7 +193,7 @@ class FunctionNode {
     const returnValueType = returnNodes.isEmpty() ?
       "void" : returnNodes.first().getType()
     return (returnValueType === this.returnType ||
-            isBothNumbers(returnValueType, this.returnType)) ?
+            assignTypesMatches(returnValueType, this.returnType)) ?
       null : createError("invalidReturnValue", this)
   }
 
@@ -239,7 +239,7 @@ class ReturnNode{
 }
 
 function paramTypesMatches(t1, t2) {
-  return t1 === t2 || isBothNumbers(t1, t2)
+  return t1 === t2 || assignTypesMatches(t2, t1)
 }
 
 class FunctionCallNode {
