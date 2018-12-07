@@ -1,6 +1,6 @@
 const {
   ValueNode, ArithmeticsNode, FunctionCallNode, RootNode, AssignmentNode,
-  SymbolNode, IfNode, CompareNode
+  SymbolNode, IfNode, CompareNode, WhileNode
 } = require("../ast.js")
 const { Map, List } = require("immutable")
 
@@ -89,4 +89,29 @@ test("eval symbol", () => {
         new ValueNode(info, "integer", "2")),
       new SymbolNode(info, "x")]))
   expect(node.eval(Map({result: 0}))).toBe(2)
+})
+
+test("eval while", () => {
+  const node = new RootNode(List([
+    new AssignmentNode(
+      info, "i", new ValueNode(info, "integer", "0"), "integer"),
+    new WhileNode(
+      info,
+      new CompareNode(
+        info,
+        "lt",
+        new SymbolNode(info, "i"),
+        new ValueNode(info, "integer", "5")),
+      List([
+        new AssignmentNode(
+          info,
+          "i",
+          new ArithmeticsNode(
+            info,
+            "add",
+            new SymbolNode(info, "i"),
+            new ValueNode(info, "integer", "1")))
+      ])),
+  new SymbolNode(info, "i")]))
+  expect(node.eval(Map({result: 0}))).toBe(5)
 })
