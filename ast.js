@@ -227,7 +227,7 @@ class ReturnNode{
   }
 
   eval(env) {
-    return env.set("result", this.expression.eval(env))
+    return env.set("result", this.expression.eval(env).get("result"))
   }
 }
 
@@ -272,7 +272,19 @@ class FunctionCallNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of function call is not supported yet")
+    const results = this.params.map(p => p.eval(env))
+    switch(this.id) {
+    case "print": {
+      console.log.apply(console, results.map(r => r.get("result")).toJS())
+      return env
+    }
+    case "d_to_str": {
+      return env.set("result", String(results.first().get("result")))
+    }
+    default: {
+      throw Error("Evaluation of non-system function call is not supported yet")
+    }
+    }
   }
 }
 
@@ -434,7 +446,10 @@ class ArithmeticsNode {
   }
 
   eval(env) {
-    return operators[this.operator](this.left.eval(env), this.right.eval(env))
+    return env.set(
+      "result",
+      operators[this.operator](this.left.eval(env).get("result"),
+                               this.right.eval(env).get("result")))
   }
 }
 
@@ -485,7 +500,8 @@ class AssignmentNode {
   }
 
   eval(env) {
-    return env.set(this.id, this.expression.eval(env))
+    return env.setIn(["variables", this.id],
+                     this.expression.eval(env).get("result"))
   }
 }
 
@@ -563,8 +579,8 @@ class ValueNode {
         "errors", v => v.push(createError("invalidType", this)))
   }
 
-  eval() {
-    return this.value
+  eval(env) {
+    return env.set("result", this.value)
   }
 }
 
@@ -593,7 +609,7 @@ class SymbolNode {
   }
 
   eval(env) {
-    return env.get(this.id)
+    return env.set("result", env.getIn(["variables", this.id]))
   }
 }
 
