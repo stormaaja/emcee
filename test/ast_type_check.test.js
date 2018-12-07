@@ -516,3 +516,5 @@ test("typecheck for symbol does not exist", () => {
 // TODO multiple times typechecking the same thing (returning errors multiple times)
 // TODO return values inside blocks
 // TODO allow only int to double cast
+// TODO reserved keywords (return at least)
+// TODO returnnode info
