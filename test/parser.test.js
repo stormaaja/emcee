@@ -61,19 +61,20 @@ test("generates AST of assignment", () => {
           generateNode({
             nodeType: "assignment",
             children: [
-            "i",
-            generateNode({
-              nodeType: "integer_value",
-              children: ["0"],
-              info: createInfo(1, 1, 21, 22)})
-          ],
+              "i",
+              generateNode({
+                nodeType: "integer_value",
+                children: ["0"],
+                info: createInfo(1, 1, 21, 22)})
+            ],
             id: "i",
-            meta: {valueType: "int"},}),
+            meta: {valueType: "int"},
+            info: createInfo(1, 1, 13, 16)}),
           createNode("return", [
             generateNode({
-                nodeType: "symbol",
-                id: "i",
-                info: createInfo(1, 1, 31, 32)}),])
+              nodeType: "symbol",
+              id: "i",
+              info: createInfo(1, 1, 31, 32)}),])
         ]),
         id: "main",
         meta: {argList: [], returnType: "int"},
@@ -141,8 +142,9 @@ test("generates AST of array", () => {
     "int[] a = [0, 1, 2, 3]; print(a[2]); return a[0];")
   expect(parser.parse(source).result).toEqual(
     generateProgramNode([
-      createNode(
-        "assignment", [
+      generateNode({
+        nodeType: "assignment",
+        children: [
           "a",
           createNode("array_values", [
             createNode("integer_value", ["0"]),
@@ -150,7 +152,9 @@ test("generates AST of array", () => {
             createNode("integer_value", ["2"]),
             createNode("integer_value", ["3"])])
         ],
-        "a", {valueType: "array_int"}),
+        id: "a",
+        meta: {valueType: "array_int"},
+        info: createInfo(1, 1, 13, 18)}),
       generateNode({
         nodeType: "function_call",
         children: List([

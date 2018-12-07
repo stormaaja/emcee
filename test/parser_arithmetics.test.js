@@ -9,18 +9,23 @@ test("generates AST of multiply integer", () => {
   const source = generateMain("int x = 2 * 3; return 0;")
   expect(parser.parse(source).result).toEqual(
     generateProgramNode([
-      createNode("assignment", [
-        "x",
-        createNode("mul_expr", [
-          generateNode({
-            nodeType: "integer_value",
-            children: ["2"],
-            info: createInfo(1, 1, 21, 22)}),
-          generateNode({
-            nodeType: "integer_value",
-            children: ["3"],
-            info: createInfo(1, 1, 25, 26)})])
-      ], "x", {valueType: "int"}),
+      generateNode({
+        nodeType: "assignment",
+        children: [
+          "x",
+          createNode("mul_expr", [
+            generateNode({
+              nodeType: "integer_value",
+              children: ["2"],
+              info: createInfo(1, 1, 21, 22)}),
+            generateNode({
+              nodeType: "integer_value",
+              children: ["3"],
+              info: createInfo(1, 1, 25, 26)})])
+        ],
+        id: "x",
+        meta: {valueType: "int"},
+        info: createInfo(1, 1, 13, 16)}),
       createNode("return", [
         generateNode({
           nodeType: "integer_value",
@@ -37,18 +42,23 @@ test("generates AST of subtract integer", () => {
   const source = generateMain("int x = 3 - 2; return 0;")
   expect(parser.parse(source).result).toEqual(
     generateProgramNode([
-      createNode("assignment", [
-        "x",
-        createNode("sub_expr", [
-          generateNode({
-            nodeType: "integer_value",
-            children: ["3"],
-            info: createInfo(1, 1, 21, 22)}),
-          generateNode({
-            nodeType: "integer_value",
-            children: ["2"],
-            info: createInfo(1, 1, 25, 26)})])
-      ],"x", {valueType: "int"}),
+      generateNode({
+        nodeType: "assignment",
+        children: [
+          "x",
+          createNode("sub_expr", [
+            generateNode({
+              nodeType: "integer_value",
+              children: ["3"],
+              info: createInfo(1, 1, 21, 22)}),
+            generateNode({
+              nodeType: "integer_value",
+              children: ["2"],
+              info: createInfo(1, 1, 25, 26)})])
+        ],
+        id: "x",
+        meta: {valueType: "int"},
+        info: createInfo(1, 1, 13, 16)}),
       createNode("return", [
         generateNode({
           nodeType: "integer_value",
@@ -62,18 +72,23 @@ test("generates AST of divide integer", () => {
   const source = generateMain("int x = 2 / 3; return 0;")
   expect(parser.parse(source).result).toEqual(
     generateProgramNode([
-      createNode("assignment", [
-        "x",
-        createNode("div_expr", [
-          generateNode({
-            nodeType: "integer_value",
-            children: ["2"],
-            info: createInfo(1, 1, 21, 22)}),
-          generateNode({
-            nodeType: "integer_value",
-            children: ["3"],
-            info: createInfo(1, 1, 25, 26)})])
-      ], "x", {valueType: "int"}),
+      generateNode({
+        nodeType: "assignment",
+        children: [
+          "x",
+          createNode("div_expr", [
+            generateNode({
+              nodeType: "integer_value",
+              children: ["2"],
+              info: createInfo(1, 1, 21, 22)}),
+            generateNode({
+              nodeType: "integer_value",
+              children: ["3"],
+              info: createInfo(1, 1, 25, 26)})])
+        ],
+        id: "x",
+        meta: {valueType: "int"},
+        info: createInfo(1, 1, 13, 16)}),
       createNode("return", [
         generateNode({
           nodeType: "integer_value",
@@ -87,12 +102,17 @@ test("generates AST of divide double", () => {
   const source = generateMain("double x = 2.0 / 3.0; return 0;")
   expect(parser.parse(source).result).toEqual(
     generateProgramNode([
-      createNode("assignment", [
+      generateNode({
+        nodeType: "assignment",
+        children: [
         "x",
         createNode("div_expr", [
           createNode("double_value", ["2.0"]),
           createNode("double_value", ["3.0"])
-        ])], "x", {valueType: "double"}),
+        ])],
+        id: "x",
+        meta: {valueType: "double"},
+        info: createInfo(1, 1, 13, 19)}),
       createNode("return", [
         generateNode({
           nodeType: "integer_value",
@@ -108,7 +128,9 @@ test("generates AST of more complex arithmetics", () => {
     "double x = 2.0 / 3.0 - 4 * (1 + 4); return 0;")
   expect(parser.parse(source).result).toEqual(
     generateProgramNode([
-      createNode("assignment", [
+      generateNode({
+        nodeType: "assignment",
+        children: [
         "x",
         createNode("sub_expr", [
           createNode("div_expr", [
@@ -133,7 +155,10 @@ test("generates AST of more complex arithmetics", () => {
                 info: createInfo(1, 1, 45, 46)})
             ])
           ])
-        ])], "x", {valueType: "double"}),
+        ])],
+        id: "x",
+        meta: {valueType: "double"},
+        info: createInfo(1, 1, 13, 19)}),
       createNode("return", [
         generateNode({
           nodeType: "integer_value",

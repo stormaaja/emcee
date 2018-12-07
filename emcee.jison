@@ -186,13 +186,17 @@ expr
 
 assgnmt_stmt
     : id EQUALSSIGN expr
-      {$$ = generateNode({nodeType: "assignment", children: [$1, $3], id: $1});}
+      {$$ = generateNode({
+         nodeType: "assignment",
+         children: [$1, $3], id: $1,
+         info: @1});}
     | type id EQUALSSIGN expr
       {$$ = generateNode({
         nodeType: "assignment",
         children: [$2, $4],
         id: $2,
-        meta: {valueType: $1}});}
+        meta: {valueType: $1},
+        info: @1});}
     ;
 
 value

@@ -24,7 +24,8 @@ test("generates AST of simple assignment", () => {
                   info: createInfo(1, 1, 21, 22)})
               ],
               id: "x",
-              meta: {valueType: "int"}}),
+              meta: {valueType: "int"},
+              info: createInfo(1, 1, 13, 16)}),
             generateNode({
               nodeType: "return",
               children: [
@@ -56,7 +57,8 @@ test("generates AST of usage of an assignment", () => {
               generateNode({nodeType: "string_value", children: ["\"Hello\""]})
             ],
             id: "s",
-            meta: {valueType: "string"}}),
+            meta: {valueType: "string"},
+            info: createInfo(1, 1, 13, 19)}),
           generateNode({
             nodeType: "function_call",
             children: [
@@ -95,7 +97,8 @@ test("generates AST of an array assignment", () => {
                 generateNode(
                   {nodeType: "string_value", children: ["\"World\""]})]})],
           id: "a",
-          meta: {valueType: "array_string"}}),
+          meta: {valueType: "array_string"},
+          info: createInfo(1, 1, 13, 21)}),
         generateNode({
           nodeType: "return",
           children: [
