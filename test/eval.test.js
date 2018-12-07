@@ -1,6 +1,6 @@
 const {
   ValueNode, ArithmeticsNode, FunctionCallNode, RootNode, AssignmentNode,
-  SymbolNode
+  SymbolNode, IfNode, CompareNode
 } = require("../ast.js")
 const { Map, List } = require("immutable")
 
@@ -42,6 +42,20 @@ test("eval system function integer to string call", () => {
     List([new ValueNode(Map({}), "integer", "2")]))
   expect(node.eval(Map({result: 0})).get("result")).toBe("2")
 })
+
+test("eval if else", () => {
+  const node = new IfNode(
+    info,
+    new CompareNode(
+      info,
+      "lt",
+      new ValueNode(info, "integer", "2"),
+      new ValueNode(info, "integer", "3")),
+    new ValueNode(info, "string", "yes"),
+    new ValueNode(info, "string", "no"))
+  expect(node.eval(Map({result: 0})).get("result")).toBe("yes")
+})
+
 
 test("eval symbol", () => {
   const node = new RootNode(
