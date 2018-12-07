@@ -127,8 +127,6 @@ const errorMessages = {
   functionDoesNotExist: "Function does not exist",
   fnParamInvalidType: "Function parameter type is invalid",
   invalidReturnValue: "Return value type does not match function signature",
-  multipleDifferentReturnValues:
-  "Function has multiple different return values",
   fnAlreadyExists: "Function or variable of given name already exists",
   symbolDoesNotExist: "Symbol does not exist"
 }
@@ -185,18 +183,6 @@ class FunctionNode {
     return this.returnType
   }
 
-  checkReturnType() {
-    const returnNodes = this.children.filter(
-      c => (c instanceof ReturnNode))
-    if (returnNodes.countBy(v => v.getType()).size > 1)
-      return createError("multipleDifferentReturnValues", this)
-    const returnValueType = returnNodes.isEmpty() ?
-      "void" : returnNodes.first().getType()
-    return (returnValueType === this.returnType ||
-            assignTypesMatches(returnValueType, this.returnType)) ?
-      null : createError("invalidReturnValue", this)
-  }
-
   checkReinit(typeEnv) {
     return typeEnv.hasIn(["types", this.id]) ?
       createError("fnAlreadyExists", this) : null
@@ -206,22 +192,14 @@ class FunctionNode {
     const argTypes = this.argList.map(a => a.getType())
     const env = typeEnv.setIn(["types", this.id], Map({
       arguments: argTypes,
-      returnType: this.returnType
-    }))
+      returnType: this.getType()
+    })).set("currentReturnType", this.getType())
     const envT = typeCheckEach(this.argList, env)
     const childEnv = typeCheckEach(this.children, envT)
 
-    const errors = [
-      this.checkReinit(typeEnv), this.checkReturnType()].filter(x => x)
+    const errors = [this.checkReinit(typeEnv)].filter(x => x)
 
-    return env.update(
-      "errors",
-      e => e.concat(
-        childEnv.get("errors"),
-        envT.get("errors"),
-        errors
-      )
-    )
+    return env.set("errors", childEnv.get("errors").concat(errors))
   }
 
   eval(env) {
@@ -236,11 +214,16 @@ class ReturnNode{
   }
 
   typeCheck(typeEnv) {
-    return this.expression.typeCheck(typeEnv)
+    const errors = this.expression.typeCheck(typeEnv).get("errors")
+
+    return typeEnv.set(
+      "errors",
+      this.getType() === typeEnv.get("currentReturnType") ?
+        errors : errors.push(createError("invalidReturnValue", this)))
   }
 
   getType() {
-    return this.expression.getType()
+    return this.expression ? this.expression.getType() : "void"
   }
 
   eval(env) {
