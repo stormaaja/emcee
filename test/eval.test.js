@@ -4,6 +4,8 @@ const {
 } = require("../ast.js")
 const { Map, List } = require("immutable")
 
+const info = Map({})
+
 test("eval arithmetics", () => {
   const node = new ArithmeticsNode(
     Map({}),
