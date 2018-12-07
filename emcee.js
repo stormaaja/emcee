@@ -28,9 +28,12 @@ function main(argv) {
     } else if (!r.typeCheckResult.get("errors").isEmpty()) {
       console.log("%s: \x1b[31mTypecheck failed\x1b[0m", r.file)
       r.typeCheckResult.get("errors").forEach((e) => {
-        const info = e.get("node").info.toJS()
-        console.log(`${r.file} ${info.first_line}:${info.first_column}`)
-        console.log(e.get("message"))
+        const node = e.get("node")
+        const info = node.info.toJS()
+        const message = node.id ?
+          `${node.id} ${e.get("message")}` : e.get("message")
+        console.log(
+          `${r.file} ${info.first_line}:${info.first_column} ${message}`)
       })
     } else {
       if (printAST) {
