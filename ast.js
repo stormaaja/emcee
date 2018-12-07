@@ -639,5 +639,5 @@ class ArgumentNode {
 module.exports = {
   generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
   RootNode, FunctionNode, WhileNode, ArrayAccessNode, FunctionCallNode,
-  ReturnNode, ArgumentNode
+  ReturnNode, ArgumentNode, SymbolNode
 }
