@@ -14,3 +14,4 @@
 - returnnode info
 - or and
 - not
+- Arithmetics type (divide is always double)
