@@ -6,8 +6,8 @@ matti.ahinko (ät) gmail.com
 
 ## Kieli
 
-Kieli on C-JavaScript-Java-hybridikieli. Syntaksi on lähelle C:tä, mutta mukana
-on esimerkiksi merkkijonot.
+Kieli on yksinkertainen C-JavaScript-Java-hybridikieli. Syntaksi on ehkä lähelle
+C:tä, mutta mukana on esimerkiksi merkkijonot ja paljon ominaisuuksia puuttuu.
 
 ## Kohdekieli
 
@@ -15,7 +15,7 @@ Kohdekieli on joko ES5-JS tai WebAssembly. Tämä tarkentuu myöhemmin.
 
 ## Työkalut
 
-Isäntäkielenä on JavaScript (NodeJS, ES6).
+Isäntäkielenä on JavaScript (NodeJS, ES5).
 
 Parserigeneraattorina toimii Jison.
 
