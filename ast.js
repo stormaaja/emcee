@@ -364,12 +364,25 @@ class IfNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of if block is not supported yet")
+    if (this.expression.eval(env).get("result")) {
+      return this.ifBody.eval(env)
+    } else {
+      return this.elseBody.eval(env)
+    }
   }
 }
 
 function compareTypesMatches(t1, t2) {
   return t1 === t2 || isBothNumbers(t1, t2)
+}
+
+function compare(c, v1, v2) {
+  switch(c) {
+    case "lt": return v1 < v2
+    case "gt": return v1 > v2
+    case "eq": return v1 === v2
+    default: throw Error("Unknown comparision: " + c)
+  }
 }
 
 class CompareNode {
@@ -394,7 +407,12 @@ class CompareNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of compare is not supported yet")
+    return env.set(
+      "result",
+      compare(
+        this.comparision,
+        this.left.eval(env).get("result"),
+        this.right.eval(env).get("result")))
   }
 }
 
