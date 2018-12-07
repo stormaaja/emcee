@@ -74,12 +74,12 @@ function
     ;
 
 type
-    : INT
+    : array
+    | INT
     | VOID
     | DOUBLE
     | STRING
     | BOOL
-    | array
     ;
 
 array
