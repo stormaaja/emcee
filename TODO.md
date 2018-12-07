@@ -1,0 +1,16 @@
+- assign cross cast (string, integer, double etc.)
+- fn call type cast (string, integer, double etc.)
+- Add symbol typecheck test
+- function param typecheck
+- if expression typecheck
+- comparision left right typecheck
+- function arg typecheck
+- typecheck arithmetics node as return value
+- function call node typecheck
+- multiple times typechecking the same thing (returning errors multiple times)
+- return values inside blocks
+- allow only int to double cast
+- reserved keywords (return at least)
+- returnnode info
+- or and
+- not

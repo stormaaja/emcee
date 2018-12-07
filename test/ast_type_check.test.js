@@ -502,20 +502,3 @@ test("typecheck for symbol does not exist", () => {
         List([]),)]))
   expectErrors(node.typeCheck(typeEnv), ["functionDoesNotExist"], 1)
 })
-
-
-// TODO assign cross cast (string, integer, double etc.)
-// TODO fn call type cast (string, integer, double etc.)
-// TODO Add symbol typecheck test
-// TODO function param typecheck
-// TODO if expression typecheck
-// TODO comparision left right typecheck
-// TODO function arg typecheck
-// TODO typecheck arithmetics node as return value
-// TODO function call node typecheck
-// TODO multiple times typechecking the same thing (returning errors multiple times)
-// TODO return values inside blocks
-// TODO allow only int to double cast
-// TODO reserved keywords (return at least)
-// TODO returnnode info
-// TODO or and
