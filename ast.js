@@ -337,7 +337,10 @@ class WhileNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of while is not supported yet")
+    if (!this.expression.eval(env).get("result"))
+      return env
+    else
+      return this.eval(evalEach(this.body, env))
   }
 }
 
