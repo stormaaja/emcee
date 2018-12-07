@@ -39,3 +39,14 @@ test("eval system function integer to string call", () => {
     List([new ValueNode(Map({}), "integer", "2")]))
   expect(node.eval(Map({result: 0})).get("result")).toBe("2")
 })
+
+test("eval symbol", () => {
+  const node = new RootNode(
+    List([
+      new AssignmentNode(
+        info,
+        "x",
+        new ValueNode(info, "integer", "2")),
+      new SymbolNode(info, "x")]))
+  expect(node.eval(Map({result: 0}))).toBe(2)
+})
