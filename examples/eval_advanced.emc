@@ -1,2 +1,4 @@
 // Advanced eval example
-return 5.0 / (2 + 3.0) - 3.0 * 7;
+double r = 5.0 / (2 + 3.0) - 3.0 * 7;
+print("Result: ");
+print(d_to_str(r));

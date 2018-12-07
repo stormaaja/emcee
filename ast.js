@@ -281,6 +281,9 @@ class FunctionCallNode {
     case "d_to_str": {
       return env.set("result", String(results.first().get("result")))
     }
+    case "to_str": {
+      return env.set("result", String(results.first().get("result")))
+    }
     default: {
       throw Error("Evaluation of non-system function call is not supported yet")
     }
