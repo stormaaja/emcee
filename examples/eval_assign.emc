@@ -1,0 +1,7 @@
+// Eval assignment example
+
+string s = "Hello";
+
+string hello = s + " world!";
+
+print(hello);
