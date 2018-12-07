@@ -368,9 +368,9 @@ class IfNode {
 
   eval(env) {
     if (this.expression.eval(env).get("result")) {
-      return this.ifBody.eval(env)
+      return evalEach(this.ifBody, env)
     } else {
-      return this.elseBody.eval(env)
+      return this.elseBody.isEmpty() ? env : evalEach(this.elseBody, env)
     }
   }
 }
