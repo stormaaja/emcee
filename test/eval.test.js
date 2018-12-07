@@ -43,7 +43,7 @@ test("eval system function integer to string call", () => {
   expect(node.eval(Map({result: 0})).get("result")).toBe("2")
 })
 
-test("eval if else", () => {
+test("eval if", () => {
   const node = new IfNode(
     info,
     new CompareNode(
@@ -51,11 +51,34 @@ test("eval if else", () => {
       "lt",
       new ValueNode(info, "integer", "2"),
       new ValueNode(info, "integer", "3")),
-    new ValueNode(info, "string", "yes"),
-    new ValueNode(info, "string", "no"))
+    List([new ValueNode(info, "string", "yes")]))
   expect(node.eval(Map({result: 0})).get("result")).toBe("yes")
 })
 
+test("eval if false", () => {
+  const node = new IfNode(
+    info,
+    new CompareNode(
+      info,
+      "eq",
+      new ValueNode(info, "integer", "2"),
+      new ValueNode(info, "integer", "3")),
+    List([new ValueNode(info, "string", "nope")]))
+  expect(node.eval(Map({result: 0})).get("result")).toBe(0)
+})
+
+test("eval if else", () => {
+  const node = new IfNode(
+    info,
+    new CompareNode(
+      info,
+      "gt",
+      new ValueNode(info, "integer", "2"),
+      new ValueNode(info, "integer", "3")),
+    List([new ValueNode(info, "string", "no")]),
+    List([new ValueNode(info, "string", "yes")]))
+  expect(node.eval(Map({result: 0})).get("result")).toBe("yes")
+})
 
 test("eval symbol", () => {
   const node = new RootNode(
