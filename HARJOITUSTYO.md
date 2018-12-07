@@ -39,15 +39,15 @@ laajuudesta ja kohdekielen lopullisesta valinnasta.
 
 ### Perusominaisuudet
 
-- [ ] lukukelpoinen (ei binäärimössöä)
-- [ ] kommentit
-- [ ] kokonaislukuaritmetiikka (infix-syntaksilla, ellei erikseen muuta sovita)
-- [ ] valintojen tekeminen (if tms)
-- [ ] toisto (silmukat, rekursio tms)
-- [ ] muuttujat
-- [ ] jonkinlainen syötteen välitys vähintään ohjelman alussa, esim. muuttujille
+- [X] lukukelpoinen (ei binäärimössöä)
+- [X] kommentit
+- [X] kokonaislukuaritmetiikka (infix-syntaksilla, ellei erikseen muuta sovita)
+- [X] valintojen tekeminen (if tms)
+- [X] toisto (silmukat, rekursio tms)
+- [X] muuttujat
+- [X] jonkinlainen syötteen välitys vähintään ohjelman alussa, esim. muuttujille
    alkuarvot
-- [ ] jonkinlainen tulostus vähintään ohjelman lopussa, esim. muuttujien
+- [X] jonkinlainen tulostus vähintään ohjelman lopussa, esim. muuttujien
    loppuarvot
 Yhteensä 3 op
 
@@ -57,7 +57,7 @@ Yhteensä 3 op
    muuttujia, rekursiolla (1 op)
 - [ ] yksiulotteiset taulukot (0,25 op)
 - [ ] merkkijonosyöte ja -tulostus (0,5 op)
-- [ ] staattinen tyypintarkastus, yksinkertaiset tyypit (1 op)
+- [X] staattinen tyypintarkastus, yksinkertaiset tyypit (1 op)
 
 Yhteensä 2,75 op
 
@@ -77,7 +77,7 @@ jälkeen.
 
 ## 1. inkrementti
 
-13.11.2018 - 15.12.2018
+13.11.2018 - 28.11.2018
 
 - Työkalujen valinta
 - Parseri
@@ -87,11 +87,12 @@ jälkeen.
 
 ## 2. inkrementti
 
-16.12.2018 - 31.1.2018
+29.11.2018 - 31.1.2018
 
 - Syntaktinen analyysi
 - Kontekstinen analyysi
 - AST
+. Tulkki
 - Kohdekielen selvitykset
 - Yksinkertaiset virheviestit
 
