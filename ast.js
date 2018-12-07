@@ -272,6 +272,7 @@ class FunctionCallNode {
   }
 
   eval(env) {
+    // TODO move system functions to be nodes with own eval
     const results = this.params.map(p => p.eval(env))
     switch(this.id) {
     case "print": {
