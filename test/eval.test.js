@@ -1,5 +1,6 @@
 const {
-  ValueNode, ArithmeticsNode, FunctionCallNode
+  ValueNode, ArithmeticsNode, FunctionCallNode, RootNode, AssignmentNode,
+  SymbolNode
 } = require("../ast.js")
 const { Map, List } = require("immutable")
 
