@@ -367,7 +367,11 @@ class IfNode {
   }
 
   eval(env) {
-    if (this.expression.eval(env).get("result")) {
+    const r = this.expression.eval(env).get("result")
+    if (r !== true &&
+        r !== false)
+      throw Error("Invalid comparision result")
+    if (r) {
       return evalEach(this.ifBody, env)
     } else {
       return this.elseBody.isEmpty() ? env : evalEach(this.elseBody, env)
