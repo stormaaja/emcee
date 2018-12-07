@@ -518,15 +518,18 @@ class AssignmentNode {
   }
 
   typeCheck(typeEnv) {
-    const errors = [
-      this.checkTypeMatch(typeEnv), this.checkReinit(typeEnv)
-    ].filter(x => x)
+
 
     const nodeTypeEnv = this.getType() ?
       typeEnv.setIn(["types", this.id], this.getType()) : typeEnv
 
-    return this.expression.typeCheck(
-      nodeTypeEnv.update("errors", e => e.concat(errors)))
+    const exprTypeEnv = this.expression.typeCheck(nodeTypeEnv)
+
+    const errors = [
+      this.checkTypeMatch(typeEnv), this.checkReinit(typeEnv)
+    ].filter(x => x)
+
+    return exprTypeEnv.update("errors", e => e.concat(errors))
   }
 
   eval(env) {
