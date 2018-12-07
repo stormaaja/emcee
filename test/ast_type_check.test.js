@@ -518,3 +518,4 @@ test("typecheck for symbol does not exist", () => {
 // TODO allow only int to double cast
 // TODO reserved keywords (return at least)
 // TODO returnnode info
+// TODO or and
