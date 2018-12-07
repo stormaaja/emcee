@@ -466,13 +466,13 @@ test("typecheck for function with multiple different return values", () => {
     List([
       new ReturnNode(
         createInfo(1, 0),
-        new ValueNode(createInfo(1, 0), "integer", "0")),
+        new ValueNode(createInfo(1, 0), "boolean", "true")),
       new ReturnNode(
         createInfo(1, 0),
         new ValueNode(createInfo(1, 0), "string", "hello"))]),
     List([]),
     "integer")
-  expectErrors(node.typeCheck(typeEnv), ["multipleDifferentReturnValues"], 1)
+  expectErrors(node.typeCheck(typeEnv), ["invalidReturnValue"], 2)
 })
 
 test("typecheck for function already exists", () => {
