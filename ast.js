@@ -80,7 +80,7 @@ function generateNode(data) {
     return new ValueNode(info, "array", children)
   }
   case "array_access": {
-    return new ArrayAccessNode(info, id, children.first())
+    return new ArrayAccessNode(info, id, children.get(1))
   }
   case "argument": {
     return new ArgumentNode(info, types[meta.valueType], id)
@@ -102,7 +102,7 @@ function generateNode(data) {
       info, children.first(), List(children.get(1)), List(children.get(2)))
   }
   case "while": {
-    return new WhileNode(info, children.first(), children.get(1))
+    return new WhileNode(info, children.first(), List(children.get(1)))
   }
   case "add_expr": {
     return new ArithmeticsNode(info, "add", children.first(), children.get(1))
