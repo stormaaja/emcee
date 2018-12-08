@@ -505,3 +505,47 @@ test("typecheck for symbol does not exist", () => {
         List([]),)]))
   expectErrors(node.typeCheck(typeEnv), ["functionDoesNotExist"], 1)
 })
+
+test("typecheck for empty array", () => {
+  const node = new ValueNode(
+    createInfo(0, 0),
+    "array",
+    List())
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck for assignment of empty array", () => {
+  const node = new AssignmentNode(
+    createInfo(),
+    "x",
+    new ValueNode(
+      createInfo(0, 0),
+      "array",
+      List()),
+    "array_integer")
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck for assignment of array", () => {
+  const node = new AssignmentNode(
+    createInfo(),
+    "x",
+    new ValueNode(
+      createInfo(0, 0),
+      "array",
+      List([new ValueNode(createInfo(), "integer", "4")])),
+    "array_integer")
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck for assignment of array of invalid type", () => {
+  const node = new AssignmentNode(
+    createInfo(),
+    "x",
+    new ValueNode(
+      createInfo(0, 0),
+      "array",
+      List([new ValueNode(createInfo(), "string", "str")])),
+    "array_integer")
+  expectErrors(node.typeCheck(typeEnv), ["assignExprConflict"], 1)
+})
