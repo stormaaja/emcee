@@ -333,7 +333,9 @@ class ArrayAccessNode {
   }
 
   eval(env) {
-    throw Error("Evaluation of array access is not supported yet")
+    const arr = env.getIn(["variables", this.id])
+    const index = this.expression.eval(env).get("result")
+    return env.set("result", arr[index])
   }
 }
 
