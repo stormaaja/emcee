@@ -614,11 +614,6 @@ const parsers = {
     case "false": return false
     default: return new InvalidValueType(x)
     }
-  },
-  "array": (x) => {
-    if (x.length > 0)
-      console.log(x)
-    return []
   }
 }
 
