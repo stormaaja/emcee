@@ -14,29 +14,6 @@ const types = {
   array_boolean: "array_boolean"
 }
 
-const systemFunctions = Map({
-  print: Map({
-    arguments: List(["string"]),
-    returnType: "void"
-  }),
-  to_str: Map({
-    arguments: List(["integer"]),
-    returnType: "string"
-  }),
-  d_to_str: Map({
-    arguments: List(["integer"]),
-    returnType: "string"
-  }),
-  len_as: Map({
-    arguments: List(["array_string"]),
-    returnType: "integer"
-  }),
-  len_ai: Map({
-    arguments: List(["array_integer"]),
-    returnType: "integer"
-  })
-})
-
 function generateNode(data) {
   const {nodeType, id} = data
   const children = List(data.children)
@@ -167,14 +144,23 @@ function evalEach(nodes, env) {
 
 class RootNode {
   constructor(children) {
-    this.children = children
+    this.children = systemFunctions.concat(children)
   }
   typeCheck() {
-    const typeEnv = Map({types: systemFunctions, errors: List()})
+    const typeEnv = Map({
+      functions: List(),
+      types: systemFunctionTypes,
+      errors: List(),
+      variables: Map()})
     return typeCheckEach(this.children, typeEnv)
   }
   eval() {
-    return evalEach(this.children, Map({result: 0})).get("result")
+    const env = evalEach(this.children, Map({
+      functions: Map(),
+      result: 0,
+      variables: Map()}))
+    return (env.hasIn(["functions", "main"]) ?
+      env.getIn(["functions", "main"]).call(env) : env).get("result")
   }
 }
 
@@ -281,29 +267,9 @@ class FunctionCallNode {
   }
 
   eval(env) {
-    // TODO move system functions to be nodes with own eval
-    const results = this.params.map(p => p.eval(env))
-    switch(this.id) {
-    case "print": {
-      console.log.apply(console, results.map(r => r.get("result")).toJS())
-      return env
-    }
-    case "d_to_str": {
-      return env.set("result", String(results.first().get("result")))
-    }
-    case "to_str": {
-      return env.set("result", String(results.first().get("result")))
-    }
-    case "len_as": {
-      return env.set("result", results.first().get("result").length)
-    }
-    case "len_ai": {
-      return env.set("result", results.first().get("result").length)
-    }
-    default: {
-      throw Error("Evaluation of non-system function call is not supported yet")
-    }
-    }
+    const fn = env.getIn(["functions", this.id])
+    const paramResults = this.params.map(p => p.eval(env).get("result"))
+    return fn.call(env, paramResults.toJS())
   }
 }
 
@@ -717,6 +683,51 @@ class ArgumentNode {
     throw Error("Evaluation of argument is not supported yet")
   }
 }
+
+function createSystemFunction(id, customCall, args, returnType) {
+  const fn = new FunctionNode(Map(), id, List(), List(args), returnType)
+  fn.call = (env, params) => customCall(fn, env, params)
+  return fn
+}
+
+const systemFunctions = List([
+  createSystemFunction(
+    "print",
+    (_this, env, params) =>  {
+      console.log.apply(console, params)
+      return env
+    },
+    [new ArgumentNode(Map(), "string", "x")],
+    "void"),
+  createSystemFunction(
+    "d_to_str",
+    (_this, env, params) =>  {
+      return env.set("result", String(params[0]))
+    },
+    [new ArgumentNode(Map(), "double", "x")],
+    "string"),
+  createSystemFunction(
+    "to_str",
+    (_this, env, params) =>  {
+      return env.set("result", String(params[0]))
+    },
+    [new ArgumentNode(Map(), "integer", "x")],
+    "string"),
+  createSystemFunction(
+    "len_ai",
+    (_this, env, params) =>  {
+      return env.set("result", params[0].length)
+    },
+    [new ArgumentNode(Map(), "array_integer", "x")],
+    "integer"),
+  createSystemFunction(
+    "len_as",
+    (_this, env, params) =>  {
+      return env.set("result", params[0].length)
+    },
+    [new ArgumentNode(Map(), "array_string", "x")],
+    "integer"),
+])
 
 module.exports = {
   generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
