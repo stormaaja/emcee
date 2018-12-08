@@ -196,8 +196,20 @@ class FunctionNode {
     return env.set("errors", childEnv.get("errors").concat(errors))
   }
 
+  call(env, params) {
+    const callEnv = env.update(
+      "variables",
+      (v) => v.merge(
+        this.argList.reduce((a, c, i) => a.set(c.id, params[i]), Map())))
+
+    const resultEnv = evalEach(this.children, callEnv)
+    return resultEnv.update(
+      "variables",
+      (v) => v.deleteAll(this.argList.map(a => a.id)))
+  }
+
   eval(env) {
-    throw Error("Evaluation of function is not supported yet")
+    return env.setIn(["functions", this.id], this)
   }
 }
 
