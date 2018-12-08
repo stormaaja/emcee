@@ -638,8 +638,13 @@ const getArrayType = (a) => a.size === 0 ?
 class ValueNode {
   constructor(info, type, value) {
     this.info = info
-    this.type = type === "array" ? getArrayType(value) : type
-    this.value = parseValue(type, value)
+    if (type === "array") {
+      this.type = getArrayType(value)
+      this.value = value
+    } else {
+      this.type = type
+      this.value = parseValue(this.type, value)
+    }
   }
 
   getType() {
@@ -652,8 +657,15 @@ class ValueNode {
         "errors", v => v.push(createError("invalidType", this)))
   }
 
+  getValue() {
+    if (this.type.startsWith("array_"))
+      return this.value.map(v => v.value).toJS()
+    else
+      return this.value
+  }
+
   eval(env) {
-    return env.set("result", this.value)
+    return env.set("result", this.getValue())
   }
 }
 
