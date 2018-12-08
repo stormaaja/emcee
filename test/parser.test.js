@@ -147,10 +147,22 @@ test("generates AST of array", () => {
         children: [
           "a",
           createNode("array_values", [
-            createNode("integer_value", ["0"]),
-            createNode("integer_value", ["1"]),
-            createNode("integer_value", ["2"]),
-            createNode("integer_value", ["3"])])
+            generateNode({
+                nodeType: "integer_value",
+                children: ["0"],
+                info: createInfo(1, 1, 24, 25)}),
+            generateNode({
+                nodeType: "integer_value",
+                children: ["1"],
+                info: createInfo(1, 1, 27, 28)}),
+            generateNode({
+                nodeType: "integer_value",
+                children: ["2"],
+                info: createInfo(1, 1, 30, 31)}),
+            generateNode({
+                nodeType: "integer_value",
+                children: ["3"],
+                info: createInfo(1, 1, 33, 34)})])
         ],
         id: "a",
         meta: {valueType: "array_int"},
@@ -158,15 +170,29 @@ test("generates AST of array", () => {
       generateNode({
         nodeType: "function_call",
         children: List([
-          createNode("array_access", [
-            "a",
-            createNode("integer_value", ["2"])])]),
+          generateNode({
+            nodeType: "array_access",
+            id: "a",
+            children: [
+              "a",
+              generateNode({
+                nodeType: "integer_value",
+                children: ["2"],
+                info: createInfo(1, 1, 45, 46)})],
+            info: createInfo()})]),
         id: "print",
         info: createInfo(1, 1, 37, 42)}),
       createNode("return", [
-        createNode("array_access", [
-          "a",
-          createNode("integer_value", ["0"])])])])
+        generateNode({
+          nodeType: "array_access",
+          id: "a",
+          children: [
+            "a",
+            generateNode({
+              nodeType: "integer_value",
+              children: ["0"],
+              info: createInfo(1, 1, 59, 60)})],
+          info: createInfo()})])])
   )
 })
 
