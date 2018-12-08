@@ -17,3 +17,4 @@
 - Arithmetics type (divide is always double)
 - Program params (env values)
 - Function call type tests
+- Tests for call and clean
