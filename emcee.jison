@@ -181,7 +181,10 @@ expr
       {$$ = generateNode({nodeType: "sub_expr", children: [$1, $3]});}
     | fn_call
     | id SBOPEN expr SBCLOSE
-      {$$ = generateNode({nodeType: "array_access", children: [$1, $3]});}
+      {$$ = generateNode({
+         nodeType: "array_access",
+         id: $1,
+         children: [$1, $3]});}
     ;
 
 assgnmt_stmt
