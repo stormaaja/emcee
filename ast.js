@@ -7,7 +7,11 @@ const types = {
   double: "double",
   bool: "boolean",
   array: "array",
-  void: "void"
+  void: "void",
+  array_int: "array_integer",
+  array_string: "array_string",
+  array_double: "array_double",
+  array_boolean: "array_boolean"
 }
 
 const systemFunctions = Map({
@@ -439,7 +443,8 @@ const isOneString = (t1, t2) =>
   t1 === "string" ||
   t2 === "string"
 
-const typePriorities = ["boolean", "integer", "double", "string"]
+const typePriorities = [
+  "array_integer", "boolean", "integer", "double", "string"]
 
 const numberTypes = ["double", "integer"]
 
@@ -487,7 +492,9 @@ class ArithmeticsNode {
 }
 
 function assignTypesMatches(t1, t2) {
-  return t1 === t2 || (t1 === "double" && t2 === "integer")
+  return t1 === t2 ||
+    (t1 === "double" && t2 === "integer") ||
+    (t1 && t1.startsWith("array_") && t2 === "array_empty")
 }
 
 class AssignmentNode {
@@ -549,7 +556,18 @@ class InvalidValueType {
   }
 }
 
-const isValid = (valueType) => !(valueType instanceof InvalidValueType)
+function isValid(value) {
+  if (Array.isArray(value)) {
+    if (value.length === 0) {
+      return true
+    } else {
+      const firstValueType = (typeof value[0])
+      return value.some(x => (typeof x) !== firstValueType) === null
+    }
+  } else {
+    return !(value instanceof InvalidValueType)
+  }
+}
 
 function parseNumber(parser, pattern, value) {
   const parsedValue = parser(value)
@@ -584,6 +602,11 @@ const parsers = {
     case "false": return false
     default: return new InvalidValueType(x)
     }
+  },
+  "array": (x) => {
+    if (x.length > 0)
+      console.log(x)
+    return []
   }
 }
 
@@ -595,10 +618,20 @@ function parseValue(type, value) {
     return new InvalidValueType(type)
 }
 
+const arrayTypes = {
+  integer: "array_integer",
+  double: "array_double",
+  string: "array_string",
+  boolean: "array_boolean"
+}
+
+const getArrayType = (a) => a.size === 0 ?
+      "array_empty" : arrayTypes[a.first().getType()]
+
 class ValueNode {
   constructor(info, type, value) {
     this.info = info
-    this.type = type
+    this.type = type === "array" ? getArrayType(value) : type
     this.value = parseValue(type, value)
   }
 
