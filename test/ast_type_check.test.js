@@ -16,7 +16,10 @@ function expectErrors(typeEnv, errors, count) {
 }
 
 function expectNoErrors(typeEnv) {
-  expect(typeEnv.get("errors").isEmpty()).toBeTruthy()
+  const isEmpty = typeEnv.get("errors").isEmpty()
+  if (!isEmpty)
+    console.log("Erros: ", typeEnv.get("errors").toJS().map(e => e.id))
+  expect(isEmpty).toBeTruthy()
 }
 
 test("typecheck of positive integer", () => {
