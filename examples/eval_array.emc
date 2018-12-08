@@ -1,0 +1,17 @@
+int[] arr = [1, 3, 9];
+
+int i = 0;
+
+while (i < len_ai(arr)) {
+  print(to_str(arr[i]));
+  i = i + 1;
+}
+
+string[] arr_str = ["Hello", " ", "World", "!"];
+
+i = 0;
+
+while (i < len_as(arr_str)) {
+  print(arr_str[i]);
+  i = i + 1;
+}
