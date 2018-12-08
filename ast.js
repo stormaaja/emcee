@@ -27,8 +27,12 @@ const systemFunctions = Map({
     arguments: List(["integer"]),
     returnType: "string"
   }),
-  len: Map({
-    arguments: List(["array"]),
+  len_as: Map({
+    arguments: List(["array_string"]),
+    returnType: "integer"
+  }),
+  len_ai: Map({
+    arguments: List(["array_integer"]),
     returnType: "integer"
   })
 })
@@ -289,6 +293,12 @@ class FunctionCallNode {
     }
     case "to_str": {
       return env.set("result", String(results.first().get("result")))
+    }
+    case "len_as": {
+      return env.set("result", results.first().get("result").length)
+    }
+    case "len_ai": {
+      return env.set("result", results.first().get("result").length)
     }
     default: {
       throw Error("Evaluation of non-system function call is not supported yet")
