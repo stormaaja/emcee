@@ -97,10 +97,7 @@ arglist
     ;
 
 arg
-    : type
-      {$$ = generateNode({
-        nodeType: "argument", meta: {valueType: $1}});}
-    | type id
+    : type id
       {$$ = generateNode({nodeType: "argument", id: $2, meta: {valueType: $1}});}
     ;
 
