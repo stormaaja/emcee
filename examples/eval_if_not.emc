@@ -1,0 +1,7 @@
+// Example for if not
+
+if (!true) {
+  print("Not happening");
+} else {
+  print("This is indeed false");
+}
