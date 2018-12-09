@@ -4,7 +4,7 @@ void print_hello() {
   print("Hello!");
 }
 
-int main(void) {
+int main() {
   print_hello();
   return 1;
 }
