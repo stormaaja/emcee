@@ -332,11 +332,11 @@ class WhileNode {
   }
 
   eval(env) {
-    // TODO Fix potential stack overflow
-    if (!this.expression.eval(env).get("result"))
-      return env
-    else
-      return this.eval(evalEach(this.body, env))
+    let resultEnv = env
+    while(this.expression.eval(resultEnv).get("result")) {
+      resultEnv = this.eval(evalEach(this.body, resultEnv))
+    }
+    return resultEnv
   }
 }
 
