@@ -93,6 +93,9 @@ function generateNode(data) {
   case "div_expr": {
     return new ArithmeticsNode(info, "div", children.first(), children.get(1))
   }
+  case "not": {
+    return new NotNode(info, children.first())
+  }
 
   default: {
     throw Error("Unknown node type: " + nodeType)
@@ -113,7 +116,8 @@ const errorMessages = {
   fnParamInvalidType: "Function parameter type is invalid",
   invalidReturnValue: "Return value type does not match function signature",
   fnAlreadyExists: "Function or variable of given name already exists",
-  symbolDoesNotExist: "Symbol does not exist"
+  symbolDoesNotExist: "Symbol does not exist",
+  negateWorksOnlyForBool: "Negate works only for boolean type expressions"
 }
 
 function createError(id, node) {
@@ -372,6 +376,30 @@ class IfNode {
     } else {
       return this.elseBody.isEmpty() ? env : evalEach(this.elseBody, env)
     }
+  }
+}
+
+class NotNode{
+  constructor(info, expression) {
+    this.info = info
+    this.expression = expression
+  }
+
+  typeCheck(typeEnv) {
+    const env = this.expression.getType() === "boolean" ?
+      typeEnv :
+      typeEnv.update(
+        "errors",
+        e => e.push(createError("negateWorksOnlyForBool", this)))
+    return this.expression.typeCheck(env)
+  }
+
+  getType() {
+    return "boolean"
+  }
+
+  eval(env) {
+    return env.set("result", !this.expression.eval(env))
   }
 }
 
@@ -743,5 +771,5 @@ const systemFunctions = List([
 module.exports = {
   generateNode, ValueNode, CompareNode, ArithmeticsNode, IfNode, AssignmentNode,
   RootNode, FunctionNode, WhileNode, ArrayAccessNode, FunctionCallNode,
-  ReturnNode, ArgumentNode, SymbolNode
+  ReturnNode, ArgumentNode, SymbolNode, NotNode
 }
