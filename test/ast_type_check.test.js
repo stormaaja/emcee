@@ -1,6 +1,7 @@
 const {
   ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode,
-  FunctionNode, WhileNode, FunctionCallNode, ReturnNode, ArgumentNode
+  FunctionNode, WhileNode, FunctionCallNode, ReturnNode, ArgumentNode,
+  SymbolNode
 } = require("../ast.js")
 
 const { Map, List } = require("immutable")
@@ -574,4 +575,21 @@ test("typecheck for assignment of function return with invalid type", () => {
       ),
       "integer")])
   expectErrors(node.typeCheck(typeEnv), ["assignExprConflict"], 1)
+})
+
+test("typecheck for symbol", () => {
+  const node = new RootNode([
+    new AssignmentNode(
+      createInfo(),
+      "x",
+      new ValueNode(createInfo(), "integer", "10"),
+      "integer"),
+    new SymbolNode(createInfo, "x")])
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck for missing symbol", () => {
+  const node = new RootNode([
+    new SymbolNode(createInfo(), "x")])
+  expectErrors(node.typeCheck(typeEnv), ["symbolDoesNotExist"], 1)
 })
