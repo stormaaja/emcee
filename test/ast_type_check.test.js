@@ -551,3 +551,27 @@ test("typecheck for assignment of array of invalid type", () => {
     "array_integer")
   expectErrors(node.typeCheck(typeEnv), ["assignExprConflict"], 1)
 })
+
+test("typecheck for assignment of function return with invalid type", () => {
+  const node = new RootNode([
+    new FunctionNode(
+      createInfo(0, 0),
+      "str_fn",
+      List([
+        new ReturnNode(
+          createInfo(1, 0),
+          new ValueNode(createInfo(1, 0), "string", "str"))
+      ]),
+      List([]),
+      "string"),
+    new AssignmentNode(
+      createInfo(),
+      "x",
+      new FunctionCallNode(
+        createInfo(),
+        "str_fn",
+        List()
+      ),
+      "integer")])
+  expectErrors(node.typeCheck(typeEnv), ["assignExprConflict"], 1)
+})
