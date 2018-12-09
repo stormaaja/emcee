@@ -259,8 +259,7 @@ class FunctionCallNode {
     if (!this.type && type) {
       this.type = type.get("returnType")
     }
-    // TODO check that param types matches function signature
-    // TODO check if assignment matches function return value
+
     const errors = [
       typeEnv.getIn(["types", this.id]) ?
         null : createError("functionDoesNotExist", this)
