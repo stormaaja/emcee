@@ -149,7 +149,7 @@ class RootNode {
   typeCheck() {
     const typeEnv = Map({
       functions: List(),
-      types: systemFunctionTypes,
+      types: Map(),
       errors: List(),
       variables: Map()})
     return typeCheckEach(this.children, typeEnv)
