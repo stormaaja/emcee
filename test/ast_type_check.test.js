@@ -1,7 +1,7 @@
 const {
   ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode,
   FunctionNode, WhileNode, FunctionCallNode, ReturnNode, ArgumentNode,
-  SymbolNode
+  SymbolNode, NotNode
 } = require("../ast.js")
 
 const { Map, List } = require("immutable")
@@ -592,4 +592,28 @@ test("typecheck for missing symbol", () => {
   const node = new RootNode([
     new SymbolNode(createInfo(), "x")])
   expectErrors(node.typeCheck(typeEnv), ["symbolDoesNotExist"], 1)
+})
+
+test("typecheck valid not", () => {
+  const node = new NotNode(
+    createInfo(),
+      new CompareNode(
+        createInfo(),
+        "eq",
+        new ValueNode(createInfo(), "integer", "2"),
+        new ValueNode(createInfo(), "integer", "2"))
+  )
+  expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("typecheck invalid not", () => {
+  const node = new NotNode(
+    createInfo(),
+    new ArithmeticsNode(
+      createInfo(),
+      "add",
+      new ValueNode(createInfo(), "integer", "2"),
+      new ValueNode(createInfo(), "integer", "3"))
+  )
+  expectErrors(node.typeCheck(typeEnv), ["negateWorksOnlyForBool"], 1)
 })
