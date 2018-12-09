@@ -40,12 +40,13 @@
 "*"                   return "MULTIPLY";
 ">"                   return "GT";
 "<"                   return "LT";
+"!"                   return "NOT";
 "//".*\n              /* skip comment */
 "/"                   return "DIVIDE";
 \"[^"]+\"             return "STR_VALUE";
 /lex
 
-%left EQ GT LT PLUS MINUS
+%left EQ GT LT PLUS MINUS NOT
 %left MULTIPLY DIVIDE
 
 %%
@@ -182,6 +183,8 @@ expr
          nodeType: "array_access",
          id: $1,
          children: [$1, $3]});}
+    | NOT expr
+      {$$ = generateNode({nodeType: "not", children: [$2], info: @1})}
     ;
 
 assgnmt_stmt
