@@ -13,28 +13,32 @@ test("generates AST of multiply integer", () => {
         nodeType: "assignment",
         children: [
           "x",
-          createNode("mul_expr", [
-            generateNode({
-              nodeType: "integer_value",
-              children: ["2"],
-              info: createInfo(1, 1, 21, 22)}),
-            generateNode({
-              nodeType: "integer_value",
-              children: ["3"],
-              info: createInfo(1, 1, 25, 26)})])
+          createNode(
+            "mul_expr",
+            [
+              generateNode({
+                nodeType: "integer_value",
+                children: ["2"],
+                info: createInfo(1, 1, 21, 22)}),
+              generateNode({
+                nodeType: "integer_value",
+                children: ["3"],
+                info: createInfo(1, 1, 25, 26)})])
         ],
         id: "x",
         meta: {valueType: "int"},
         info: createInfo(1, 1, 13, 16)}),
-      createNode("return", [
-        generateNode({
-          nodeType: "integer_value",
-          children: ["0"],
-          info: createInfo(1, 1, 35, 36)
-        })
-      ])
-    ]
-                       )
+      generateNode({
+        nodeType: "return",
+        children: [
+          generateNode({
+            nodeType: "integer_value",
+            children: ["0"],
+            info: createInfo(1, 1, 35, 36)
+          })
+        ],
+        info: createInfo(1, 1, 28, 34)})
+    ])
   )
 })
 
@@ -59,12 +63,15 @@ test("generates AST of subtract integer", () => {
         id: "x",
         meta: {valueType: "int"},
         info: createInfo(1, 1, 13, 16)}),
-      createNode("return", [
+      generateNode({
+        nodeType: "return",
+        children: [
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
           info: createInfo(1, 1, 35, 36)
-        })])
+        })],
+        info: createInfo(1, 1, 28, 34)})
     ]))
 })
 
@@ -89,11 +96,14 @@ test("generates AST of divide integer", () => {
         id: "x",
         meta: {valueType: "int"},
         info: createInfo(1, 1, 13, 16)}),
-      createNode("return", [
+      generateNode({
+        nodeType: "return",
+        children: [
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
-          info: createInfo(1, 1, 35, 36)})])
+          info: createInfo(1, 1, 35, 36)})],
+        info: createInfo(1, 1, 28, 34)})
     ])
   )
 })
@@ -113,11 +123,14 @@ test("generates AST of divide double", () => {
         id: "x",
         meta: {valueType: "double"},
         info: createInfo(1, 1, 13, 19)}),
-      createNode("return", [
+      generateNode({
+        nodeType: "return",
+        children: [
         generateNode({
           nodeType: "integer_value",
           children: ["0"],
-          info: createInfo(1, 1, 42, 43)})])
+          info: createInfo(1, 1, 42, 43)})],
+        info: createInfo(1, 1, 35, 41)})
     ])
   )
 })
@@ -131,39 +144,42 @@ test("generates AST of more complex arithmetics", () => {
       generateNode({
         nodeType: "assignment",
         children: [
-        "x",
-        createNode("sub_expr", [
-          createNode("div_expr", [
-            generateNode({
-              nodeType: "double_value",
-              children: ["2.0"],
-              info: createInfo(0, 0, 0, 0)}),
-            createNode("double_value", ["3.0"])]),
-          createNode("mul_expr", [
-            generateNode({
-              nodeType: "integer_value",
-              children: ["4"],
-              info: createInfo(1, 1, 36, 37)}),
-            createNode("add_expr", [
+          "x",
+          createNode("sub_expr", [
+            createNode("div_expr", [
               generateNode({
-                nodeType: "integer_value",
-                children: ["1"],
-                info: createInfo(1, 1, 41, 42)}),
+                nodeType: "double_value",
+                children: ["2.0"],
+                info: createInfo(0, 0, 0, 0)}),
+              createNode("double_value", ["3.0"])]),
+            createNode("mul_expr", [
               generateNode({
                 nodeType: "integer_value",
                 children: ["4"],
-                info: createInfo(1, 1, 45, 46)})
+                info: createInfo(1, 1, 36, 37)}),
+              createNode("add_expr", [
+                generateNode({
+                  nodeType: "integer_value",
+                  children: ["1"],
+                  info: createInfo(1, 1, 41, 42)}),
+                generateNode({
+                  nodeType: "integer_value",
+                  children: ["4"],
+                  info: createInfo(1, 1, 45, 46)})
+              ])
             ])
-          ])
-        ])],
+          ])],
         id: "x",
         meta: {valueType: "double"},
         info: createInfo(1, 1, 13, 19)}),
-      createNode("return", [
-        generateNode({
-          nodeType: "integer_value",
-          children: ["0"],
-          info: createInfo(1, 1, 56, 57)})])]))
+      generateNode({
+        nodeType: "return",
+        children: [
+          generateNode({
+            nodeType: "integer_value",
+            children: ["0"],
+            info: createInfo(1, 1, 56, 57)})],
+        info: createInfo(1, 1, 49, 55)})]))
 })
 
 // TODO test int-double combination type

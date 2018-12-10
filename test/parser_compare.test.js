@@ -25,19 +25,24 @@ test("generates AST of compare greater than", () => {
                   info: createInfo(1, 1, 21, 22)})
               ]),
               [
-                createNode("return", [
+                generateNode({
+                  nodeType: "return",
+                  children: [
                   generateNode({
                     nodeType: "integer_value",
                     children: ["0"],
-                    info: createInfo(1, 1, 32, 33)})])]
+                    info: createInfo(1, 1, 32, 33)})],
+                  info: createInfo(1, 1, 25, 31)})]
             ]),
             info: createInfo(1, 1, 13, 15)}),
-          createNode("return", [
+          generateNode({
+            nodeType: "return",
+            children: [
             generateNode({
               nodeType: "integer_value",
               children: ["1"],
-              info: createInfo(1, 1, 43, 44)})
-          ])],
+              info: createInfo(1, 1, 43, 44)})],
+            info: createInfo(1, 1, 36, 42)})],
         id: "main",
         meta: {argList: [], returnType: "int"},
         info: createInfo(1, 1, 0, 3)
@@ -78,7 +83,7 @@ test("generates AST of compare less than", () => {
                       children: ["1"],
                       info: createInfo(1, 1, 32, 33)})
                   ],
-                  info: createInfo(0, 0, 0, 0)})],
+                  info: createInfo(1, 1, 25, 31)})],
               [
                 generateNode({
                   nodeType: "return",
@@ -88,7 +93,7 @@ test("generates AST of compare less than", () => {
                       children: ["0"],
                       info: createInfo(1, 1, 49, 50)})
                   ],
-                  info: createInfo(0, 0, 0, 0)})]
+                  info: createInfo(1, 1, 42, 48)})]
             ],
             info: createInfo(1, 1, 13, 15)
           }),
@@ -128,7 +133,7 @@ test("generates AST of compare equals", () => {
                       nodeType: "integer_value",
                       children: ["0"],
                       info: createInfo(1, 1, 33, 34)})],
-                  info: createInfo(0, 0, 0, 0)})]],
+                  info: createInfo(1, 1, 26, 32)})]],
             info: createInfo(1, 1, 13, 15)}),
           generateNode({
             nodeType: "return",
@@ -138,7 +143,7 @@ test("generates AST of compare equals", () => {
                 children: ["1"],
                 info: createInfo(1, 1, 44, 45)})
             ],
-            info: createInfo(0, 0, 0, 0)})
+            info: createInfo(1, 1, 37, 43)})
         ],
         id: "main",
         meta: {

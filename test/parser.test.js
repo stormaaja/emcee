@@ -27,20 +27,26 @@ test("generates AST of if-else greater than", () => {
                   info: createInfo(1, 1, 21, 22)})
               ]),
               [
-                createNode("return", [
-                  generateNode({
-                    nodeType: "integer_value",
-                    children: ["0"],
-                    info: createInfo(1, 1, 32, 33)})
-
-                ])],
+                generateNode({
+                  nodeType: "return",
+                  children: [
+                    generateNode({
+                      nodeType: "integer_value",
+                      children: ["0"],
+                      info: createInfo(1, 1, 32, 33)})
+                  ],
+                  info: createInfo(1, 1, 25, 31)})],
               [
-                createNode("return", [
-                  generateNode({
-                    nodeType: "integer_value",
-                    children: ["1"],
-                    info: createInfo(1, 1, 49, 50)})
-                ])]
+                generateNode({
+                  nodeType: "return",
+                  children: [
+                    generateNode({
+                      nodeType: "integer_value",
+                      children: ["1"],
+                      info: createInfo(1, 1, 49, 50)})
+                  ],
+                  info: createInfo(1, 1, 42, 48)})
+              ]
             ],
             info: createInfo(1, 1, 13, 15)})
         ],
@@ -70,11 +76,14 @@ test("generates AST of assignment", () => {
             id: "i",
             meta: {valueType: "int"},
             info: createInfo(1, 1, 13, 16)}),
-          createNode("return", [
-            generateNode({
-              nodeType: "symbol",
-              id: "i",
-              info: createInfo(1, 1, 31, 32)}),])
+          generateNode({
+            nodeType: "return",
+            children: [
+              generateNode({
+                nodeType: "symbol",
+                id: "i",
+                info: createInfo(1, 1, 31, 32)})],
+            info: createInfo(1, 1, 24, 30)})
         ]),
         id: "main",
         meta: {argList: [], returnType: "int"},
@@ -122,16 +131,19 @@ test("generates AST of function call", () => {
             ]),
             id: "hello",
             info: createInfo(1, 1, 46, 51)}),
-          createNode("return", [
-            generateNode({
-              nodeType: "integer_value",
-              children: ["0"],
-              info: createInfo(1, 1, 76, 77)})
-          ])
+          generateNode({
+            nodeType: "return",
+            children: [
+              generateNode({
+                nodeType: "integer_value",
+                children: ["0"],
+                info: createInfo(1, 1, 76, 77)})
+            ],
+            info: createInfo(1, 1, 69, 75)})
         ]),
         id: "main",
         meta: {argList: [], returnType: "int"},
-      info: createInfo(1, 1, 33, 36)})
+        info: createInfo(1, 1, 33, 36)})
     ])
   )
 })
@@ -148,21 +160,21 @@ test("generates AST of array", () => {
           "a",
           createNode("array_values", [
             generateNode({
-                nodeType: "integer_value",
-                children: ["0"],
-                info: createInfo(1, 1, 24, 25)}),
+              nodeType: "integer_value",
+              children: ["0"],
+              info: createInfo(1, 1, 24, 25)}),
             generateNode({
-                nodeType: "integer_value",
-                children: ["1"],
-                info: createInfo(1, 1, 27, 28)}),
+              nodeType: "integer_value",
+              children: ["1"],
+              info: createInfo(1, 1, 27, 28)}),
             generateNode({
-                nodeType: "integer_value",
-                children: ["2"],
-                info: createInfo(1, 1, 30, 31)}),
+              nodeType: "integer_value",
+              children: ["2"],
+              info: createInfo(1, 1, 30, 31)}),
             generateNode({
-                nodeType: "integer_value",
-                children: ["3"],
-                info: createInfo(1, 1, 33, 34)})])
+              nodeType: "integer_value",
+              children: ["3"],
+              info: createInfo(1, 1, 33, 34)})])
         ],
         id: "a",
         meta: {valueType: "array_int"},
@@ -182,17 +194,22 @@ test("generates AST of array", () => {
             info: createInfo()})]),
         id: "print",
         info: createInfo(1, 1, 37, 42)}),
-      createNode("return", [
-        generateNode({
-          nodeType: "array_access",
-          id: "a",
-          children: [
-            "a",
-            generateNode({
-              nodeType: "integer_value",
-              children: ["0"],
-              info: createInfo(1, 1, 59, 60)})],
-          info: createInfo()})])])
+      generateNode({
+        nodeType: "return",
+        children: [
+          generateNode({
+            nodeType: "array_access",
+            id: "a",
+            children: [
+              "a",
+              generateNode({
+                nodeType: "integer_value",
+                children: ["0"],
+                info: createInfo(1, 1, 59, 60)})],
+            info: createInfo()})
+        ],
+        info: createInfo(1, 1, 50, 56)})
+    ])
   )
 })
 

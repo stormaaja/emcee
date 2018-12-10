@@ -117,9 +117,15 @@ block
 
 return
     : RETURN expr SEMICOLON
-      {$$ = generateNode({nodeType: "return", children: [$2]});}
+      {$$ = generateNode({
+         nodeType: "return",
+         children: [$2],
+         info: @1});}
     | RETURN SEMICOLON
-      {$$ = generateNode({nodeType: "return", children: [$2]});}
+      {$$ = generateNode({
+         nodeType: "return",
+         children: [$2],
+         info: @1});}
     ;
 
 stmt
