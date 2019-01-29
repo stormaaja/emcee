@@ -11,7 +11,7 @@ C:tä, mutta mukana on esimerkiksi merkkijonot ja paljon ominaisuuksia puuttuu.
 
 ## Kohdekieli
 
-Kohdekieli on joko ES5-JS tai WebAssembly. Tämä tarkentuu myöhemmin.
+Kohdekieli on joko ES5-JS (tulkki) tai WebAssembly. Tämä tarkentuu myöhemmin.
 
 ## Työkalut
 
@@ -53,10 +53,10 @@ Yhteensä 3 op
 
 ### Lisäominaisuudet
 
-- [ ] aliohjelmat, joille voi viedä parametreja ja joissa voi käyttää paikallisia
+- [X] aliohjelmat, joille voi viedä parametreja ja joissa voi käyttää paikallisia
    muuttujia, rekursiolla (1 op)
-- [ ] yksiulotteiset taulukot (0,25 op)
-- [ ] merkkijonosyöte ja -tulostus (0,5 op)
+- [X] yksiulotteiset taulukot (0,25 op)
+- [X] merkkijonosyöte ja -tulostus (0,5 op)
 - [X] staattinen tyypintarkastus, yksinkertaiset tyypit (1 op)
 
 Yhteensä 2,75 op
