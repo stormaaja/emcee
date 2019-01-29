@@ -1,9 +1,10 @@
 const jison = require("jison")
 const file = require("./file.js")
+const path = require("path")
 
 "use strict"
 
-const bnf = file.loadFile("emcee.jison")
+const bnf = file.loadFile(path.resolve(__dirname, "emcee.jison"))
 
 function parseSource(parser, source) {
   try {

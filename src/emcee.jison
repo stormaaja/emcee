@@ -1,9 +1,9 @@
 %{
     const path = require("path");
-    const { generateNode } = require(path.normalize("../../../ast.js"))
+    const { generateNode } = require(path.normalize("../../../src/ast.js"))
     const {
       appendChild, prependChild, appendNodeChild
-    } = require(path.normalize("../../../utils.js"));
+    } = require(path.normalize("../../../src/utils.js"));
 %}
 
 %lex

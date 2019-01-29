@@ -9,9 +9,9 @@
   },
   "scripts": {
     "test": "jest",
-    "compile": "node emcee.js",
-    "compile-examples": "find examples -name '*.emc' -exec node emcee.js {} +",
-    "lint": "node_modules/.bin/eslint *.js"
+    "compile": "node src/emcee.js",
+    "compile-examples": "find examples -name '*.emc' -exec node src/emcee.js {} +",
+    "lint": "node_modules/.bin/eslint src/*.js"
   },
   "repository": {
     "type": "git",

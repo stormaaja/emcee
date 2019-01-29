@@ -2,7 +2,7 @@ const {
   ValueNode, CompareNode, IfNode, AssignmentNode, RootNode, ArithmeticsNode,
   FunctionNode, WhileNode, FunctionCallNode, ReturnNode, ArgumentNode,
   SymbolNode, NotNode
-} = require("../ast.js")
+} = require("../src/ast.js")
 
 const { Map, List } = require("immutable")
 

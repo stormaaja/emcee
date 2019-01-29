@@ -1,9 +1,9 @@
-const parser = require("../parser.js");
-const {createNode, addElse} = require("../utils.js")
+const parser = require("../src/parser.js");
+const {createNode, addElse} = require("../src/utils.js")
 const {
   generateMain, generateProgramNode, createInfo
-} = require("../test_utils.js")
-const {generateNode} = require("../ast.js")
+} = require("../src/test_utils.js")
+const {generateNode} = require("../src/ast.js")
 const {List} = require("immutable")
 
 test("generates AST of if-else greater than", () => {

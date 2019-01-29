@@ -1,9 +1,9 @@
-const parser = require("../parser.js")
-const {createNode} = require("../utils.js")
+const parser = require("../src/parser.js")
+const {createNode} = require("../src/utils.js")
 const {
   generateMain, generateProgramNode, createInfo
-} = require("../test_utils.js")
-const {generateNode} = require("../ast.js")
+} = require("../src/test_utils.js")
+const {generateNode} = require("../src/ast.js")
 
 test("generates AST of multiply integer", () => {
   const source = generateMain("int x = 2 * 3; return 0;")
