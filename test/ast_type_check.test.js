@@ -619,7 +619,6 @@ test("typecheck invalid not", () => {
 })
 
 test("typecheck for arithmetics return value", () => {
-
   const node = new FunctionNode(
     createInfo(0, 0),
     "fun_one",
@@ -635,4 +634,16 @@ test("typecheck for arithmetics return value", () => {
     List(),
     "integer")
   expectNoErrors(node.typeCheck(typeEnv))
+})
+
+test("multiple errorneus typechecks", () => {
+  const node = new NotNode(
+    createInfo(),
+    new ArithmeticsNode(
+      createInfo(),
+      "add",
+      new ValueNode(createInfo(), "integer", "2"),
+      new ValueNode(createInfo(), "integer", "3"))
+  )
+  expect(node.typeCheck(typeEnv)).toEqual(node.typeCheck(typeEnv))
 })
