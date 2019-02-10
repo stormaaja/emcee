@@ -1,5 +1,3 @@
-- Test if expression typecheck
-- Test comparision left right typecheck
 - Test typecheck arithmetics node as return value
 - Test function call node typecheck
 - Test multiple times typechecking the same thing (returning errors multiple times)
