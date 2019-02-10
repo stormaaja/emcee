@@ -617,3 +617,22 @@ test("typecheck invalid not", () => {
   )
   expectErrors(node.typeCheck(typeEnv), ["negateWorksOnlyForBool"], 1)
 })
+
+test("typecheck for arithmetics return value", () => {
+
+  const node = new FunctionNode(
+    createInfo(0, 0),
+    "fun_one",
+    List([
+      new ReturnNode(
+        createInfo(),
+        new ArithmeticsNode(
+          createInfo(),
+          "add",
+          new ValueNode(createInfo(), "integer", "2"),
+          new ValueNode(createInfo(), "integer", "3")))
+    ]),
+    List(),
+    "integer")
+  expectNoErrors(node.typeCheck(typeEnv))
+})
