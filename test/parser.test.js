@@ -213,4 +213,12 @@ test("generates AST of array", () => {
   )
 })
 
-// TODO tests for booleans
+test("Test for using return as value name", () => {
+  const source = generateMain("string return = \"Error here\";")
+  expect(parser.parse(source).success).toBeFalsy()
+})
+
+test("Test for using string as value name", () => {
+  const source = generateMain("string string = \"Error here\";")
+  expect(parser.parse(source).success).toBeFalsy()
+})
