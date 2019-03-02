@@ -717,10 +717,6 @@ class ArgumentNode {
   typeCheck(typeEnv) {
     return typeEnv.setIn(["types", this.id], this.type)
   }
-
-  eval(env) {
-    throw Error("Evaluation of argument is not supported yet")
-  }
 }
 
 function createSystemFunction(id, customCall, args, returnType) {
