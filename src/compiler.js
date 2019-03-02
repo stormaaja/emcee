@@ -8,7 +8,7 @@ function compileFile(f) {
   try {
     const parseResult = parser.parse(file.loadFile(f))
     const typeCheckResult = parseResult.success ?
-          parseResult.result.typeCheck() : Map()
+      parseResult.result.typeCheck() : Map()
     return {parseResult, typeCheckResult, file: f}
   } catch(e) {
     console.error("Error while processing file: " + f)
