@@ -13,7 +13,7 @@ function main(argv) {
   const objects = options.includes("--objects")
   const printAST = options.includes("--print-ast")
   const debug = options.includes("--debug")
-  const eval = options.includes("--eval")
+  const evalCode = options.includes("--eval")
 
   const results = compile(files)
 
@@ -41,7 +41,7 @@ function main(argv) {
           r.parseResult.result : JSON.stringify(r.parseResult.result, null, 2)
         console.log(tree)
       }
-      if (eval) {
+      if (evalCode) {
         console.log(r.parseResult.result.eval())
       } else {
         console.log("%s: \x1b[32mOK\x1b[0m", r.file)
