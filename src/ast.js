@@ -409,10 +409,10 @@ function compareTypesMatches(t1, t2) {
 
 function compare(c, v1, v2) {
   switch(c) {
-    case "lt": return v1 < v2
-    case "gt": return v1 > v2
-    case "eq": return v1 === v2
-    default: throw Error("Unknown comparision: " + c)
+  case "lt": return v1 < v2
+  case "gt": return v1 > v2
+  case "eq": return v1 === v2
+  default: throw Error("Unknown comparision: " + c)
   }
 }
 
@@ -495,8 +495,8 @@ class ArithmeticsNode {
     const rightEnv = this.right.typeCheck(
       typeEnv.set("errors", leftEnv.get("errors")))
     const errors = isValid(this.getType()) ?
-          rightEnv.get("errors") :
-          rightEnv.get("errors").push(createError("invalidArithmetics", this))
+      rightEnv.get("errors") :
+      rightEnv.get("errors").push(createError("invalidArithmetics", this))
     return typeEnv.set("errors", errors)
   }
 
@@ -504,7 +504,7 @@ class ArithmeticsNode {
     return env.set(
       "result",
       operators[this.operator](this.left.eval(env).get("result"),
-                               this.right.eval(env).get("result")))
+        this.right.eval(env).get("result")))
   }
 }
 
@@ -558,7 +558,7 @@ class AssignmentNode {
 
   eval(env) {
     return env.setIn(["variables", this.id],
-                     this.expression.eval(env).get("result"))
+      this.expression.eval(env).get("result"))
   }
 }
 
@@ -638,7 +638,7 @@ const arrayTypes = {
 }
 
 const getArrayType = (a) => a.size === 0 ?
-      "array_empty" : arrayTypes[a.first().getType()]
+  "array_empty" : arrayTypes[a.first().getType()]
 
 class ValueNode {
   constructor(info, type, value) {
