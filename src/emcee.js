@@ -7,8 +7,9 @@ function main(argv) {
   }
 
   const args = argv.slice(2)
-  const files = args.filter(f => !f.startsWith("--"))
+  const files = args.filter(f => !f.startsWith("--") && f.endsWith(".emc"))
   const options = args.filter(f => f.startsWith("--"))
+  const params = args.filter(f => !f.startsWith("--") && !f.endsWith(".emc"))
 
   const objects = options.includes("--objects")
   const printAST = options.includes("--print-ast")
@@ -42,7 +43,7 @@ function main(argv) {
         console.log(tree)
       }
       if (evalCode) {
-        console.log(r.parseResult.result.eval())
+        console.log(r.parseResult.result.eval(params))
       } else {
         console.log("%s: \x1b[32mOK\x1b[0m", r.file)
       }
