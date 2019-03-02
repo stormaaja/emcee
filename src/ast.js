@@ -355,7 +355,7 @@ class IfNode {
   typeCheck(typeEnv) {
     const exprEnv = this.expression.typeCheck(typeEnv)
     const ifEnv = typeCheckEach(
-      this.ifBody, typeEnv.set("errors", typeEnv.get("errors")))
+      this.ifBody, typeEnv.set("errors", exprEnv.get("errors")))
     const elseEnv = typeCheckEach(
       this.elseBody, typeEnv.set("errors", ifEnv.get("errors")))
 
