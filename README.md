@@ -38,6 +38,11 @@ lähdekooditiedoston suoritus:
 
 Ilman `--eval`-vipua lähdekoodi parsitaan ja luetaan syntaksipuuksi.
 
+Jos `main`-funktiolle on määritelty argumentit (string array), niin nämä arvot
+luetaan myös. Kaikki komentorivin paremetrit, jotka eivät ole `--`-vipuja tai
+tiedostonnimiä (*.emc) tulkitaan parametreiksi funktiolle. Tätä voi testata
+`examples/eval_params.emc`-lähdekoodilla.
+
 ## Testit
 
 Kääntäjän kehitystä varten on luotu useita erilaisia testejä. Nämä voit ajaa
