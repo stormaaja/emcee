@@ -158,13 +158,13 @@ class RootNode {
       variables: Map()})
     return typeCheckEach(this.children, typeEnv)
   }
-  eval() {
+  eval(args) {
     const env = evalEach(this.children, Map({
       functions: Map(),
       result: 0,
       variables: Map()}))
     return (env.hasIn(["functions", "main"]) ?
-      env.getIn(["functions", "main"]).call(env) : env).get("result")
+      env.getIn(["functions", "main"]).call(env, [args]) : env).get("result")
   }
 }
 
