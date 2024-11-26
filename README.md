@@ -1,5 +1,7 @@
 # emCee
 
+**! This repository is archived and development is discontinued !**
+
 emCee on C/JS/Java-tyyppinen kieli. Tässä repositoriossa on kielen tulkki.
 
 ## Ryhmä
